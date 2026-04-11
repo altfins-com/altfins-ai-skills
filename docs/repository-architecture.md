@@ -14,6 +14,8 @@
 │   ├── repository-architecture.md
 │   ├── skill-roadmap.md
 │   └── validated-sources.md
+├── scripts/
+│   └── validate_skills.py
 ├── altfins-market-analyst/
 ├── altfins-market-researcher/
 └── altfins-query-builder/
@@ -41,6 +43,7 @@ Keep only shared repository-level content at the root:
 - contribution conventions
 - shared architecture decisions
 - shared validated source inventory
+- repository-wide validation helpers
 - roadmap and planning documents
 
 ### Inside a Skill Directory
@@ -74,6 +77,7 @@ In practice, this means future `skill.zip` creation should work by archiving the
 - Prefer short, high-signal instructions over speculative detail.
 - Add shared conventions to `docs/` instead of copying them into every skill.
 - Put cross-skill source validation into `docs/validated-sources.md` and keep skill-local interpretations inside each skill's `references/` folder.
+- Keep repository-wide validators under `scripts/` and keep them lightweight and dependency-free when possible.
 
 ## Extension Rules
 
@@ -84,3 +88,4 @@ When adding a new skill later:
 3. Keep the skill self-contained.
 4. Add only the references, scripts, or assets that are already useful.
 5. Avoid introducing shared tooling until at least two skills clearly need it.
+6. Run the repository validator before committing structural changes.

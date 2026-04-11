@@ -3,5 +3,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+__pycache__/
 dist/
 tmp/

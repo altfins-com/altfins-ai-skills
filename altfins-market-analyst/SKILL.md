@@ -63,3 +63,5 @@ Treat these as documented capability families, not as guaranteed runtime tool na
 - Read [references/sources.md](references/sources.md) for source boundaries.
 - Read [references/mcp-anchors.md](references/mcp-anchors.md) for validated MCP facts.
 - Read [references/analysis-workflow.md](references/analysis-workflow.md) for a reusable analysis flow.
+- Read [references/example-prompts.md](references/example-prompts.md) for validated prompt anchors and safe wrappers.
+- Reuse [assets/analysis-summary-template.md](assets/analysis-summary-template.md) when a structured written output is useful.

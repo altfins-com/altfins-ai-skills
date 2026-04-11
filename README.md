@@ -25,6 +25,7 @@ This keeps the project:
 .
 ├── README.md
 ├── docs/
+├── scripts/
 ├── altfins-market-analyst/
 ├── altfins-market-researcher/
 └── altfins-query-builder/
@@ -62,6 +63,16 @@ The repository now includes a validated source layer built from:
 
 Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, then open the skill-local files in each `references/` directory for deeper, task-specific guidance.
 
+## Validation
+
+Use the lightweight repository validator before pushing structural changes:
+
+```bash
+python3 scripts/validate_skills.py
+```
+
+The validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, and the shared source-linking rules used by the current skills.
+
 ## Adding Another Skill
 
 When adding a new skill:
@@ -72,6 +83,7 @@ When adding a new skill:
 4. Add minimal `agents/openai.yaml` metadata.
 5. Put shared conventions in `docs/`, not inside the skill folder.
 6. Keep the skill independently archivable for future `skill.zip` packaging.
+7. Run `python3 scripts/validate_skills.py` before committing structural changes.
 
 ## Packaging Direction
 
