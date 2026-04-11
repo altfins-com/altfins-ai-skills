@@ -44,6 +44,24 @@ Use validated altFINS data only. Find coins with RSI below 30 and bullish MACD, 
 Use validated altFINS data only. Show me the latest crypto news about Ethereum, then explain whether any item materially changes the current technical picture.
 ```
 
+### Comparative analysis wrapper
+
+```text
+Use validated altFINS data only. Compare BTC and ETH on the daily timeframe. Separate validated facts, interpretation, and the main open questions before giving a cautious conclusion.
+```
+
+### Signal-plus-context wrapper
+
+```text
+Use validated altFINS data only. Review recent bullish or bearish signal evidence for SOL and explain whether the broader context strengthens or weakens the setup. Keep facts and interpretation separate.
+```
+
+### Scan-summary wrapper
+
+```text
+Use validated altFINS data only. Find a small group of technically interesting candidates and summarize them as a market scan. Highlight the strongest evidence, the biggest uncertainty, and the next checks to run.
+```
+
 ## Usage rules
 
 - Use the official prompt anchors as examples of supported question shape, not as proof of a specific runtime tool name.

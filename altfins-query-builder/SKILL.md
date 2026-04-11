@@ -31,18 +31,27 @@ Choose one of these output modes explicitly:
 
 If the target interface is not yet validated, stay interface-neutral.
 
-## Validated Target Families
+## Beginner-Friendly Request Categories
 
-The current validated target families include:
+Start by classifying the request into one plain-English category:
 
-- market screening
-- analytics history
-- OHLCV history and snapshots
-- signal feed queries
-- curated technical analysis
-- news search and detail lookup
-- reference data such as symbols and intervals
-- MCP capability families such as Screener, Technical Analysis, OHLCV Data, Analytics History, Signal Feed, News, Calendar Events, and Portfolio
+- find coins
+- check signals
+- look up indicator history
+- look up price candles
+- browse technical analysis
+- get news or context
+- open an interactive browser
+- ask for a full market analysis
+
+## Agent-Facing Routing Layer
+
+After choosing a beginner-facing category:
+
+1. identify the validated target family
+2. fill the required slots
+3. choose the safest output mode
+4. produce a handoff another agent can continue without guessing
 
 ## Working Rules
 
@@ -51,14 +60,16 @@ The current validated target families include:
 - Distinguish between the user goal, the structured request, and any later execution step.
 - Avoid fake precision in filters, schemas, or endpoints.
 - When in doubt, produce a request brief instead of a fake concrete command.
+- Keep beginner-facing language simple, then map it to the more formal routing layer internally.
 
 ## Recommended Workflow
 
 1. Identify the user's real goal.
-2. Classify it into a validated target family.
-3. Collect the missing dimensions: assets, timeframe, filters, and desired output.
-4. Choose the safest output mode.
-5. Produce a handoff that another skill or agent can execute without guessing intent.
+2. Classify it into a beginner-facing request category.
+3. Map that category to a validated target family.
+4. Collect the missing dimensions: assets, timeframe, filters, and desired output.
+5. Choose the safest output mode.
+6. Produce a handoff that another skill or agent can execute without guessing intent.
 
 ## Expected Outputs
 
@@ -71,7 +82,9 @@ The current validated target families include:
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
 - Read [references/target-catalog.md](references/target-catalog.md) for validated target mappings.
+- Read [references/intent-taxonomy.md](references/intent-taxonomy.md) for beginner-facing categories and routing rules.
 - Read [references/translation-playbook.md](references/translation-playbook.md) for a reusable translation flow.
 - Read [references/example-translations.md](references/example-translations.md) for worked translations from plain English into safe handoff shapes.
 - Read [references/validation-scenarios.md](references/validation-scenarios.md) for smoke-check scenarios.
 - Reuse [assets/request-brief-template.md](assets/request-brief-template.md) when the safest output is a neutral or multi-step request brief.
+- Reuse [assets/intent-routing-matrix.md](assets/intent-routing-matrix.md) when you want a quick fill-in routing sheet before writing the final handoff.

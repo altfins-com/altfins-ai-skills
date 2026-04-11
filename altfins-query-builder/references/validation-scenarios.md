@@ -36,6 +36,7 @@ Find me promising large-cap setups.
 - classify this as a market screening request
 - note that the target family is clear but key filters are missing
 - choose an interface-neutral brief or a partially specified CLI-ready plan with explicit missing inputs
+- use the taxonomy layer before selecting the final output mode
 
 ### Failure signals
 
@@ -63,3 +64,23 @@ Give me a complete technical analysis of SOL.
 - outputs fake MCP tool calls
 - routes it to an unrelated CLI family
 - omits the expected structured output boundary
+
+## Scenario 4: Interactive beginner request
+
+### Input
+
+```text
+Open a browser where I can explore BTC.
+```
+
+### Expected behavior
+
+- classify this into the interactive browser category
+- route it to a TUI-oriented handoff
+- avoid turning it into a non-interactive export command unless the user asks for one
+
+### Failure signals
+
+- chooses the wrong beginner-facing category
+- ignores the interactive intent
+- routes to an unrelated one-shot analytics command

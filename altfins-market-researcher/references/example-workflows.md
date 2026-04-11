@@ -18,32 +18,64 @@ These examples are grounded in:
 
 Use when the user wants a quick screener-style overview for a known set of symbols.
 
+#### Simple flags version
+
 ```bash
 af markets search --symbols BTC,ETH,SOL --interval DAILY --display-type MARKET_CAP,RSI14,MACD
+```
+
+#### Body-planning version
+
+```text
+Use af markets search with --filter @market-screen.json or --stdin-json when the request is a true screen with richer conditions than a fixed symbol list. If the exact body keys are not validated for the current task, describe the JSON at the planning level and add a --dry-run preview step.
 ```
 
 ### Signal scan
 
 Use when the user wants recent signal feed events filtered by direction and time.
 
+#### Simple flags version
+
 ```bash
 af signals list --direction BULLISH --from 2026-03-01
+```
+
+#### Body-planning version
+
+```text
+Use af signals list with --filter or --stdin-json when the request combines multiple signal constraints that are awkward to express as simple flags. Add --dry-run when handing the request to another agent.
 ```
 
 ### Analytics history lookup
 
 Use when the user wants historical values for a specific indicator or metric.
 
+#### Simple flags version
+
 ```bash
 af analytics history --symbol BTC --type RSI14 --interval DAILY --from 2026-03-01 --to 2026-03-18
+```
+
+#### Body-planning version
+
+```text
+Stay flag-first for normal one-symbol one-metric history lookups. Only move to --filter or --stdin-json planning when the request clearly exceeds that direct pattern.
 ```
 
 ### OHLCV history export
 
 Use when the user wants reusable candle data for downstream analysis.
 
+#### Simple flags version
+
 ```bash
 af ohlcv history --symbol BTC --interval DAILY --from 2026-03-01 --to 2026-03-18 -o json
+```
+
+#### Body-planning version
+
+```text
+Keep OHLCV history flag-first unless the task explicitly calls for a more unusual request shape. Prefer output-mode guidance over speculative body design.
 ```
 
 ### Technical analysis lookup
@@ -58,8 +90,16 @@ af ta list --symbol SOL
 
 Use when the user wants recent news summaries in a date window.
 
+#### Simple flags version
+
 ```bash
 af news list --from 2026-03-01 --to 2026-03-18
+```
+
+#### Body-planning version
+
+```text
+Use af news list with --filter or --stdin-json only when the date window alone is not enough and the query shape needs a richer request body. If the exact body keys are not validated for the task, describe the body plan instead of fabricating it.
 ```
 
 ## Safe wrapper patterns
@@ -93,3 +133,4 @@ af commands -o json
 - Do not copy these examples blindly when the user intent points to a different command family.
 - Re-check subcommand help if you are adding or changing flags.
 - Prefer `--filter` or `--stdin-json` when the request shape becomes more complex than a few simple flags.
+- If the exact body schema is not validated for the task, write a planning note instead of fake JSON.

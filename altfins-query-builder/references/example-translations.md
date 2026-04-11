@@ -110,6 +110,86 @@ Give me a complete technical analysis of SOL.
 Use validated altFINS data only. Give me a complete technical analysis of SOL. Separate the answer into Objective, Validated Facts, Interpretation, Open Questions, and Suggested Next Checks.
 ```
 
+## Example 6: Vague beginner request
+
+### User intent
+
+```text
+What are the best coins right now?
+```
+
+### Best target family
+
+- market screening, but underspecified
+
+### Safe output mode
+
+- interface-neutral research brief
+
+### Safe handoff
+
+Ask for or mark the missing dimensions explicitly:
+
+- timeframe
+- coin universe
+- what “best” means: momentum, signals, technical analysis, or news-driven context
+
+## Example 7: News-context request
+
+### User intent
+
+```text
+Catch me up on Ethereum and whether anything important happened recently.
+```
+
+### Best target family
+
+- news search or analysis-context brief
+
+### Safe output mode
+
+- CLI-ready if the user mainly wants news summaries
+- interface-neutral if they also want interpretive analysis and the exact execution path is unclear
+
+## Example 8: Interactive beginner request
+
+### User intent
+
+```text
+I just want to browse the market and click around from BTC.
+```
+
+### Best target family
+
+- TUI market browsing
+
+### Safe CLI-ready plan
+
+```bash
+af tui markets --symbol BTC
+```
+
+## Example 9: Missing-slot indicator request
+
+### User intent
+
+```text
+Show me MACD for SOL.
+```
+
+### Best target family
+
+- analytics history
+
+### Safe output mode
+
+- interface-neutral or partially specified CLI-ready plan
+
+### Missing inputs
+
+- date range
+- interval
+
 ## Usage rules
 
 - Prefer CLI-ready outputs only when the command family and flags are already validated.

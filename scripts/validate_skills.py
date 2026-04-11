@@ -17,14 +17,30 @@ ROOT_REQUIRED_FILES = [
     ROOT / "docs" / "validated-sources.md",
     ROOT / "scripts" / "validate_skills.py",
 ]
-SKILL_REQUIRED_RELATIVE = [
-    Path("SKILL.md"),
-    Path("agents/openai.yaml"),
-    Path("references/sources.md"),
-    Path("references/validation-scenarios.md"),
-    Path("scripts"),
-    Path("assets"),
-]
+SKILL_REQUIRED_RELATIVE = {
+    "default": [
+        Path("SKILL.md"),
+        Path("agents/openai.yaml"),
+        Path("references/sources.md"),
+        Path("references/validation-scenarios.md"),
+        Path("scripts"),
+        Path("assets"),
+    ],
+    "altfins-query-builder": [
+        Path("references/intent-taxonomy.md"),
+        Path("assets/intent-routing-matrix.md"),
+    ],
+    "altfins-market-researcher": [
+        Path("references/request-patterns.md"),
+        Path("references/filter-body-guidance.md"),
+        Path("assets/filter-handoff-template.md"),
+    ],
+    "altfins-market-analyst": [
+        Path("references/synthesis-rules.md"),
+        Path("references/output-modes.md"),
+        Path("assets/market-scan-summary-template.md"),
+    ],
+}
 
 
 def find_skill_dirs() -> list[Path]:
@@ -83,7 +99,10 @@ def validate_validation_scenarios(skill_dir: Path, errors: list[str]) -> None:
 
 
 def validate_skill(skill_dir: Path, errors: list[str]) -> None:
-    for relative in SKILL_REQUIRED_RELATIVE:
+    required_paths = list(SKILL_REQUIRED_RELATIVE["default"])
+    required_paths.extend(SKILL_REQUIRED_RELATIVE.get(skill_dir.name, []))
+
+    for relative in required_paths:
         if not (skill_dir / relative).exists():
             errors.append(f"{skill_dir / relative}: missing required skill path")
 

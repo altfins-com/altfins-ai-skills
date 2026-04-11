@@ -11,6 +11,9 @@ The goal is not to prove full correctness. The goal is to catch obvious drift in
 - source discipline
 - output shape discipline
 - handoff usefulness
+- routing taxonomy quality
+- filter and body planning discipline
+- synthesis discipline
 
 ## How to Run a Smoke Check
 
@@ -31,6 +34,7 @@ A scenario passes if the skill:
 - does not invent endpoints, CLI flags, MCP methods, or schemas
 - produces the expected output mode for the task
 - makes missing inputs and assumptions explicit when needed
+- uses the taxonomy, request-shaping, or synthesis layer that now belongs to that skill's contract
 
 ## Shared Failure Signals
 
@@ -41,6 +45,7 @@ A scenario fails if the skill:
 - skips required clarification when key inputs are missing
 - produces an output shape that another agent cannot reliably continue from
 - ignores validated discovery paths such as `af --help`, `af commands -o json`, or MCP runtime tool discovery
+- skips the newer skill-specific discipline layer that should now guide the answer
 
 ## Current Validation Files
 

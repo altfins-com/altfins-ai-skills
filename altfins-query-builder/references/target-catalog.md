@@ -4,7 +4,35 @@ Validated on April 11, 2026.
 
 This file maps common user intents to validated altFINS-facing target families.
 
-## CLI-oriented targets
+## Beginner-Facing Category Layer
+
+Use one of these plain-English categories first:
+
+| Beginner-facing category | What the user usually means |
+| --- | --- |
+| find coins | screen a market or shortlist candidates |
+| check signals | look for bullish or bearish trigger-style results |
+| look up indicator history | pull historical values for RSI, MACD, or similar metrics |
+| look up price candles | get OHLCV history or snapshots |
+| browse technical analysis | review curated technical analysis entries |
+| get news or context | search summaries or inspect context around a coin |
+| open an interactive browser | use the TUI instead of a one-shot export |
+| ask for a full market analysis | produce an MCP-ready analysis prompt or a neutral research brief |
+
+## Agent-Facing Routing Layer
+
+| Beginner-facing category | Best validated target family | Preferred output mode |
+| --- | --- | --- |
+| find coins | market screening | CLI-ready or interface-neutral |
+| check signals | signal feed query | CLI-ready |
+| look up indicator history | analytics history | CLI-ready |
+| look up price candles | OHLCV history or snapshot | CLI-ready |
+| browse technical analysis | curated technical analysis | CLI-ready or TUI |
+| get news or context | news search or summary lookup | CLI-ready or interface-neutral |
+| open an interactive browser | TUI surfaces | CLI-ready |
+| ask for a full market analysis | MCP technical-analysis or analysis-oriented brief | MCP-ready or interface-neutral |
+
+## CLI-Oriented Targets
 
 | User intent | Validated CLI target | Endpoint family |
 | --- | --- | --- |
@@ -22,7 +50,7 @@ This file maps common user intents to validated altFINS-facing target families.
 | Discover intervals | `af refs intervals` | `/api/v2/public/intervals` |
 | Discover symbols | `af refs symbols` | `/api/v2/public/symbols` |
 
-## TUI-oriented targets
+## TUI-Oriented Targets
 
 The installed CLI also exposes these validated TUI surfaces:
 
@@ -33,7 +61,7 @@ The installed CLI also exposes these validated TUI surfaces:
 
 Use TUI-oriented targets when the user wants interactive browsing rather than a one-shot export.
 
-## MCP-oriented target families
+## MCP-Oriented Target Families
 
 From the official altFINS MCP docs, the safe high-level families are:
 
@@ -48,7 +76,7 @@ From the official altFINS MCP docs, the safe high-level families are:
 
 Treat these as category labels until the actual MCP client reveals the discovered tool list.
 
-## When to stay interface-neutral
+## When to Stay Interface-Neutral
 
 Stay interface-neutral if:
 

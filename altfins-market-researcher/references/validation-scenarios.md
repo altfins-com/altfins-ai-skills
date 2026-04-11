@@ -62,3 +62,24 @@ I want an interactive market browser starting from BTC.
 - suggests an unrelated one-shot command instead of TUI
 - invents unsupported TUI flags
 - misdescribes local search behavior
+
+## Scenario 4: Complex screening request
+
+### Input
+
+```text
+I want a richer market screen than simple flags can express. Show me the safest CLI way to shape that request.
+```
+
+### Expected behavior
+
+- identify that this should move beyond flag-only guidance
+- recommend `--filter` or `--stdin-json`
+- avoid fabricating body keys if they are not fully validated for the task
+- suggest `--dry-run` when the request shape matters
+
+### Failure signals
+
+- forces everything into guessed shorthand flags
+- invents unvalidated JSON keys
+- skips the preview-before-run step when it would help
