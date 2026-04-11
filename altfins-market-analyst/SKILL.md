@@ -80,6 +80,7 @@ The output mode should match the user's actual need, not just the amount of avai
 - Read [references/synthesis-rules.md](references/synthesis-rules.md) for evidence and reasoning discipline.
 - Read [references/output-modes.md](references/output-modes.md) to choose the right output shape.
 - Read [references/example-prompts.md](references/example-prompts.md) for validated prompt anchors and safe wrappers.
+- Read [references/golden-examples.md](references/golden-examples.md) for quality benchmarks that show what a strong analysis answer should look like.
 - Read [references/validation-scenarios.md](references/validation-scenarios.md) for smoke-check scenarios.
 - Reuse [assets/analysis-summary-template.md](assets/analysis-summary-template.md) when a structured written output is useful.
 - Reuse [assets/market-scan-summary-template.md](assets/market-scan-summary-template.md) when summarizing a scan across multiple assets.

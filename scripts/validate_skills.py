@@ -23,6 +23,7 @@ SKILL_REQUIRED_RELATIVE = {
         Path("agents/openai.yaml"),
         Path("references/sources.md"),
         Path("references/validation-scenarios.md"),
+        Path("references/golden-examples.md"),
         Path("scripts"),
         Path("assets"),
     ],
@@ -98,6 +99,19 @@ def validate_validation_scenarios(skill_dir: Path, errors: list[str]) -> None:
             errors.append(f"{path}: missing required validation phrase {phrase!r}")
 
 
+def validate_golden_examples(skill_dir: Path, errors: list[str]) -> None:
+    path = skill_dir / "references" / "golden-examples.md"
+    text = path.read_text(encoding="utf-8")
+    required_phrases = [
+        "## Example 1",
+        "### Golden output",
+        "### Why this is good",
+    ]
+    for phrase in required_phrases:
+        if phrase not in text:
+            errors.append(f"{path}: missing required golden-example phrase {phrase!r}")
+
+
 def validate_skill(skill_dir: Path, errors: list[str]) -> None:
     required_paths = list(SKILL_REQUIRED_RELATIVE["default"])
     required_paths.extend(SKILL_REQUIRED_RELATIVE.get(skill_dir.name, []))
@@ -124,6 +138,7 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
 
     validate_openai_yaml(skill_dir, errors)
     validate_validation_scenarios(skill_dir, errors)
+    validate_golden_examples(skill_dir, errors)
 
     sources_file = skill_dir / "references" / "sources.md"
     if sources_file.exists() and "../../docs/validated-sources.md" not in sources_file.read_text(encoding="utf-8"):

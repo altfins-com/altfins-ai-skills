@@ -72,6 +72,7 @@ Do not force everything into flags if the query shape is clearly better expresse
 - Read [references/filter-body-guidance.md](references/filter-body-guidance.md) for conservative JSON-body planning guidance.
 - Read [references/research-playbook.md](references/research-playbook.md) for a reusable CLI workflow.
 - Read [references/example-workflows.md](references/example-workflows.md) for validated command patterns and wrappers.
+- Read [references/golden-examples.md](references/golden-examples.md) for quality benchmarks that show what a strong CLI recommendation should look like.
 - Read [references/validation-scenarios.md](references/validation-scenarios.md) for smoke-check scenarios.
 - Reuse [assets/research-handoff-template.md](assets/research-handoff-template.md) when handing a CLI workflow to another agent or user.
 - Reuse [assets/filter-handoff-template.md](assets/filter-handoff-template.md) when a complex request needs structured filter/body planning.

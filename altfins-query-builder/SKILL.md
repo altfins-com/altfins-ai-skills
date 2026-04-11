@@ -85,6 +85,7 @@ After choosing a beginner-facing category:
 - Read [references/intent-taxonomy.md](references/intent-taxonomy.md) for beginner-facing categories and routing rules.
 - Read [references/translation-playbook.md](references/translation-playbook.md) for a reusable translation flow.
 - Read [references/example-translations.md](references/example-translations.md) for worked translations from plain English into safe handoff shapes.
+- Read [references/golden-examples.md](references/golden-examples.md) for quality benchmarks that show what a strong final translation should look like.
 - Read [references/validation-scenarios.md](references/validation-scenarios.md) for smoke-check scenarios.
 - Reuse [assets/request-brief-template.md](assets/request-brief-template.md) when the safest output is a neutral or multi-step request brief.
 - Reuse [assets/intent-routing-matrix.md](assets/intent-routing-matrix.md) when you want a quick fill-in routing sheet before writing the final handoff.
