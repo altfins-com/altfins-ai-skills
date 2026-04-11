@@ -65,13 +65,16 @@ Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared
 
 ## Validation
 
-Use the lightweight repository validator before pushing structural changes:
+Use the repository validators before pushing structural changes:
 
 ```bash
 python3 scripts/validate_skills.py
+python3 scripts/lint_markdown_contracts.py
 ```
 
-The validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, the shared source-linking rules, and the presence of skill-level validation scenarios.
+The first validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, the shared source-linking rules, and the stable skill artifacts.
+
+The markdown contract linter checks internal markdown links and common contract references so a broken path in `SKILL.md`, `docs/`, or skill references is caught early.
 
 Use [docs/skill-validation.md](docs/skill-validation.md) to run the scenario-based smoke checks for each skill.
 
@@ -85,8 +88,8 @@ When adding a new skill:
 4. Add minimal `agents/openai.yaml` metadata.
 5. Put shared conventions in `docs/`, not inside the skill folder.
 6. Keep the skill independently archivable for future `skill.zip` packaging.
-7. Add `references/validation-scenarios.md` for the new skill.
-8. Run `python3 scripts/validate_skills.py` before committing structural changes.
+7. Add `references/validation-scenarios.md` and `references/golden-examples.md` for the new skill.
+8. Run both validators before committing structural changes.
 
 ## Packaging Direction
 

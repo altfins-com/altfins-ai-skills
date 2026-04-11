@@ -16,6 +16,7 @@
 │   ├── skill-validation.md
 │   └── validated-sources.md
 ├── scripts/
+│   ├── lint_markdown_contracts.py
 │   └── validate_skills.py
 ├── altfins-market-analyst/
 ├── altfins-market-researcher/
@@ -56,6 +57,7 @@ Keep skill-local content inside the skill:
 - scope boundaries
 - skill-specific references
 - skill-specific validation scenarios
+- quality benchmarks via golden examples
 - future scripts or assets required by that skill only
 
 Do not create extra per-skill README files unless there is a strong future need. `SKILL.md` should remain the primary entry point.
@@ -81,6 +83,7 @@ In practice, this means future `skill.zip` creation should work by archiving the
 - Add shared conventions to `docs/` instead of copying them into every skill.
 - Put cross-skill source validation into `docs/validated-sources.md` and keep skill-local interpretations inside each skill's `references/` folder.
 - Keep repository-wide validators under `scripts/` and keep them lightweight and dependency-free when possible.
+- Keep markdown links and contract references valid; the markdown linter now treats those links as part of the stable repo contract.
 
 ## Extension Rules
 
@@ -92,4 +95,5 @@ When adding a new skill later:
 4. Add only the references, scripts, or assets that are already useful.
 5. Avoid introducing shared tooling until at least two skills clearly need it.
 6. Add at least one `references/validation-scenarios.md` file.
-7. Run the repository validator before committing structural changes.
+7. Add at least one `references/golden-examples.md` file.
+8. Run the repository validators before committing structural changes.

@@ -15,6 +15,7 @@ The goal is not to prove full correctness. The goal is to catch obvious drift in
 - filter and body planning discipline
 - synthesis discipline
 - answer quality against repository golden examples
+- broken contract links between skill docs, references, and assets
 
 ## How to Run a Smoke Check
 
@@ -26,7 +27,8 @@ For each skill:
 4. Pick one scenario that matches the kind of work you want to validate.
 5. Check whether the skill would produce the expected behavior without inventing undocumented altFINS behavior.
 6. Compare the shape and quality of the answer against the golden example style for that skill.
-7. Record any failure as a repository issue or update the skill docs if the contract is outdated.
+7. Run `python3 scripts/lint_markdown_contracts.py` if you changed markdown links or contract references.
+8. Record any failure as a repository issue or update the skill docs if the contract is outdated.
 
 ## Shared Pass Criteria
 
@@ -39,6 +41,7 @@ A scenario passes if the skill:
 - makes missing inputs and assumptions explicit when needed
 - uses the taxonomy, request-shaping, or synthesis layer that now belongs to that skill's contract
 - reaches the same quality bar shown by the skill's golden examples
+- keeps internal markdown links and referenced assets valid
 
 ## Shared Failure Signals
 
@@ -51,6 +54,7 @@ A scenario fails if the skill:
 - ignores validated discovery paths such as `af --help`, `af commands -o json`, or MCP runtime tool discovery
 - skips the newer skill-specific discipline layer that should now guide the answer
 - falls materially below the clarity or caution level shown in the golden examples
+- leaves a broken internal markdown link or broken contract reference behind
 
 ## Current Validation Files
 

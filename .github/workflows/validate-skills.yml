@@ -24,3 +24,17 @@ jobs:
 
       - name: Run repository validator
         run: python3 scripts/validate_skills.py
+
+  lint-markdown-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Run markdown contract linter
+        run: python3 scripts/lint_markdown_contracts.py
