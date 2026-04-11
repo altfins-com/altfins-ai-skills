@@ -2,12 +2,17 @@
 
 Use this skill conservatively.
 
+## Shared starting point
+
+Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) for the shared cross-repository source inventory.
+
 ## Preferred source order
 
 1. User-provided task context
 2. Real installed altFINS CLI help output
-3. Official altFINS documentation
-4. Verified repository context relevant to the CLI workflow
+3. `af commands -o json` command metadata
+4. Official altFINS documentation
+5. Verified repository context relevant to the CLI workflow
 
 ## Rules
 

@@ -52,6 +52,16 @@ Use this skill when the goal is to run or plan repeatable altFINS CLI research t
 
 Use this skill when the goal is to turn plain-English trading or research intent into a cleaner structured prompt, request brief, or future query plan without overpromising execution details.
 
+## Validated Reference Material
+
+The repository now includes a validated source layer built from:
+
+- official altFINS API and MCP documentation
+- the official altFINS CLI documentation page
+- the real installed `af` CLI help output and command metadata observed on April 11, 2026
+
+Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, then open the skill-local files in each `references/` directory for deeper, task-specific guidance.
+
 ## Adding Another Skill
 
 When adding a new skill:
@@ -67,4 +77,4 @@ When adding a new skill:
 
 This repository does not yet ship packaging automation. The intended direction is simple: package one skill directory at a time, so each skill can later become its own `skill.zip` without depending on shared runtime files from the root.
 
-See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.
+See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract, [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.

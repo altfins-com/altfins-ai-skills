@@ -2,6 +2,10 @@
 
 Use this skill conservatively.
 
+## Shared starting point
+
+Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) for the shared cross-repository source inventory.
+
 ## Preferred source order
 
 1. User-provided requirements and constraints

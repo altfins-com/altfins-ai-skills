@@ -12,7 +12,8 @@
 ├── .gitignore
 ├── docs/
 │   ├── repository-architecture.md
-│   └── skill-roadmap.md
+│   ├── skill-roadmap.md
+│   └── validated-sources.md
 ├── altfins-market-analyst/
 ├── altfins-market-researcher/
 └── altfins-query-builder/
@@ -39,6 +40,7 @@ Keep only shared repository-level content at the root:
 - repository overview
 - contribution conventions
 - shared architecture decisions
+- shared validated source inventory
 - roadmap and planning documents
 
 ### Inside a Skill Directory
@@ -71,6 +73,7 @@ In practice, this means future `skill.zip` creation should work by archiving the
 - Do not invent undocumented endpoints, CLI commands, flags, or MCP methods.
 - Prefer short, high-signal instructions over speculative detail.
 - Add shared conventions to `docs/` instead of copying them into every skill.
+- Put cross-skill source validation into `docs/validated-sources.md` and keep skill-local interpretations inside each skill's `references/` folder.
 
 ## Extension Rules
 

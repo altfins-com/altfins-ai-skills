@@ -21,12 +21,36 @@ Use this skill to structure crypto market analysis around validated altFINS-faci
 - the task is only prompt rewriting without analysis workflow design
 - the answer would require assuming undocumented altFINS MCP methods
 
+## Validated MCP Anchors
+
+Official altFINS MCP docs currently describe these high-level capability families:
+
+- Screener
+- Technical Analysis
+- OHLCV Data
+- Analytics History
+- Signal Feed
+- News
+- Calendar Events
+- Portfolio
+
+Treat these as documented capability families, not as guaranteed runtime tool names. Actual tool identifiers should be discovered from the connected MCP client at runtime.
+
 ## Working Rules
 
 - Treat official altFINS documentation, validated MCP metadata, and user-provided context as the trusted sources.
 - Do not invent tool names, server methods, or analysis capabilities.
 - Make uncertainty explicit when MCP coverage is not yet validated.
 - Prefer structured findings, assumptions, and next investigative steps.
+- Separate validated facts from inferences and market interpretation.
+
+## Recommended Workflow
+
+1. Clarify the market question, assets, timeframe, and desired output.
+2. Decide which documented capability family is relevant.
+3. Confirm the actual available MCP tools from the connected client before planning any tool use.
+4. Gather evidence in a traceable order: market state, supporting indicators, signals, then contextual news or events when relevant.
+5. Finish with a conservative summary that clearly labels facts, inferences, and missing inputs.
 
 ## Expected Outputs
 
@@ -36,4 +60,6 @@ Use this skill to structure crypto market analysis around validated altFINS-faci
 
 ## References
 
-- Read [references/sources.md](references/sources.md) before relying on external altFINS-facing behavior.
+- Read [references/sources.md](references/sources.md) for source boundaries.
+- Read [references/mcp-anchors.md](references/mcp-anchors.md) for validated MCP facts.
+- Read [references/analysis-workflow.md](references/analysis-workflow.md) for a reusable analysis flow.
