@@ -1,0 +1,70 @@
+# altfins-ai-skills
+
+This repository hosts reusable AI skills for altFINS-related workflows.
+
+The goal is to keep each skill self-contained, easy to review, and easy to package later as an individual `skill.zip` bundle. The repository starts with three conservative, documentation-first skills:
+
+- `altfins-market-analyst`: structured market analysis workflows for altFINS MCP-driven research
+- `altfins-market-researcher`: repeatable CLI-driven research workflows with export-friendly output habits
+- `altfins-query-builder`: translation of plain-English research intent into structured prompts or future query shapes
+
+## Why a Monorepo
+
+This repository uses a monorepo so the skills can share the same contribution model, naming conventions, packaging rules, and roadmap while still remaining independently packageable.
+
+This keeps the project:
+
+- easy for humans to browse
+- easy for agents to extend
+- easy to version skill-by-skill later
+- easy to review without guessing where new skills belong
+
+## Repository Layout
+
+```text
+.
+├── README.md
+├── docs/
+├── altfins-market-analyst/
+├── altfins-market-researcher/
+└── altfins-query-builder/
+```
+
+Each skill directory follows the same internal shape:
+
+- `SKILL.md` for the skill contract and usage guidance
+- `agents/openai.yaml` for starter metadata
+- `references/` for trusted source boundaries and future reference material
+- `scripts/` for future deterministic helpers
+- `assets/` for future packaging assets
+
+## Current Skills
+
+### AltFINS Market Analyst
+
+Use this skill when the goal is to guide structured crypto market analysis through validated altFINS-facing workflows, especially when the agent needs to frame research, gather evidence carefully, and summarize findings conservatively.
+
+### AltFINS Market Researcher
+
+Use this skill when the goal is to run or plan repeatable altFINS CLI research tasks, inspect available commands, and prepare output that is easy to export or hand off.
+
+### AltFINS Query Builder
+
+Use this skill when the goal is to turn plain-English trading or research intent into a cleaner structured prompt, request brief, or future query plan without overpromising execution details.
+
+## Adding Another Skill
+
+When adding a new skill:
+
+1. Create a new top-level directory with a lowercase, hyphenated name.
+2. Copy the standard folder shape used by the existing skills.
+3. Write a short, conservative `SKILL.md` with clear boundaries.
+4. Add minimal `agents/openai.yaml` metadata.
+5. Put shared conventions in `docs/`, not inside the skill folder.
+6. Keep the skill independently archivable for future `skill.zip` packaging.
+
+## Packaging Direction
+
+This repository does not yet ship packaging automation. The intended direction is simple: package one skill directory at a time, so each skill can later become its own `skill.zip` without depending on shared runtime files from the root.
+
+See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.

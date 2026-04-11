@@ -1,0 +1,7 @@
+interface:
+  display_name: "AltFINS Query Builder"
+  short_description: "Translate intent into structured requests"
+  default_prompt: "Use $altfins-query-builder to turn this plain-English crypto research request into a structured altFINS-ready brief."
+
+policy:
+  allow_implicit_invocation: false

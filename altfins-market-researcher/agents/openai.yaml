@@ -1,0 +1,7 @@
+interface:
+  display_name: "AltFINS Market Researcher"
+  short_description: "Repeatable altFINS CLI research workflows"
+  default_prompt: "Use $altfins-market-researcher to plan a repeatable altFINS CLI research workflow for this market question."
+
+policy:
+  allow_implicit_invocation: false
