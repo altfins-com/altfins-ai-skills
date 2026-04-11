@@ -72,3 +72,5 @@ The current validated target families include:
 - Read [references/sources.md](references/sources.md) for source boundaries.
 - Read [references/target-catalog.md](references/target-catalog.md) for validated target mappings.
 - Read [references/translation-playbook.md](references/translation-playbook.md) for a reusable translation flow.
+- Read [references/example-translations.md](references/example-translations.md) for worked translations from plain English into safe handoff shapes.
+- Reuse [assets/request-brief-template.md](assets/request-brief-template.md) when the safest output is a neutral or multi-step request brief.
