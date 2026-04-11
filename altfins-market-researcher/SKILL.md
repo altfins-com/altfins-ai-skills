@@ -58,4 +58,5 @@ Observed from the real installed CLI on April 11, 2026:
 - Read [references/cli-anchors.md](references/cli-anchors.md) for validated CLI surface details.
 - Read [references/research-playbook.md](references/research-playbook.md) for a reusable CLI workflow.
 - Read [references/example-workflows.md](references/example-workflows.md) for validated command patterns and wrappers.
+- Read [references/validation-scenarios.md](references/validation-scenarios.md) for smoke-check scenarios.
 - Reuse [assets/research-handoff-template.md](assets/research-handoff-template.md) when handing a CLI workflow to another agent or user.

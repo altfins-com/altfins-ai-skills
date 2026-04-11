@@ -13,6 +13,7 @@ ROOT_REQUIRED_FILES = [
     ROOT / ".gitignore",
     ROOT / "docs" / "repository-architecture.md",
     ROOT / "docs" / "skill-roadmap.md",
+    ROOT / "docs" / "skill-validation.md",
     ROOT / "docs" / "validated-sources.md",
     ROOT / "scripts" / "validate_skills.py",
 ]
@@ -20,6 +21,7 @@ SKILL_REQUIRED_RELATIVE = [
     Path("SKILL.md"),
     Path("agents/openai.yaml"),
     Path("references/sources.md"),
+    Path("references/validation-scenarios.md"),
     Path("scripts"),
     Path("assets"),
 ]
@@ -48,10 +50,6 @@ def parse_frontmatter(skill_file: Path) -> dict[str, str]:
     return frontmatter
 
 
-def file_contains(path: Path, needle: str) -> bool:
-    return needle in path.read_text(encoding="utf-8")
-
-
 def validate_openai_yaml(skill_dir: Path, errors: list[str]) -> None:
     path = skill_dir / "agents" / "openai.yaml"
     text = path.read_text(encoding="utf-8")
@@ -69,6 +67,19 @@ def validate_openai_yaml(skill_dir: Path, errors: list[str]) -> None:
     skill_invocation = f"${skill_dir.name}"
     if skill_invocation not in text:
         errors.append(f"{path}: default_prompt must mention {skill_invocation}")
+
+
+def validate_validation_scenarios(skill_dir: Path, errors: list[str]) -> None:
+    path = skill_dir / "references" / "validation-scenarios.md"
+    text = path.read_text(encoding="utf-8")
+    required_phrases = [
+        "## Scenario 1",
+        "### Expected behavior",
+        "### Failure signals",
+    ]
+    for phrase in required_phrases:
+        if phrase not in text:
+            errors.append(f"{path}: missing required validation phrase {phrase!r}")
 
 
 def validate_skill(skill_dir: Path, errors: list[str]) -> None:
@@ -93,6 +104,7 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
         errors.append(f"{skill_file}: missing frontmatter description")
 
     validate_openai_yaml(skill_dir, errors)
+    validate_validation_scenarios(skill_dir, errors)
 
     sources_file = skill_dir / "references" / "sources.md"
     if sources_file.exists() and "../../docs/validated-sources.md" not in sources_file.read_text(encoding="utf-8"):

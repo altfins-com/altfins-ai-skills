@@ -71,7 +71,9 @@ Use the lightweight repository validator before pushing structural changes:
 python3 scripts/validate_skills.py
 ```
 
-The validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, and the shared source-linking rules used by the current skills.
+The validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, the shared source-linking rules, and the presence of skill-level validation scenarios.
+
+Use [docs/skill-validation.md](docs/skill-validation.md) to run the scenario-based smoke checks for each skill.
 
 ## Adding Another Skill
 
@@ -83,10 +85,11 @@ When adding a new skill:
 4. Add minimal `agents/openai.yaml` metadata.
 5. Put shared conventions in `docs/`, not inside the skill folder.
 6. Keep the skill independently archivable for future `skill.zip` packaging.
-7. Run `python3 scripts/validate_skills.py` before committing structural changes.
+7. Add `references/validation-scenarios.md` for the new skill.
+8. Run `python3 scripts/validate_skills.py` before committing structural changes.
 
 ## Packaging Direction
 
 This repository does not yet ship packaging automation. The intended direction is simple: package one skill directory at a time, so each skill can later become its own `skill.zip` without depending on shared runtime files from the root.
 
-See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract, [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.
+See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract, [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, [docs/skill-validation.md](docs/skill-validation.md) for smoke-check guidance, and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.

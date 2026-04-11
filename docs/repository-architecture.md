@@ -13,6 +13,7 @@
 ├── docs/
 │   ├── repository-architecture.md
 │   ├── skill-roadmap.md
+│   ├── skill-validation.md
 │   └── validated-sources.md
 ├── scripts/
 │   └── validate_skills.py
@@ -44,6 +45,7 @@ Keep only shared repository-level content at the root:
 - shared architecture decisions
 - shared validated source inventory
 - repository-wide validation helpers
+- smoke-check guidance
 - roadmap and planning documents
 
 ### Inside a Skill Directory
@@ -53,6 +55,7 @@ Keep skill-local content inside the skill:
 - invocation guidance
 - scope boundaries
 - skill-specific references
+- skill-specific validation scenarios
 - future scripts or assets required by that skill only
 
 Do not create extra per-skill README files unless there is a strong future need. `SKILL.md` should remain the primary entry point.
@@ -88,4 +91,5 @@ When adding a new skill later:
 3. Keep the skill self-contained.
 4. Add only the references, scripts, or assets that are already useful.
 5. Avoid introducing shared tooling until at least two skills clearly need it.
-6. Run the repository validator before committing structural changes.
+6. Add at least one `references/validation-scenarios.md` file.
+7. Run the repository validator before committing structural changes.
