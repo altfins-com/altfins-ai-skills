@@ -1,87 +1,163 @@
 # altfins-ai-skills
 
-This repository hosts reusable AI skills for altFINS-related workflows.
+Reusable AI skills for altFINS workflows.
 
-The goal is to keep each skill self-contained, easy to review, and easy to package later as an individual `skill.zip` bundle. The repository starts with three conservative, documentation-first skills:
+Install them into your local AI agent, then use them for crypto market analysis, CLI research, and plain-English-to-query translation.
 
-- `altfins-market-analyst`: structured market analysis workflows for altFINS MCP-driven research
-- `altfins-market-researcher`: repeatable CLI-driven research workflows with export-friendly output habits
-- `altfins-query-builder`: translation of plain-English research intent into structured prompts or future query shapes
+## Install in 30 Seconds
 
-## Why a Monorepo
+Requires Python 3.9+ and one of the supported local agent homes.
 
-This repository uses a monorepo so the skills can share the same contribution model, naming conventions, packaging rules, and roadmap while still remaining independently packageable.
+```bash
+# Clone the repository
+git clone https://github.com/altfins-com/altfins-ai-skills
+cd altfins-ai-skills
 
-This keeps the project:
+# See the available skills
+python3 scripts/skills.py list
 
-- easy for humans to browse
-- easy for agents to extend
-- easy to version skill-by-skill later
-- easy to review without guessing where new skills belong
-
-## Repository Layout
-
-```text
-.
-├── README.md
-├── docs/
-├── scripts/
-├── altfins-market-analyst/
-├── altfins-market-researcher/
-└── altfins-query-builder/
+# Install all skills into Codex
+python3 scripts/skills.py install --platform codex --all
 ```
 
-Each skill directory follows the same internal shape:
+Other common installs:
 
-- `README.md` for user-facing onboarding and example ways to use the skill
-- `SKILL.md` for the core skill contract and invocation guidance
-- `agents/openai.yaml` for starter metadata
-- `references/` for trusted source boundaries and future reference material
-- `scripts/` for future deterministic helpers
-- `assets/` for future packaging assets
+```bash
+# Claude
+python3 scripts/skills.py install --platform claude --all
 
-## Current Skills
+# Gemini
+python3 scripts/skills.py install --platform gemini --all
+
+# Copilot
+python3 scripts/skills.py install --platform copilot --all
+```
+
+After installation, restart your assistant so it can pick up the new skills.
+
+Full install details live in [docs/skill-installation.md](docs/skill-installation.md).
+
+## What You Get
+
+This repository currently ships three reusable skills:
 
 ### AltFINS Market Analyst
 
-Use this skill when the goal is to guide structured crypto market analysis through validated altFINS-facing workflows, especially when the agent needs to frame research, gather evidence carefully, and summarize findings conservatively.
+Use this when you want a structured technical or market analysis built around validated altFINS-facing workflows.
+
+Best for:
+- single-coin technical outlooks
+- comparing two market setups
+- summarizing the most interesting opportunities from a scan
+- separating facts from interpretation
+
+See:
+- [altfins-market-analyst/README.md](altfins-market-analyst/README.md)
+- [altfins-market-analyst/SKILL.md](altfins-market-analyst/SKILL.md)
 
 ### AltFINS Market Researcher
 
-Use this skill when the goal is to run or plan repeatable altFINS CLI research tasks, inspect available commands, and prepare output that is easy to export or hand off.
+Use this when you want help with the `af` CLI in a way that is repeatable, export-friendly, and safe.
+
+Best for:
+- finding the right `af` command
+- deciding between flags, `--filter`, and `--stdin-json`
+- preparing JSON, JSONL, CSV, or table workflows
+- building repeatable research steps for another agent or user
+
+See:
+- [altfins-market-researcher/README.md](altfins-market-researcher/README.md)
+- [altfins-market-researcher/SKILL.md](altfins-market-researcher/SKILL.md)
 
 ### AltFINS Query Builder
 
-Use this skill when the goal is to turn plain-English trading or research intent into a cleaner structured prompt, request brief, or future query plan without overpromising execution details.
+Use this when the user starts with a vague plain-English crypto request and the first job is to turn it into something structured.
+
+Best for:
+- clarifying what the user actually wants
+- identifying missing inputs
+- routing a request toward CLI, MCP, or an interface-neutral brief
+- producing a clean handoff for the next skill or agent
+
+See:
+- [altfins-query-builder/README.md](altfins-query-builder/README.md)
+- [altfins-query-builder/SKILL.md](altfins-query-builder/SKILL.md)
+
+## How to Use the Skills
+
+Once the skills are installed, invoke them by name in your agent environment.
+
+Examples:
+
+```text
+Use $altfins-query-builder to turn this into a clean research brief: What are the best coins right now?
+```
+
+```text
+Use $altfins-market-researcher to give me the safest af workflow for daily RSI history for BTC in JSON.
+```
+
+```text
+Use $altfins-market-analyst to assess the current technical outlook for ETH and separate facts from interpretation.
+```
+
+Each skill also has its own user-facing README with more examples.
+
+## Supported Platforms
+
+The installer currently supports these local agent homes:
+
+| Platform | Install support in v1 | Install root |
+|----------|------------------------|--------------|
+| Codex | Yes | `$CODEX_HOME/skills` or `~/.codex/skills` |
+| Claude | Yes | `~/.claude/skills` |
+| Gemini | Yes | `~/.gemini/skills` |
+| Copilot | Yes | `~/.copilot/skills` |
+| Cursor | Recognized, not installable in v1 | deferred |
+| OpenClaw | Recognized, not installable in v1 | deferred |
+
+`Cursor` and `OpenClaw` are intentionally deferred because v1 only handles skills-only installation. Project-level glue such as rules, hooks, or `AGENTS.md` wiring is a later phase.
+
+## Package Skills
+
+If you want individual `skill.zip` bundles:
+
+```bash
+python3 scripts/skills.py package --all
+```
+
+Artifacts land here:
+
+```text
+dist/skills/<skill-name>.skill.zip
+```
+
+Each archive contains the skill folder itself as the zip root, so the package stays self-contained.
+
+## Why This Repo Is a Monorepo
+
+The monorepo structure keeps the skills:
+- easy to browse
+- easy to validate
+- easy to package one by one
+- easy to extend without guessing where new skills belong
+
+Shared conventions and validation live at the repo level, while each skill remains independently installable and packageable.
 
 ## Validated Reference Material
 
-The repository now includes a validated source layer built from:
+The repository is grounded in:
+- official altFINS API documentation
+- the official OpenAPI schema
+- official altFINS MCP documentation
+- official altFINS CLI documentation
+- observed local `af` CLI help and command metadata
 
-- official altFINS API and MCP documentation
-- the official altFINS CLI documentation page
-- the real installed `af` CLI help output and command metadata observed on April 11, 2026
-
-Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, then open the skill-local files in each `references/` directory for deeper, task-specific guidance.
-
-## Installation and Packaging
-
-The repository now includes a shared installer CLI:
-
-```bash
-python3 scripts/skills.py list
-python3 scripts/skills.py package --all
-python3 scripts/skills.py install --platform codex altfins-market-analyst
-python3 scripts/skills.py status --platform codex
-```
-
-Supported v1 install targets are `codex`, `claude`, `gemini`, and `copilot`. `cursor` and `openclaw` are recognized but intentionally deferred because v1 only handles skills-only installation, not project-level glue.
-
-See [docs/skill-installation.md](docs/skill-installation.md) for the platform matrix, exact commands, package output layout, and current limitations.
+Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory.
 
 ## Validation
 
-Use the repository validators before pushing structural changes:
+Run these checks before pushing structural or contract changes:
 
 ```bash
 python3 scripts/validate_skills.py
@@ -89,29 +165,27 @@ python3 scripts/lint_markdown_contracts.py
 python3 scripts/test_skills.py
 ```
 
-The first validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, the shared source-linking rules, and the stable skill artifacts.
+These checks cover:
+- skill structure and required files
+- markdown contract links
+- installer list, package, install, uninstall, and status smoke tests
 
-The markdown contract linter checks internal markdown links and common contract references so a broken path in `SKILL.md`, `docs/`, or skill references is caught early.
-
-The installer smoke test checks listing, packaging, supported platform installs, uninstall flow, unsupported platform handling, and validator-gated packaging behavior.
-
-Use [docs/skill-validation.md](docs/skill-validation.md) to run the scenario-based smoke checks for each skill.
+For scenario-based checks of the skill behavior itself, see [docs/skill-validation.md](docs/skill-validation.md).
 
 ## Adding Another Skill
 
 When adding a new skill:
 
 1. Create a new top-level directory with a lowercase, hyphenated name.
-2. Copy the standard folder shape used by the existing skills.
-3. Write a short, conservative `SKILL.md` with clear boundaries.
-4. Add minimal `agents/openai.yaml` metadata.
-5. Put shared conventions in `docs/`, not inside the skill folder.
-6. Keep the skill independently archivable for future `skill.zip` packaging.
-7. Add `references/validation-scenarios.md` and `references/golden-examples.md` for the new skill.
-8. Run both validators before committing structural changes.
+2. Add `README.md`, `SKILL.md`, `agents/openai.yaml`, `references/`, `scripts/`, and `assets/`.
+3. Keep claims conservative and grounded in validated altFINS behavior.
+4. Add `references/validation-scenarios.md` and `references/golden-examples.md`.
+5. Run all repository checks before committing.
 
-## Packaging Direction
+## Learn More
 
-This repository does not yet ship packaging automation. The intended direction is simple: package one skill directory at a time, so each skill can later become its own `skill.zip` without depending on shared runtime files from the root.
-
-See [docs/repository-architecture.md](docs/repository-architecture.md) for the structural contract, [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, [docs/skill-validation.md](docs/skill-validation.md) for smoke-check guidance, and [docs/skill-roadmap.md](docs/skill-roadmap.md) for the phased roadmap.
+- [docs/skill-installation.md](docs/skill-installation.md)
+- [docs/repository-architecture.md](docs/repository-architecture.md)
+- [docs/validated-sources.md](docs/validated-sources.md)
+- [docs/skill-validation.md](docs/skill-validation.md)
+- [docs/skill-roadmap.md](docs/skill-roadmap.md)
