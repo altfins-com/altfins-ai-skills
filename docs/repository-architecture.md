@@ -17,6 +17,8 @@
 │   └── validated-sources.md
 ├── scripts/
 │   ├── lint_markdown_contracts.py
+│   ├── skills.py
+│   ├── test_skills.py
 │   └── validate_skills.py
 ├── altfins-market-analyst/
 ├── altfins-market-researcher/
@@ -45,7 +47,7 @@ Keep only shared repository-level content at the root:
 - contribution conventions
 - shared architecture decisions
 - shared validated source inventory
-- repository-wide validation helpers
+- repository-wide validation and installation helpers
 - smoke-check guidance
 - roadmap and planning documents
 
@@ -60,7 +62,7 @@ Keep skill-local content inside the skill:
 - quality benchmarks via golden examples
 - future scripts or assets required by that skill only
 
-Do not create extra per-skill README files unless there is a strong future need. `SKILL.md` should remain the primary entry point.
+Per-skill `README.md` files are allowed when they serve as user-facing onboarding docs. `SKILL.md` remains the primary skill contract for agents, while `README.md` can explain how a human should use the skill.
 
 ## Packaging Strategy
 
@@ -68,6 +70,7 @@ The packaging model should stay straightforward:
 
 - one skill directory equals one future package
 - zip one skill directory at a time
+- use `python3 scripts/skills.py package ...` as the canonical packaging entrypoint
 - avoid root-level runtime dependencies that a packaged skill would require
 
 In practice, this means future `skill.zip` creation should work by archiving the contents of a single skill folder without pulling in shared code from elsewhere in the repository.
@@ -82,7 +85,7 @@ In practice, this means future `skill.zip` creation should work by archiving the
 - Prefer short, high-signal instructions over speculative detail.
 - Add shared conventions to `docs/` instead of copying them into every skill.
 - Put cross-skill source validation into `docs/validated-sources.md` and keep skill-local interpretations inside each skill's `references/` folder.
-- Keep repository-wide validators under `scripts/` and keep them lightweight and dependency-free when possible.
+- Keep repository-wide validators and installer helpers under `scripts/` and keep them lightweight and dependency-free when possible.
 - Keep markdown links and contract references valid; the markdown linter now treats those links as part of the stable repo contract.
 
 ## Extension Rules

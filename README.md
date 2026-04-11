@@ -33,7 +33,8 @@ This keeps the project:
 
 Each skill directory follows the same internal shape:
 
-- `SKILL.md` for the skill contract and usage guidance
+- `README.md` for user-facing onboarding and example ways to use the skill
+- `SKILL.md` for the core skill contract and invocation guidance
 - `agents/openai.yaml` for starter metadata
 - `references/` for trusted source boundaries and future reference material
 - `scripts/` for future deterministic helpers
@@ -63,6 +64,21 @@ The repository now includes a validated source layer built from:
 
 Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory, then open the skill-local files in each `references/` directory for deeper, task-specific guidance.
 
+## Installation and Packaging
+
+The repository now includes a shared installer CLI:
+
+```bash
+python3 scripts/skills.py list
+python3 scripts/skills.py package --all
+python3 scripts/skills.py install --platform codex altfins-market-analyst
+python3 scripts/skills.py status --platform codex
+```
+
+Supported v1 install targets are `codex`, `claude`, `gemini`, and `copilot`. `cursor` and `openclaw` are recognized but intentionally deferred because v1 only handles skills-only installation, not project-level glue.
+
+See [docs/skill-installation.md](docs/skill-installation.md) for the platform matrix, exact commands, package output layout, and current limitations.
+
 ## Validation
 
 Use the repository validators before pushing structural changes:
@@ -70,11 +86,14 @@ Use the repository validators before pushing structural changes:
 ```bash
 python3 scripts/validate_skills.py
 python3 scripts/lint_markdown_contracts.py
+python3 scripts/test_skills.py
 ```
 
 The first validator checks the required folder shape, `SKILL.md` frontmatter, starter `agents/openai.yaml` metadata, the shared source-linking rules, and the stable skill artifacts.
 
 The markdown contract linter checks internal markdown links and common contract references so a broken path in `SKILL.md`, `docs/`, or skill references is caught early.
+
+The installer smoke test checks listing, packaging, supported platform installs, uninstall flow, unsupported platform handling, and validator-gated packaging behavior.
 
 Use [docs/skill-validation.md](docs/skill-validation.md) to run the scenario-based smoke checks for each skill.
 

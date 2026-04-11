@@ -13,12 +13,22 @@ ROOT_REQUIRED_FILES = [
     ROOT / ".gitignore",
     ROOT / "docs" / "repository-architecture.md",
     ROOT / "docs" / "skill-roadmap.md",
+    ROOT / "docs" / "skill-installation.md",
     ROOT / "docs" / "skill-validation.md",
     ROOT / "docs" / "validated-sources.md",
+    ROOT / "scripts" / "skills.py",
+    ROOT / "scripts" / "test_skills.py",
     ROOT / "scripts" / "validate_skills.py",
 ]
+README_TITLES = {
+    "altfins-market-analyst": "# AltFINS Market Analyst",
+    "altfins-market-researcher": "# AltFINS Market Researcher",
+    "altfins-query-builder": "# AltFINS Query Builder",
+}
+
 SKILL_REQUIRED_RELATIVE = {
     "default": [
+        Path("README.md"),
         Path("SKILL.md"),
         Path("agents/openai.yaml"),
         Path("references/sources.md"),
@@ -122,7 +132,12 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
 
     readme_path = skill_dir / "README.md"
     if readme_path.exists():
-        errors.append(f"{readme_path}: per-skill README files are not part of the current convention")
+        readme_text = readme_path.read_text(encoding="utf-8")
+        expected_title = README_TITLES.get(skill_dir.name, f"# {skill_dir.name}")
+        if expected_title not in readme_text:
+            errors.append(f"{readme_path}: missing expected top-level heading {expected_title!r}")
+        if "## How to Use It" not in readme_text:
+            errors.append(f"{readme_path}: missing user-facing usage section")
 
     skill_file = skill_dir / "SKILL.md"
     try:
