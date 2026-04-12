@@ -4,36 +4,46 @@ Reusable AI skills for altFINS workflows.
 
 Install them into your local AI agent, then use them for crypto market analysis, CLI research, and plain-English-to-query translation.
 
-## Install in 30 Seconds
+## Install
 
-Requires Python 3.9+ and one of the supported local agent homes.
+### macOS and Linux
+
+The intended public install path for tagged releases is Homebrew:
 
 ```bash
-# Clone the repository
+brew install altfins-com/tap/altfins-skills
+altfins-skills list
+altfins-skills install --platform codex --all
+```
+
+Brew installs the `altfins-skills` command only. It does not modify your local agent homes until you explicitly run `altfins-skills install ...`.
+
+### Windows
+
+The intended public install path for tagged releases is the downloadable release ZIP:
+
+```powershell
+# Download and unzip altfins-skills-windows.zip
+.\altfins-skills.exe list
+.\altfins-skills.exe install --platform copilot --all
+```
+
+Python fallback inside the ZIP:
+
+```powershell
+.\altfins-skills.cmd list
+```
+
+### Developer Fallback
+
+If you are working directly from a repo checkout, you can still use the Python entrypoint:
+
+```bash
 git clone https://github.com/altfins-com/altfins-ai-skills
 cd altfins-ai-skills
-
-# See the available skills
 python3 scripts/skills.py list
-
-# Install all skills into Codex
 python3 scripts/skills.py install --platform codex --all
 ```
-
-Other common installs:
-
-```bash
-# Claude
-python3 scripts/skills.py install --platform claude --all
-
-# Gemini
-python3 scripts/skills.py install --platform gemini --all
-
-# Copilot
-python3 scripts/skills.py install --platform copilot --all
-```
-
-After installation, restart your assistant so it can pick up the new skills.
 
 Full install details live in [docs/skill-installation.md](docs/skill-installation.md).
 
@@ -101,8 +111,6 @@ Use $altfins-market-researcher to give me the safest af workflow for daily RSI h
 Use $altfins-market-analyst to assess the current technical outlook for ETH and separate facts from interpretation.
 ```
 
-Each skill also has its own user-facing README with more examples.
-
 ## Supported Platforms
 
 The installer currently supports these local agent homes:
@@ -116,11 +124,17 @@ The installer currently supports these local agent homes:
 | Cursor | Recognized, not installable in v1 | deferred |
 | OpenClaw | Recognized, not installable in v1 | deferred |
 
-`Cursor` and `OpenClaw` are intentionally deferred because v1 only handles skills-only installation. Project-level glue such as rules, hooks, or `AGENTS.md` wiring is a later phase.
+`Cursor` and `OpenClaw` are intentionally deferred because this pass still excludes project-level glue such as rules, hooks, or `AGENTS.md` wiring.
 
 ## Package Skills
 
 If you want individual `skill.zip` bundles:
+
+```bash
+altfins-skills package --all
+```
+
+Developer fallback:
 
 ```bash
 python3 scripts/skills.py package --all
@@ -131,8 +145,6 @@ Artifacts land here:
 ```text
 dist/skills/<skill-name>.skill.zip
 ```
-
-Each archive contains the skill folder itself as the zip root, so the package stays self-contained.
 
 ## Why This Repo Is a Monorepo
 
@@ -169,6 +181,7 @@ These checks cover:
 - skill structure and required files
 - markdown contract links
 - installer list, package, install, uninstall, and status smoke tests
+- launcher and packaged-layout resolution smoke tests
 
 For scenario-based checks of the skill behavior itself, see [docs/skill-validation.md](docs/skill-validation.md).
 
@@ -185,6 +198,7 @@ When adding a new skill:
 ## Learn More
 
 - [docs/skill-installation.md](docs/skill-installation.md)
+- [docs/releasing.md](docs/releasing.md)
 - [docs/repository-architecture.md](docs/repository-architecture.md)
 - [docs/validated-sources.md](docs/validated-sources.md)
 - [docs/skill-validation.md](docs/skill-validation.md)

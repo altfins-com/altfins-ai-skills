@@ -1,0 +1,26 @@
+class AltfinsSkills < Formula
+  desc "Install and package reusable altFINS AI skills"
+  homepage "https://github.com/altfins-com/altfins-ai-skills"
+  url "{{URL}}"
+  sha256 "{{SHA256}}"
+  version "{{VERSION}}"
+  license "Apache-2.0"
+
+  depends_on "python@3.12"
+
+  def install
+    (libexec/"repo").install Dir["*"]
+
+    (bin/"altfins-skills").write <<~SH
+      #!/bin/bash
+      export ALTFINS_SKILLS_ROOT="#{libexec}/repo"
+      export ALTFINS_SKILLS_PYTHON="#{Formula["python@3.12"].opt_bin}/python3"
+      exec "$ALTFINS_SKILLS_PYTHON" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+    SH
+  end
+
+  test do
+    output = shell_output("#{bin}/altfins-skills list --json")
+    assert_match "altfins-market-analyst", output
+  end
+end

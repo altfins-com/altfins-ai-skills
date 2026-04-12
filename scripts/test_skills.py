@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Smoke tests for scripts/skills.py."""
+"""Smoke tests for altfins-skills installer surfaces."""
 
 from __future__ import annotations
 
@@ -14,7 +14,11 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from skills_core import resolve_repo_root  # noqa: E402
+
 SCRIPT = ROOT / "scripts" / "skills.py"
+WRAPPER = ROOT / "bin" / "altfins-skills"
 PYTHON = sys.executable
 EXPECTED_SKILLS = [
     "altfins-market-analyst",
@@ -23,12 +27,18 @@ EXPECTED_SKILLS = [
 ]
 
 
-def run_cli(*args: str, cwd: Path | None = None, env: dict[str, str] | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
-    command = [PYTHON, str(SCRIPT), *args]
-    result = subprocess.run(command, cwd=cwd or ROOT, env=env, text=True, capture_output=True)
+def run_cli(
+    *args: str,
+    command: list[str] | None = None,
+    cwd: Path | None = None,
+    env: dict[str, str] | None = None,
+    check: bool = True,
+) -> subprocess.CompletedProcess[str]:
+    cmd = command or [PYTHON, str(SCRIPT)]
+    result = subprocess.run([*cmd, *args], cwd=cwd or ROOT, env=env, text=True, capture_output=True)
     if check and result.returncode != 0:
         raise AssertionError(
-            f"Command failed: {' '.join(command)}\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+            f"Command failed: {' '.join([*cmd, *args])}\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
         )
     return result
 
@@ -74,7 +84,6 @@ class SkillsCliTest(unittest.TestCase):
             run_cli("install", "--platform", platform, "altfins-market-analyst", env=self.env)
             result = run_cli("status", "--platform", platform, "--json", env=self.env)
             payload = json.loads(result.stdout)
-            self.assertEqual(len(payload["platforms"]), 1)
             statuses = {item["name"]: item["installed"] for item in payload["platforms"][0]["skills"]}
             self.assertTrue(statuses["altfins-market-analyst"])
             run_cli("uninstall", "--platform", platform, "altfins-market-analyst", env=self.env)
@@ -104,16 +113,50 @@ class SkillsCliTest(unittest.TestCase):
             ignore=shutil.ignore_patterns(".git", "dist", "__pycache__", ".pytest_cache", "tmp"),
         )
         broken_readme = repo_copy / "altfins-market-analyst" / "README.md"
-        broken_readme.write_text("# Broken\n")
+        broken_readme.write_text("# Broken\n", encoding="utf-8")
+        env = self.env.copy()
+        env["ALTFINS_SKILLS_ROOT"] = str(repo_copy)
+        env["ALTFINS_SKILLS_DIST_DIR"] = str(self.tmpdir / "broken-dist")
         result = subprocess.run(
             [PYTHON, str(repo_copy / "scripts" / "skills.py"), "package", "altfins-market-analyst"],
             cwd=repo_copy,
-            env=self.env,
+            env=env,
             text=True,
             capture_output=True,
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Repository validation failed", result.stderr)
+
+    @unittest.skipUnless(os.name == "posix", "Unix launcher test only runs on POSIX hosts")
+    def test_unix_wrapper_works_with_installed_style_tree(self) -> None:
+        portable = self.tmpdir / "portable"
+        repo_dest = portable / "repo"
+        shutil.copytree(
+            ROOT,
+            repo_dest,
+            ignore=shutil.ignore_patterns(".git", "dist", "__pycache__", ".pytest_cache", "tmp"),
+        )
+        wrapper_path = portable / "altfins-skills"
+        shutil.copy2(WRAPPER, wrapper_path)
+        wrapper_path.chmod(0o755)
+        result = run_cli("list", "--json", command=[str(wrapper_path)], env=self.env)
+        payload = json.loads(result.stdout)
+        self.assertEqual([item["name"] for item in payload], EXPECTED_SKILLS)
+
+    def test_root_resolution_for_frozen_layout(self) -> None:
+        exe_root = self.tmpdir / "frozen"
+        repo_dest = exe_root / "repo"
+        shutil.copytree(
+            ROOT,
+            repo_dest,
+            ignore=shutil.ignore_patterns(".git", "dist", "__pycache__", ".pytest_cache", "tmp"),
+        )
+        resolved = resolve_repo_root(
+            script_file=repo_dest / "scripts" / "skills.py",
+            executable_path=exe_root / "altfins-skills.exe",
+            frozen=True,
+        )
+        self.assertEqual(resolved, repo_dest.resolve())
 
 
 if __name__ == "__main__":

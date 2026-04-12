@@ -1,27 +1,60 @@
 # Skill Installation
 
-This document explains the v1 installer flow for `altfins-ai-skills`.
+This document explains the public installation story for `altfins-ai-skills`.
 
-## Goal
+## Summary
 
-The repository now ships a shared Python installer so each skill can be:
-- listed from the monorepo
-- packaged into its own `skill.zip`
-- installed into a supported local agent home
-- uninstalled cleanly later
+The project now has two user-facing installation paths:
 
-The v1 installer is intentionally conservative. It supports skills-only installation, not project-level glue such as `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, Cursor rules, or hooks.
+- `macOS and Linux`: Homebrew-first
+- `Windows`: downloadable ZIP-first
 
-## Installer Entry Point
+The current repo checkout path remains available as a developer fallback.
 
-Run the installer from the repository root:
+## macOS and Linux
+
+The intended public install flow for tagged releases is:
+
+```bash
+brew install altfins-com/tap/altfins-skills
+altfins-skills list
+altfins-skills install --platform codex --all
+```
+
+Notes:
+- Homebrew installs the `altfins-skills` command.
+- `brew install` does not touch your agent homes.
+- The actual skill copy into `~/.codex/skills`, `~/.claude/skills`, `~/.gemini/skills`, or `~/.copilot/skills` happens only when you run `altfins-skills install ...`.
+
+## Windows
+
+The intended public install flow for tagged releases is:
+
+```powershell
+# Download and unzip altfins-skills-windows.zip
+.\altfins-skills.exe list
+.\altfins-skills.exe install --platform copilot --all
+```
+
+Python fallback inside the ZIP:
+
+```powershell
+.\altfins-skills.cmd list
+```
+
+The Windows ZIP should contain:
+- `altfins-skills.exe`
+- `altfins-skills.cmd`
+- `repo/` with the bundled skills, docs, and validator scripts
+
+## Developer Fallback
+
+If you are working directly from a clone of the repository, you can still use the Python entrypoint:
 
 ```bash
 python3 scripts/skills.py list
-python3 scripts/skills.py status
+python3 scripts/skills.py install --platform codex --all
 python3 scripts/skills.py package --all
-python3 scripts/skills.py install --platform codex altfins-market-analyst
-python3 scripts/skills.py uninstall --platform codex altfins-market-analyst
 ```
 
 ## Supported Platforms
@@ -32,71 +65,30 @@ python3 scripts/skills.py uninstall --platform codex altfins-market-analyst
 | Claude | Yes | `~/.claude/skills` |
 | Gemini | Yes | `~/.gemini/skills` |
 | Copilot | Yes | `~/.copilot/skills` |
-| Cursor | No, recognized only | n/a in skills-only mode |
-| OpenClaw | No, recognized only | n/a in skills-only mode |
+| Cursor | Recognized, not installable in v1 | deferred |
+| OpenClaw | Recognized, not installable in v1 | deferred |
 
-### Why Cursor and OpenClaw are deferred
+`Cursor` and `OpenClaw` remain deferred in this pass because the current installer only handles skills-only installation, not project-level rules, hooks, or `AGENTS.md` wiring.
 
-The current v1 design installs self-contained skill folders only. Cursor and OpenClaw integration patterns are closer to project-level rules or AGENTS-based wiring, so they are intentionally deferred until a later project-integration phase.
-
-## Commands
-
-### List skills
+## Public Commands
 
 ```bash
-python3 scripts/skills.py list
-python3 scripts/skills.py list --platform codex
-python3 scripts/skills.py list --json
+altfins-skills list [--platform PLATFORM] [--json]
+altfins-skills package [SKILL ... | --all]
+altfins-skills install --platform PLATFORM [SKILL ... | --all] [--force]
+altfins-skills uninstall --platform PLATFORM [SKILL ... | --all] [--force]
+altfins-skills status [--platform PLATFORM] [--json]
 ```
 
-### Show status
+The same subcommands are available through `python3 scripts/skills.py ...` in a repo checkout.
 
-```bash
-python3 scripts/skills.py status
-python3 scripts/skills.py status --platform gemini
-python3 scripts/skills.py status --json
-```
-
-### Package skills
-
-```bash
-python3 scripts/skills.py package --all
-python3 scripts/skills.py package altfins-market-analyst altfins-query-builder
-```
-
-Package output goes to:
+## Package Output
 
 ```text
 dist/skills/<skill-name>.skill.zip
 ```
 
-Each archive contains the skill folder as the zip root, for example:
-
-```text
-altfins-market-analyst/
-  README.md
-  SKILL.md
-  agents/
-  references/
-  scripts/
-  assets/
-```
-
-### Install skills
-
-```bash
-python3 scripts/skills.py install --platform codex altfins-market-analyst
-python3 scripts/skills.py install --platform claude --all
-```
-
-If a skill is already installed, the command fails unless you add `--force`.
-
-### Uninstall skills
-
-```bash
-python3 scripts/skills.py uninstall --platform codex altfins-market-analyst
-python3 scripts/skills.py uninstall --platform gemini --all
-```
+Each archive contains the skill folder itself as the zip root.
 
 ## Validation Behavior
 
@@ -107,14 +99,11 @@ python3 scripts/validate_skills.py
 python3 scripts/lint_markdown_contracts.py
 ```
 
-If validation fails, packaging or installation stops immediately.
+## Release Assets
 
-## Test and Automation
+Tagged releases are expected to publish these public artifacts:
+- `altfins-ai-skills-src.tar.gz`
+- `altfins-skills-windows.zip`
+- `altfins-skills.rb` as a rendered Homebrew formula helper artifact
 
-The repository now includes a smoke test for the installer:
-
-```bash
-python3 scripts/test_skills.py
-```
-
-GitHub Actions runs this smoke test alongside the existing repository validators.
+See [docs/releasing.md](releasing.md) for the release checklist.

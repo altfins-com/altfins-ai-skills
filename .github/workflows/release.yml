@@ -1,0 +1,89 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  source-and-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run validators and smoke tests
+        run: |
+          python3 scripts/validate_skills.py
+          python3 scripts/lint_markdown_contracts.py
+          python3 scripts/test_skills.py
+
+      - name: Derive release version
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build source archive
+        run: |
+          mkdir -p dist/release
+          python3 scripts/build_source_archive.py \
+            --version "${{ steps.version.outputs.value }}" \
+            --output dist/release/altfins-ai-skills-src.tar.gz \
+            --sha256-file dist/release/altfins-ai-skills-src.sha256
+
+      - name: Render Homebrew formula
+        run: |
+          SHA=$(cat dist/release/altfins-ai-skills-src.sha256)
+          python3 scripts/render_homebrew_formula.py \
+            --version "${{ steps.version.outputs.value }}" \
+            --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/altfins-ai-skills-src.tar.gz" \
+            --sha256 "$SHA" \
+            --output dist/release/altfins-skills.rb
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --generate-notes
+          gh release upload "${GITHUB_REF_NAME}" dist/release/altfins-ai-skills-src.tar.gz dist/release/altfins-skills.rb --clobber
+
+  windows-bundle:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install PyInstaller
+        run: python -m pip install pyinstaller
+
+      - name: Run validators and smoke tests
+        run: |
+          python scripts/validate_skills.py
+          python scripts/lint_markdown_contracts.py
+          python scripts/test_skills.py
+
+      - name: Derive release version
+        id: version
+        shell: bash
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build Windows ZIP
+        run: python scripts/build_windows_bundle.py --version ${{ steps.version.outputs.value }}
+
+      - name: Upload Windows release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: gh release upload "${GITHUB_REF_NAME}" dist/release/altfins-skills-windows.zip --clobber

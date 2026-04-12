@@ -10,14 +10,25 @@
 .
 ├── README.md
 ├── .gitignore
+├── bin/
+│   ├── altfins-skills
+│   └── altfins-skills.cmd
 ├── docs/
+│   ├── releasing.md
 │   ├── repository-architecture.md
+│   ├── skill-installation.md
 │   ├── skill-roadmap.md
 │   ├── skill-validation.md
 │   └── validated-sources.md
+├── packaging/
+│   └── homebrew/
 ├── scripts/
+│   ├── build_source_archive.py
+│   ├── build_windows_bundle.py
 │   ├── lint_markdown_contracts.py
+│   ├── render_homebrew_formula.py
 │   ├── skills.py
+│   ├── skills_core.py
 │   ├── test_skills.py
 │   └── validate_skills.py
 ├── altfins-market-analyst/
@@ -29,6 +40,7 @@ Each skill directory follows the same contract:
 
 ```text
 skill-name/
+├── README.md
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
@@ -44,11 +56,10 @@ skill-name/
 Keep only shared repository-level content at the root:
 
 - repository overview
-- contribution conventions
+- install and release conventions
 - shared architecture decisions
 - shared validated source inventory
-- repository-wide validation and installation helpers
-- smoke-check guidance
+- repository-wide validation and packaging helpers
 - roadmap and planning documents
 
 ### Inside a Skill Directory
@@ -66,14 +77,15 @@ Per-skill `README.md` files are allowed when they serve as user-facing onboardin
 
 ## Packaging Strategy
 
-The packaging model should stay straightforward:
+The packaging model stays straightforward:
 
-- one skill directory equals one future package
+- one skill directory equals one package
 - zip one skill directory at a time
-- use `python3 scripts/skills.py package ...` as the canonical packaging entrypoint
-- avoid root-level runtime dependencies that a packaged skill would require
+- use `altfins-skills package ...` or `python3 scripts/skills.py package ...` as the canonical packaging entrypoint
+- tagged releases publish a source tarball for Homebrew and a Windows ZIP for end users
+- avoid root-level runtime dependencies that an installed skill package would require
 
-In practice, this means future `skill.zip` creation should work by archiving the contents of a single skill folder without pulling in shared code from elsewhere in the repository.
+In practice, this means a packaged skill remains self-contained, while the repo-level installer and release helpers are used only to distribute the repository in friendly ways.
 
 ## Shared Conventions
 
@@ -85,8 +97,8 @@ In practice, this means future `skill.zip` creation should work by archiving the
 - Prefer short, high-signal instructions over speculative detail.
 - Add shared conventions to `docs/` instead of copying them into every skill.
 - Put cross-skill source validation into `docs/validated-sources.md` and keep skill-local interpretations inside each skill's `references/` folder.
-- Keep repository-wide validators and installer helpers under `scripts/` and keep them lightweight and dependency-free when possible.
-- Keep markdown links and contract references valid; the markdown linter now treats those links as part of the stable repo contract.
+- Keep repository-wide validators and packaging helpers under `scripts/` and keep them lightweight and dependency-free when possible.
+- Keep markdown links and contract references valid; the markdown linter treats those links as part of the stable repo contract.
 
 ## Extension Rules
 
