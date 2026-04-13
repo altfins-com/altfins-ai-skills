@@ -14,8 +14,33 @@ class AltfinsSkills < Formula
     (bin/"altfins-skills").write <<~SH
       #!/bin/bash
       export ALTFINS_SKILLS_ROOT="#{libexec}/repo"
-      export ALTFINS_SKILLS_PYTHON="#{Formula["python@3.12"].opt_bin}/python3.12"
-      exec "$ALTFINS_SKILLS_PYTHON" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+      CANDIDATES=(
+        "#{Formula["python@3.12"].opt_bin}/python3.12"
+        "#{Formula["python@3.12"].opt_bin}/python3"
+      )
+
+      if [ -n "${ALTFINS_SKILLS_PYTHON:-}" ]; then
+        CANDIDATES=("${ALTFINS_SKILLS_PYTHON}" "${CANDIDATES[@]}")
+      fi
+
+      for candidate in "${CANDIDATES[@]}"; do
+        if [ -x "$candidate" ]; then
+          exec "$candidate" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+        fi
+      done
+
+      if command -v python3.12 >/dev/null 2>&1; then
+        exec "$(command -v python3.12)" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+      fi
+      if command -v python3 >/dev/null 2>&1; then
+        exec "$(command -v python3)" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+      fi
+      if command -v python >/dev/null 2>&1; then
+        exec "$(command -v python)" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+      fi
+
+      echo "Could not find a usable Python interpreter for altfins-skills." >&2
+      exit 1
     SH
   end
 

@@ -279,6 +279,35 @@ class SkillsCliTest(unittest.TestCase):
         )
 
     @unittest.skipUnless(os.name == "posix", "Unix launcher test only runs on POSIX hosts")
+    def test_unix_wrapper_falls_back_to_python3(self) -> None:
+        portable = self.tmpdir / "portable-python3"
+        repo_dest = portable / "repo"
+        shutil.copytree(
+            ROOT,
+            repo_dest,
+            ignore=shutil.ignore_patterns(".git", "dist", "__pycache__", ".pytest_cache", "tmp"),
+        )
+        wrapper_path = portable / "altfins-skills"
+        shutil.copy2(WRAPPER, wrapper_path)
+        wrapper_path.chmod(0o755)
+
+        fake_bin = self.tmpdir / "fake-bin"
+        fake_bin.mkdir(parents=True, exist_ok=True)
+        python3_path = fake_bin / "python3"
+        python3_path.write_text(
+            f"#!/bin/bash\nexec {PYTHON} \"$@\"\n",
+            encoding="utf-8",
+        )
+        python3_path.chmod(0o755)
+
+        env = self.env.copy()
+        env.pop("ALTFINS_SKILLS_PYTHON", None)
+        env["PATH"] = os.pathsep.join([str(fake_bin), "/usr/bin", "/bin"])
+        result = run_cli("list", "--json", command=[str(wrapper_path)], env=env)
+        payload = json.loads(result.stdout)
+        self.assertEqual([item["name"] for item in payload], EXPECTED_SKILLS)
+
+    @unittest.skipUnless(os.name == "posix", "Unix launcher test only runs on POSIX hosts")
     def test_unix_wrapper_works_with_installed_style_tree(self) -> None:
         portable = self.tmpdir / "portable"
         repo_dest = portable / "repo"

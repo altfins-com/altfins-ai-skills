@@ -9,10 +9,34 @@ CANDIDATES=(
   "$SCRIPT_DIR/../share/altfins-skills/repo"
 )
 
+resolve_python() {
+  if [ -n "${ALTFINS_SKILLS_PYTHON:-}" ]; then
+    if [ -x "${ALTFINS_SKILLS_PYTHON}" ]; then
+      printf '%s\n' "${ALTFINS_SKILLS_PYTHON}"
+      return 0
+    fi
+    echo "ALTFINS_SKILLS_PYTHON is set but not executable: ${ALTFINS_SKILLS_PYTHON}" >&2
+  fi
+
+  local candidate
+  for candidate in python3.12 python3 python; do
+    if command -v "$candidate" >/dev/null 2>&1; then
+      command -v "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 for candidate in "${CANDIDATES[@]}"; do
   if [ -f "$candidate/scripts/skills.py" ]; then
     export ALTFINS_SKILLS_ROOT="$(cd "$candidate" && pwd)"
-    exec "${ALTFINS_SKILLS_PYTHON:-python3}" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+    if PYTHON_BIN="$(resolve_python)"; then
+      exec "$PYTHON_BIN" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
+    fi
+    echo "Could not find a usable Python interpreter. Tried ALTFINS_SKILLS_PYTHON, python3.12, python3, and python." >&2
+    exit 1
   fi
 done
 

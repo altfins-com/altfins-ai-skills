@@ -84,6 +84,8 @@ class ReleaseAssetTest(unittest.TestCase):
         self.assertIn('bin/"altfins-skills"', text)
         self.assertIn('ALTFINS_SKILLS_ROOT', text)
         self.assertIn('python3.12', text)
+        self.assertIn('python3', text)
+        self.assertIn('ALTFINS_SKILLS_PYTHON', text)
         self.assertIn('1234abcd', text)
 
     @unittest.skipUnless(sys.platform.startswith("win"), "Windows bundle smoke only runs on Windows")
