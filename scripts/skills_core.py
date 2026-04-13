@@ -117,12 +117,14 @@ def dist_dir() -> Path:
     return repo_root() / "dist" / "skills"
 
 
-def validator_commands() -> list[list[str]]:
+def validator_commands(profile: str = "repo") -> list[list[str]]:
     root = repo_root()
-    return [
-        [sys.executable, str(root / "scripts" / "validate_skills.py")],
-        [sys.executable, str(root / "scripts" / "lint_markdown_contracts.py")],
+    commands = [
+        [sys.executable, str(root / "scripts" / "validate_skills.py"), "--profile", profile],
     ]
+    if profile == "repo":
+        commands.append([sys.executable, str(root / "scripts" / "lint_markdown_contracts.py")])
+    return commands
 
 
 def platform_specs() -> dict[str, PlatformSpec]:
@@ -168,8 +170,8 @@ def resolve_skills(selected: list[str], use_all: bool, root: Path | None = None)
     return resolved
 
 
-def ensure_valid_repo() -> None:
-    for command in validator_commands():
+def ensure_valid_repo(profile: str = "repo") -> None:
+    for command in validator_commands(profile=profile):
         result = subprocess.run(command, cwd=repo_root())
         if result.returncode != 0:
             joined = " ".join(command)
@@ -632,7 +634,7 @@ def print_status(platform_name: str | None, mode: str | None, project_dir: str |
 
 
 def handle_package(skills: list[Path]) -> None:
-    ensure_valid_repo()
+    ensure_valid_repo(profile="repo")
     for skill_dir in skills:
         destination = dist_dir() / f"{skill_dir.name}.skill.zip"
         create_skill_zip(skill_dir, destination)
@@ -646,7 +648,7 @@ def handle_install(
     skills: list[Path],
     force: bool,
 ) -> None:
-    ensure_valid_repo()
+    ensure_valid_repo(profile="distribution")
     target = resolve_target(platform_name, mode, project_dir)
     for skill_dir in skills:
         if target.mode == "skills":

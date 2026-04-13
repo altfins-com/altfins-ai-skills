@@ -3,20 +3,16 @@
 
 from __future__ import annotations
 
+import argparse
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ROOT_REQUIRED_FILES = [
+VALIDATION_PROFILES = ("repo", "distribution")
+COMMON_REQUIRED_FILES = [
     ROOT / "README.md",
-    ROOT / ".gitignore",
-    ROOT / ".github" / "workflows" / "release.yml",
-    ROOT / ".github" / "workflows" / "validate-skills.yml",
-    ROOT / "bin" / "altfins-skills",
-    ROOT / "bin" / "altfins-skills.cmd",
     ROOT / "docs" / "repository-architecture.md",
-    ROOT / "docs" / "releasing.md",
     ROOT / "docs" / "skill-roadmap.md",
     ROOT / "docs" / "skill-installation.md",
     ROOT / "docs" / "skill-validation.md",
@@ -25,16 +21,25 @@ ROOT_REQUIRED_FILES = [
     ROOT / "docs" / "validated-surfaces" / "cli" / "af-help.txt",
     ROOT / "docs" / "validated-surfaces" / "cli" / "commands.json",
     ROOT / "docs" / "validated-surfaces" / "mcp" / "documented-surface.json",
+    ROOT / "scripts" / "lint_markdown_contracts.py",
+    ROOT / "scripts" / "skills.py",
+    ROOT / "scripts" / "skills_core.py",
+    ROOT / "scripts" / "validate_skills.py",
+]
+REPO_ONLY_REQUIRED_FILES = [
+    ROOT / ".gitignore",
+    ROOT / ".github" / "workflows" / "release.yml",
+    ROOT / ".github" / "workflows" / "validate-skills.yml",
+    ROOT / "bin" / "altfins-skills",
+    ROOT / "bin" / "altfins-skills.cmd",
+    ROOT / "docs" / "releasing.md",
     ROOT / "packaging" / "homebrew" / "altfins-skills.rb.template",
     ROOT / "scripts" / "build_source_archive.py",
     ROOT / "scripts" / "build_windows_bundle.py",
     ROOT / "scripts" / "refresh_validated_surfaces.py",
     ROOT / "scripts" / "render_homebrew_formula.py",
-    ROOT / "scripts" / "skills.py",
-    ROOT / "scripts" / "skills_core.py",
     ROOT / "scripts" / "test_release_assets.py",
     ROOT / "scripts" / "test_skills.py",
-    ROOT / "scripts" / "validate_skills.py",
 ]
 README_TITLES = {
     "altfins-market-analyst": "# AltFINS Market Analyst",
@@ -70,6 +75,13 @@ SKILL_REQUIRED_RELATIVE = {
         Path("assets/market-scan-summary-template.md"),
     ],
 }
+
+
+def required_root_files(profile: str) -> list[Path]:
+    files = list(COMMON_REQUIRED_FILES)
+    if profile == "repo":
+        files.extend(REPO_ONLY_REQUIRED_FILES)
+    return files
 
 
 def find_skill_dirs() -> list[Path]:
@@ -178,10 +190,19 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
         errors.append(f"{sources_file}: must link back to ../../docs/validated-sources.md")
 
 
-def main() -> int:
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(description="Validate altfins-ai-skills repository or distribution layout.")
+    parser.add_argument(
+        "--profile",
+        choices=VALIDATION_PROFILES,
+        default="repo",
+        help="Validation profile: repo for development checkouts, distribution for packaged installs.",
+    )
+    args = parser.parse_args(argv)
+
     errors: list[str] = []
 
-    for path in ROOT_REQUIRED_FILES:
+    for path in required_root_files(args.profile):
         if not path.exists():
             errors.append(f"{path}: missing required repository file")
 
@@ -199,6 +220,7 @@ def main() -> int:
         return 1
 
     print("VALIDATION OK")
+    print(f"Profile: {args.profile}")
     print(f"Skills checked: {len(skill_dirs)}")
     for skill_dir in skill_dirs:
         print(f"- {skill_dir.name}")
@@ -206,4 +228,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

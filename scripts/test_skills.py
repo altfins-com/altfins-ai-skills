@@ -240,6 +240,44 @@ class SkillsCliTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Repository validation failed", result.stderr)
 
+    def test_install_works_with_distribution_layout(self) -> None:
+        repo_copy = self.tmpdir / "distribution-copy"
+        shutil.copytree(
+            ROOT,
+            repo_copy,
+            ignore=shutil.ignore_patterns(
+                ".git",
+                ".github",
+                "bin",
+                ".gitignore",
+                "dist",
+                "__pycache__",
+                ".pytest_cache",
+                "tmp",
+            ),
+        )
+        env = self.env.copy()
+        env["ALTFINS_SKILLS_ROOT"] = str(repo_copy)
+        env["ALTFINS_SKILLS_DIST_DIR"] = str(self.tmpdir / "portable-dist")
+        result = subprocess.run(
+            [
+                PYTHON,
+                str(repo_copy / "scripts" / "skills.py"),
+                "install",
+                "--platform",
+                "codex",
+                "altfins-market-analyst",
+            ],
+            cwd=repo_copy,
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue(
+            (self.homes["CODEX_HOME"] / "skills" / "altfins-market-analyst" / "SKILL.md").exists()
+        )
+
     @unittest.skipUnless(os.name == "posix", "Unix launcher test only runs on POSIX hosts")
     def test_unix_wrapper_works_with_installed_style_tree(self) -> None:
         portable = self.tmpdir / "portable"

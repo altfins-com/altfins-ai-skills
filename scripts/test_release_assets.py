@@ -51,10 +51,20 @@ class ReleaseAssetTest(unittest.TestCase):
         prefix = "altfins-ai-skills-0.1.0-test/"
         with tarfile.open(output, "r:gz") as archive:
             names = archive.getnames()
+            extract_dir = self.tmpdir / "extracted"
+            archive.extractall(extract_dir)
         self.assertIn(prefix + "README.md", names)
         self.assertIn(prefix + "scripts/skills.py", names)
         self.assertIn(prefix + "altfins-market-analyst/SKILL.md", names)
         self.assertTrue(all(not name.startswith(prefix + ".git/") for name in names))
+        extracted_root = extract_dir / prefix.rstrip("/")
+        result = subprocess.run(
+            [PYTHON, str(extracted_root / "scripts" / "validate_skills.py"), "--profile", "distribution"],
+            cwd=extracted_root,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_formula_shape(self) -> None:
         output = self.tmpdir / "altfins-skills.rb"
