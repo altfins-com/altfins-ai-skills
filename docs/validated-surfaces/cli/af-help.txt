@@ -1,0 +1,30 @@
+altFINS CLI for market data, signals, analytics, and TUI workflows
+
+Usage:
+  af [flags]
+  af [command]
+
+Available Commands:
+  analytics   Historical analytics and metric metadata
+  auth        Manage altFINS API key configuration
+  commands    List commands with metadata for agents and automation
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  markets     Screener market data queries
+  news        News summary queries
+  ohlcv       Snapshot and historical OHLCV data
+  quota       Inspect current permit quotas
+  refs        Reference data and enums
+  signals     Trading signal feed and metadata
+  ta          Curated technical analysis summaries
+  tui         Interactive terminal UI
+
+Flags:
+      --dry-run         Show the API request without executing it
+      --fields string   Comma-separated output field selection
+  -h, --help            help for af
+      --no-color        Disable ANSI color output
+  -o, --output string   Output format: table, json, jsonl, csv (default "table")
+  -v, --version         version for af
+
+Use "af [command] --help" for more information about a command.

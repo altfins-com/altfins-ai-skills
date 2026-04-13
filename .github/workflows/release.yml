@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  source-and-formula:
+  source-formula-and-tap:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -25,6 +25,7 @@ jobs:
           python3 scripts/validate_skills.py
           python3 scripts/lint_markdown_contracts.py
           python3 scripts/test_skills.py
+          python3 scripts/test_release_assets.py
 
       - name: Derive release version
         id: version
@@ -54,6 +55,25 @@ jobs:
           gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --generate-notes
           gh release upload "${GITHUB_REF_NAME}" dist/release/altfins-ai-skills-src.tar.gz dist/release/altfins-skills.rb --clobber
 
+      - name: Update Homebrew tap
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          if [ -z "$HOMEBREW_TAP_TOKEN" ]; then
+            echo "Missing required secret HOMEBREW_TAP_GITHUB_TOKEN" >&2
+            exit 1
+          fi
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/altfins-com/homebrew-tap.git" dist/homebrew-tap
+          cp dist/release/altfins-skills.rb dist/homebrew-tap/Formula/altfins-skills.rb
+          cd dist/homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/altfins-skills.rb
+          git diff --cached --quiet && exit 0
+          git commit -m "Update altfins-skills ${RELEASE_VERSION}"
+          git push origin HEAD:main
+
   windows-bundle:
     runs-on: windows-latest
     steps:
@@ -73,6 +93,7 @@ jobs:
           python scripts/validate_skills.py
           python scripts/lint_markdown_contracts.py
           python scripts/test_skills.py
+          python scripts/test_release_assets.py
 
       - name: Derive release version
         id: version

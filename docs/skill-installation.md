@@ -4,16 +4,15 @@ This document explains the public installation story for `altfins-ai-skills`.
 
 ## Summary
 
-The project now has two user-facing installation paths:
+The project has three user-facing installation paths:
 
 - `macOS and Linux`: Homebrew-first
 - `Windows`: downloadable ZIP-first
+- `Cursor` and `OpenClaw`: project-mode integration
 
-The current repo checkout path remains available as a developer fallback.
+A direct repo checkout remains available as a developer fallback.
 
 ## macOS and Linux
-
-The intended public install flow for tagged releases is:
 
 ```bash
 brew install altfins-com/tap/altfins-skills
@@ -28,24 +27,51 @@ Notes:
 
 ## Windows
 
-The intended public install flow for tagged releases is:
+Download:
+
+<https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-skills-windows.zip>
+
+Then run:
 
 ```powershell
-# Download and unzip altfins-skills-windows.zip
-.\altfins-skills.exe list
-.\altfins-skills.exe install --platform copilot --all
+.ltfins-skills.exe list
+.ltfins-skills.exe install --platform copilot --all
 ```
 
 Python fallback inside the ZIP:
 
 ```powershell
-.\altfins-skills.cmd list
+.ltfins-skills.cmd list
 ```
 
-The Windows ZIP should contain:
+The Windows ZIP contains:
 - `altfins-skills.exe`
 - `altfins-skills.cmd`
 - `repo/` with the bundled skills, docs, and validator scripts
+
+## Project-Mode Platforms
+
+`Cursor` and `OpenClaw` install into a project instead of a user-home skills directory.
+
+### Cursor
+
+```bash
+altfins-skills install --platform cursor --mode project --project-dir /path/to/project altfins-query-builder
+```
+
+This writes:
+- `.cursor/rules/<skill>.mdc`
+- `.altfins-skills/cursor/<skill>/`
+
+### OpenClaw
+
+```bash
+altfins-skills install --platform openclaw --mode project --project-dir /path/to/project altfins-market-analyst
+```
+
+This writes:
+- `AGENTS.md` section for the skill
+- `.altfins-skills/openclaw/<skill>/`
 
 ## Developer Fallback
 
@@ -59,25 +85,23 @@ python3 scripts/skills.py package --all
 
 ## Supported Platforms
 
-| Platform | Install support in v1 | Install root |
-|----------|------------------------|--------------|
-| Codex | Yes | `$CODEX_HOME/skills` or `~/.codex/skills` |
-| Claude | Yes | `~/.claude/skills` |
-| Gemini | Yes | `~/.gemini/skills` |
-| Copilot | Yes | `~/.copilot/skills` |
-| Cursor | Recognized, not installable in v1 | deferred |
-| OpenClaw | Recognized, not installable in v1 | deferred |
-
-`Cursor` and `OpenClaw` remain deferred in this pass because the current installer only handles skills-only installation, not project-level rules, hooks, or `AGENTS.md` wiring.
+| Platform | Supported mode(s) | Install surface |
+|----------|-------------------|-----------------|
+| Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
+| Claude | `skills` | `~/.claude/skills/<skill>` |
+| Gemini | `skills` | `~/.gemini/skills/<skill>` |
+| Copilot | `skills` | `~/.copilot/skills/<skill>` |
+| Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
+| OpenClaw | `project` | `<project>/AGENTS.md` + `<project>/.altfins-skills/openclaw/<skill>/` |
 
 ## Public Commands
 
 ```bash
-altfins-skills list [--platform PLATFORM] [--json]
+altfins-skills list [--platform PLATFORM] [--mode MODE] [--project-dir PATH] [--json]
 altfins-skills package [SKILL ... | --all]
-altfins-skills install --platform PLATFORM [SKILL ... | --all] [--force]
-altfins-skills uninstall --platform PLATFORM [SKILL ... | --all] [--force]
-altfins-skills status [--platform PLATFORM] [--json]
+altfins-skills install --platform PLATFORM [--mode skills|project] [--project-dir PATH] [SKILL ... | --all] [--force]
+altfins-skills uninstall --platform PLATFORM [--mode skills|project] [--project-dir PATH] [SKILL ... | --all] [--force]
+altfins-skills status [--platform PLATFORM] [--mode MODE] [--project-dir PATH] [--json]
 ```
 
 The same subcommands are available through `python3 scripts/skills.py ...` in a repo checkout.
@@ -101,9 +125,9 @@ python3 scripts/lint_markdown_contracts.py
 
 ## Release Assets
 
-Tagged releases are expected to publish these public artifacts:
+Public releases publish these installable artifacts:
 - `altfins-ai-skills-src.tar.gz`
 - `altfins-skills-windows.zip`
-- `altfins-skills.rb` as a rendered Homebrew formula helper artifact
+- `altfins-skills.rb`
 
 See [docs/releasing.md](releasing.md) for the release checklist.

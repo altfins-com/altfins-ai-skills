@@ -9,8 +9,8 @@ Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) fo
 ## Preferred source order
 
 1. User intent and constraints
-2. Official altFINS documentation
-3. Validated CLI help or MCP metadata for the intended target interface
+2. Checked-in validated CLI or MCP surface snapshots
+3. Official altFINS documentation
 4. Verified repository context relevant to the translation target
 
 ## Rules

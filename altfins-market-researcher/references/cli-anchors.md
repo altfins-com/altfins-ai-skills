@@ -1,33 +1,26 @@
 # Validated CLI Anchors
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
+
+Primary snapshot files:
+- [../../docs/validated-surfaces/cli/commands.json](../../docs/validated-surfaces/cli/commands.json)
+- [../../docs/validated-surfaces/cli/manifest.json](../../docs/validated-surfaces/cli/manifest.json)
+- [../../docs/validated-surfaces/cli/af-help.txt](../../docs/validated-surfaces/cli/af-help.txt)
 
 ## Official source
 
 Official CLI docs: <https://altfins.com/crypto-market-and-analytical-data-api/documentation/altfins-cli/>
 
-## Locally observed command surface
+## Checked-In Command Surface
 
-The installed CLI was inspected with:
-
-- `af --help`
-- `af commands -o json`
-- `af markets search --help`
-- `af signals list --help`
-- `af analytics history --help`
-- `af ohlcv history --help`
-- `af news list --help`
-- `af ta list --help`
-
-### Version note
-
-The local binary reported `af version dev`, so the safest references for command behavior are the observed help output and `af commands -o json` metadata.
+The checked-in CLI snapshot was refreshed from the real local `af` binary.
 
 ## Observed top-level commands
 
 - `analytics`
 - `auth`
 - `commands`
+- `completion`
 - `markets`
 - `news`
 - `ohlcv`
@@ -46,7 +39,7 @@ The local binary reported `af version dev`, so the safest references for command
 
 ## Observed command-to-endpoint mappings
 
-From `af commands -o json`:
+From the checked-in `commands.json` snapshot:
 
 | Command | Method | Endpoint |
 | --- | --- | --- |
@@ -65,11 +58,11 @@ From `af commands -o json`:
 | `af refs intervals` | `GET` | `/api/v2/public/intervals` |
 | `af quota all` | `GET` | `/api/v2/public/all-available-permits` |
 
-## Observed query-surface examples
+## Query-Surface Examples
+
+The checked-in help snapshots confirm these common flag families:
 
 ### `af markets search`
-
-Observed flags include:
 
 - `--symbols`
 - `--interval`
@@ -82,8 +75,6 @@ Observed flags include:
 
 ### `af signals list`
 
-Observed flags include:
-
 - `--direction`
 - `--signals`
 - `--symbols`
@@ -94,8 +85,6 @@ Observed flags include:
 
 ### `af analytics history`
 
-Observed flags include:
-
 - `--symbol`
 - `--type`
 - `--interval`
@@ -104,8 +93,9 @@ Observed flags include:
 - `--filter`
 - `--stdin-json`
 
-## Safe usage guidance
+## Safe Usage Guidance
 
-- Verify the specific subcommand help before using any flag in an answer.
+- Prefer the checked-in snapshot when you need a stable local contract.
+- Prefer the live local CLI when the current session depends on runtime truth.
 - Prefer `af commands -o json` when an agent needs command discovery or endpoint metadata.
 - Prefer `--dry-run` when the request shape is part of the task.

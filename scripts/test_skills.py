@@ -46,13 +46,13 @@ def run_cli(
 class SkillsCliTest(unittest.TestCase):
     def setUp(self) -> None:
         self.tmpdir = Path(tempfile.mkdtemp(prefix="altfins-skills-test-"))
+        self.project_dir = self.tmpdir / "project"
+        self.project_dir.mkdir(parents=True, exist_ok=True)
         self.homes = {
             "CODEX_HOME": self.tmpdir / "codex-home",
             "CLAUDE_HOME": self.tmpdir / "claude-home",
             "GEMINI_HOME": self.tmpdir / "gemini-home",
             "COPILOT_HOME": self.tmpdir / "copilot-home",
-            "CURSOR_HOME": self.tmpdir / "cursor-home",
-            "OPENCLAW_HOME": self.tmpdir / "openclaw-home",
             "ALTFINS_SKILLS_DIST_DIR": self.tmpdir / "dist" / "skills",
         }
         self.env = os.environ.copy()
@@ -61,7 +61,6 @@ class SkillsCliTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         shutil.rmtree(self.tmpdir)
-        shutil.rmtree(self.tmpdir / "dist", ignore_errors=True)
         shutil.rmtree(ROOT / "dist", ignore_errors=True)
 
     def test_list_returns_all_skills(self) -> None:
@@ -79,31 +78,145 @@ class SkillsCliTest(unittest.TestCase):
             self.assertTrue(all(name.startswith(f"{skill_name}/") for name in names), archive_path)
             self.assertIn(f"{skill_name}/SKILL.md", names)
 
-    def test_install_status_and_uninstall_for_supported_platforms(self) -> None:
+    def test_install_status_and_uninstall_for_supported_skills_mode_platforms(self) -> None:
         for platform in ("codex", "claude", "gemini", "copilot"):
             run_cli("install", "--platform", platform, "altfins-market-analyst", env=self.env)
-            result = run_cli("status", "--platform", platform, "--json", env=self.env)
+            result = run_cli("status", "--platform", platform, "--mode", "skills", "--json", env=self.env)
             payload = json.loads(result.stdout)
-            statuses = {item["name"]: item["installed"] for item in payload["platforms"][0]["skills"]}
+            statuses = {
+                item["name"]: item["installed"]
+                for item in payload["platforms"][0]["status"]["skills"]
+            }
             self.assertTrue(statuses["altfins-market-analyst"])
             run_cli("uninstall", "--platform", platform, "altfins-market-analyst", env=self.env)
-            result = run_cli("status", "--platform", platform, "--json", env=self.env)
+            result = run_cli("status", "--platform", platform, "--mode", "skills", "--json", env=self.env)
             payload = json.loads(result.stdout)
-            statuses = {item["name"]: item["installed"] for item in payload["platforms"][0]["skills"]}
+            statuses = {
+                item["name"]: item["installed"]
+                for item in payload["platforms"][0]["status"]["skills"]
+            }
             self.assertFalse(statuses["altfins-market-analyst"])
 
-    def test_unsupported_platforms_fail_cleanly(self) -> None:
-        for platform in ("cursor", "openclaw"):
-            result = run_cli(
-                "install",
-                "--platform",
-                platform,
-                "altfins-market-analyst",
-                env=self.env,
-                check=False,
-            )
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn("not supported in v1", result.stderr)
+    def test_project_mode_install_status_and_uninstall_for_cursor(self) -> None:
+        run_cli(
+            "install",
+            "--platform",
+            "cursor",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "altfins-market-analyst",
+            env=self.env,
+        )
+        rule_path = self.project_dir / ".cursor" / "rules" / "altfins-market-analyst.mdc"
+        payload_path = self.project_dir / ".altfins-skills" / "cursor" / "altfins-market-analyst" / "SKILL.md"
+        self.assertTrue(rule_path.exists())
+        self.assertTrue(payload_path.exists())
+        result = run_cli(
+            "status",
+            "--platform",
+            "cursor",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "--json",
+            env=self.env,
+        )
+        payload = json.loads(result.stdout)
+        statuses = {
+            item["name"]: item["installed"]
+            for item in payload["platforms"][0]["status"]["skills"]
+        }
+        self.assertTrue(statuses["altfins-market-analyst"])
+        run_cli(
+            "uninstall",
+            "--platform",
+            "cursor",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "altfins-market-analyst",
+            env=self.env,
+        )
+        self.assertFalse(rule_path.exists())
+        self.assertFalse(payload_path.exists())
+
+    def test_project_mode_install_status_and_uninstall_for_openclaw(self) -> None:
+        run_cli(
+            "install",
+            "--platform",
+            "openclaw",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "altfins-query-builder",
+            env=self.env,
+        )
+        agents_path = self.project_dir / "AGENTS.md"
+        payload_path = self.project_dir / ".altfins-skills" / "openclaw" / "altfins-query-builder" / "SKILL.md"
+        self.assertTrue(agents_path.exists())
+        self.assertTrue(payload_path.exists())
+        self.assertIn("altfins-query-builder", agents_path.read_text(encoding="utf-8"))
+        result = run_cli(
+            "status",
+            "--platform",
+            "openclaw",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "--json",
+            env=self.env,
+        )
+        payload = json.loads(result.stdout)
+        statuses = {
+            item["name"]: item["installed"]
+            for item in payload["platforms"][0]["status"]["skills"]
+        }
+        self.assertTrue(statuses["altfins-query-builder"])
+        run_cli(
+            "uninstall",
+            "--platform",
+            "openclaw",
+            "--mode",
+            "project",
+            "--project-dir",
+            str(self.project_dir),
+            "altfins-query-builder",
+            env=self.env,
+        )
+        self.assertFalse(payload_path.exists())
+        self.assertFalse(agents_path.exists())
+
+    def test_project_mode_requires_project_dir(self) -> None:
+        result = run_cli(
+            "install",
+            "--platform",
+            "cursor",
+            "--mode",
+            "project",
+            "altfins-market-analyst",
+            env=self.env,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Project mode requires --project-dir", result.stderr)
+
+    def test_skills_mode_points_cursor_to_project_mode(self) -> None:
+        result = run_cli(
+            "install",
+            "--platform",
+            "cursor",
+            "altfins-market-analyst",
+            env=self.env,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("uses --mode project", result.stderr)
 
     def test_validator_failure_blocks_package(self) -> None:
         repo_copy = self.tmpdir / "repo-copy"

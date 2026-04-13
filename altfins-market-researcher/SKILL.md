@@ -1,6 +1,6 @@
 ---
 name: altfins-market-researcher
-description: Use this skill for repeatable altFINS CLI research workflows, especially when the task involves command discovery, export-friendly output, and careful verification of the real CLI surface.
+description: Use this skill for repeatable altFINS CLI research workflows, especially when the task involves command discovery, export-friendly output, and careful use of the validated CLI surface.
 ---
 
 # AltFINS Market Researcher
@@ -13,7 +13,7 @@ Use this skill to guide repeatable research workflows around the altFINS CLI. Th
 
 - the task is centered on the altFINS CLI
 - the user needs a repeatable research flow or export-friendly output
-- the agent should verify commands and flags before making assumptions
+- the agent should stay grounded in the validated CLI snapshot or the live local CLI
 
 ## Do Not Use This Skill When
 
@@ -23,9 +23,9 @@ Use this skill to guide repeatable research workflows around the altFINS CLI. Th
 
 ## Validated CLI Anchors
 
-Observed from the real installed CLI on April 11, 2026:
+The checked-in CLI snapshot and the live local CLI agree on these core facts:
 
-- top-level groups include `analytics`, `auth`, `commands`, `markets`, `news`, `ohlcv`, `quota`, `refs`, `signals`, `ta`, and `tui`
+- top-level groups include `analytics`, `auth`, `commands`, `completion`, `markets`, `news`, `ohlcv`, `quota`, `refs`, `signals`, `ta`, and `tui`
 - global flags include `--dry-run`, `--fields`, `--no-color`, and `-o/--output`
 - `af commands -o json` exposes command metadata and endpoint mappings for automation-friendly discovery
 
@@ -41,8 +41,8 @@ Do not force everything into flags if the query shape is clearly better expresse
 
 ## Working Rules
 
-- Inspect the real installed CLI help before assuming commands, flags, or output shapes.
-- Prefer machine-readable output and reproducible workflows when available.
+- Prefer the checked-in CLI snapshot when you need a stable local contract.
+- Prefer the live local CLI if the current session depends on runtime truth.
 - Use `--dry-run` before a live request when request shape matters.
 - Keep examples grounded in validated CLI behavior only.
 - If the CLI surface is missing a capability, state the gap clearly.
@@ -50,7 +50,7 @@ Do not force everything into flags if the query shape is clearly better expresse
 
 ## Recommended Workflow
 
-1. Start with `af --help` or `af commands -o json` to find the correct command family.
+1. Start with `af commands -o json` or the checked-in CLI snapshot to find the correct command family.
 2. Inspect the specific subcommand help before suggesting flags.
 3. Decide whether the request should stay flag-first or move to `--filter` / `--stdin-json` planning.
 4. Choose the output format that matches the task: `table`, `json`, `jsonl`, or `csv`.
@@ -67,6 +67,7 @@ Do not force everything into flags if the query shape is clearly better expresse
 ## References
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
+- Read [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
 - Read [references/cli-anchors.md](references/cli-anchors.md) for validated CLI surface details.
 - Read [references/request-patterns.md](references/request-patterns.md) for validated request-shaping rules.
 - Read [references/filter-body-guidance.md](references/filter-body-guidance.md) for conservative JSON-body planning guidance.

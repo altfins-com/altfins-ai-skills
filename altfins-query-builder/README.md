@@ -16,8 +16,8 @@ Use this skill when you want the agent to:
 - classify a beginner request into a clear category
 - identify missing details such as asset, timeframe, or filter logic
 - choose the safest output mode
-- produce a clean handoff for a later CLI or MCP workflow
-- stay conservative when the target interface is not yet validated
+- produce a clean handoff for a validated CLI workflow, documented MCP workflow, or interface-neutral brief
+- stay conservative when the target interface is not confirmed in the current validated surface
 
 ## How to Use It
 
@@ -34,7 +34,7 @@ Use $altfins-query-builder to translate this into a CLI-ready request plan: show
 ```
 
 ```text
-Use $altfins-query-builder to turn this into an MCP-ready analysis prompt: give me a complete technical analysis of SOL.
+Use $altfins-query-builder to turn this into a documented-MCP-ready analysis prompt: give me a complete technical analysis of SOL.
 ```
 
 If explicit skill invocation is not needed in your environment, plain-English requests about what the user wants to find, scan, compare, or explore should naturally fit this skill.
@@ -74,6 +74,7 @@ Start here for the core contract:
 - [references/translation-playbook.md](references/translation-playbook.md)
 - [references/example-translations.md](references/example-translations.md)
 - [references/golden-examples.md](references/golden-examples.md)
+- [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md)
 
 Reusable handoff templates:
 - [assets/request-brief-template.md](assets/request-brief-template.md)

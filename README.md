@@ -2,13 +2,11 @@
 
 Reusable AI skills for altFINS workflows.
 
-Install them into your local AI agent, then use them for crypto market analysis, CLI research, and plain-English-to-query translation.
+Install the `altfins-skills` command, copy the skills into your local agent or project, and use them for crypto market analysis, CLI research, and plain-English-to-query translation.
 
 ## Install
 
 ### macOS and Linux
-
-The intended public install path for tagged releases is Homebrew:
 
 ```bash
 brew install altfins-com/tap/altfins-skills
@@ -16,27 +14,39 @@ altfins-skills list
 altfins-skills install --platform codex --all
 ```
 
-Brew installs the `altfins-skills` command only. It does not modify your local agent homes until you explicitly run `altfins-skills install ...`.
+Brew installs only the `altfins-skills` command. Your agent homes stay untouched until you run `altfins-skills install ...` yourself.
 
 ### Windows
 
-The intended public install path for tagged releases is the downloadable release ZIP:
+Download the current bundle:
+
+<https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-skills-windows.zip>
+
+Then run:
 
 ```powershell
-# Download and unzip altfins-skills-windows.zip
-.\altfins-skills.exe list
-.\altfins-skills.exe install --platform copilot --all
+.ltfins-skills.exe list
+.ltfins-skills.exe install --platform copilot --all
 ```
 
 Python fallback inside the ZIP:
 
 ```powershell
-.\altfins-skills.cmd list
+.ltfins-skills.cmd list
 ```
 
-### Developer Fallback
+### Project-Level Installs
 
-If you are working directly from a repo checkout, you can still use the Python entrypoint:
+`Cursor` and `OpenClaw` are project integrations rather than user-home skill folders.
+
+```bash
+altfins-skills install --platform cursor --mode project --project-dir /path/to/project altfins-query-builder
+altfins-skills install --platform openclaw --mode project --project-dir /path/to/project altfins-market-analyst
+```
+
+The installer writes project-local glue and a project-local copy of the skill under `.altfins-skills/`.
+
+### Developer Fallback
 
 ```bash
 git clone https://github.com/altfins-com/altfins-ai-skills
@@ -49,11 +59,11 @@ Full install details live in [docs/skill-installation.md](docs/skill-installatio
 
 ## What You Get
 
-This repository currently ships three reusable skills:
+This repository ships three reusable skills:
 
 ### AltFINS Market Analyst
 
-Use this when you want a structured technical or market analysis built around validated altFINS-facing workflows.
+Use this when you want structured crypto market analysis built around validated altFINS-facing workflows.
 
 Best for:
 - single-coin technical outlooks
@@ -113,22 +123,16 @@ Use $altfins-market-analyst to assess the current technical outlook for ETH and 
 
 ## Supported Platforms
 
-The installer currently supports these local agent homes:
-
-| Platform | Install support in v1 | Install root |
-|----------|------------------------|--------------|
-| Codex | Yes | `$CODEX_HOME/skills` or `~/.codex/skills` |
-| Claude | Yes | `~/.claude/skills` |
-| Gemini | Yes | `~/.gemini/skills` |
-| Copilot | Yes | `~/.copilot/skills` |
-| Cursor | Recognized, not installable in v1 | deferred |
-| OpenClaw | Recognized, not installable in v1 | deferred |
-
-`Cursor` and `OpenClaw` are intentionally deferred because this pass still excludes project-level glue such as rules, hooks, or `AGENTS.md` wiring.
+| Platform | Mode | Install surface |
+|----------|------|-----------------|
+| Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
+| Claude | `skills` | `~/.claude/skills/<skill>` |
+| Gemini | `skills` | `~/.gemini/skills/<skill>` |
+| Copilot | `skills` | `~/.copilot/skills/<skill>` |
+| Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
+| OpenClaw | `project` | `<project>/AGENTS.md` + `<project>/.altfins-skills/openclaw/<skill>/` |
 
 ## Package Skills
-
-If you want individual `skill.zip` bundles:
 
 ```bash
 altfins-skills package --all
@@ -154,7 +158,7 @@ The monorepo structure keeps the skills:
 - easy to package one by one
 - easy to extend without guessing where new skills belong
 
-Shared conventions and validation live at the repo level, while each skill remains independently installable and packageable.
+Shared conventions, validated surfaces, packaging helpers, and release automation live at the repo level, while each skill remains independently packageable and installable.
 
 ## Validated Reference Material
 
@@ -163,7 +167,7 @@ The repository is grounded in:
 - the official OpenAPI schema
 - official altFINS MCP documentation
 - official altFINS CLI documentation
-- observed local `af` CLI help and command metadata
+- checked-in validated surface snapshots under [docs/validated-surfaces/](docs/validated-surfaces/README.md)
 
 Start with [docs/validated-sources.md](docs/validated-sources.md) for the shared source inventory.
 
@@ -175,13 +179,16 @@ Run these checks before pushing structural or contract changes:
 python3 scripts/validate_skills.py
 python3 scripts/lint_markdown_contracts.py
 python3 scripts/test_skills.py
+python3 scripts/test_release_assets.py
 ```
 
 These checks cover:
 - skill structure and required files
 - markdown contract links
 - installer list, package, install, uninstall, and status smoke tests
+- project-mode smoke tests for Cursor and OpenClaw
 - launcher and packaged-layout resolution smoke tests
+- source archive, formula, and Windows bundle smoke tests
 
 For scenario-based checks of the skill behavior itself, see [docs/skill-validation.md](docs/skill-validation.md).
 
@@ -193,7 +200,8 @@ When adding a new skill:
 2. Add `README.md`, `SKILL.md`, `agents/openai.yaml`, `references/`, `scripts/`, and `assets/`.
 3. Keep claims conservative and grounded in validated altFINS behavior.
 4. Add `references/validation-scenarios.md` and `references/golden-examples.md`.
-5. Run all repository checks before committing.
+5. Add project templates under `assets/project/` if the skill should support project-mode adapters.
+6. Run all repository checks before committing.
 
 ## Learn More
 
@@ -201,5 +209,6 @@ When adding a new skill:
 - [docs/releasing.md](docs/releasing.md)
 - [docs/repository-architecture.md](docs/repository-architecture.md)
 - [docs/validated-sources.md](docs/validated-sources.md)
+- [docs/validated-surfaces/README.md](docs/validated-surfaces/README.md)
 - [docs/skill-validation.md](docs/skill-validation.md)
 - [docs/skill-roadmap.md](docs/skill-roadmap.md)

@@ -1,8 +1,12 @@
 # Target Catalog
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
 
 This file maps common user intents to validated altFINS-facing target families.
+
+Reference snapshots:
+- [../../docs/validated-surfaces/cli/commands.json](../../docs/validated-surfaces/cli/commands.json)
+- [../../docs/validated-surfaces/mcp/documented-surface.json](../../docs/validated-surfaces/mcp/documented-surface.json)
 
 ## Beginner-Facing Category Layer
 
@@ -17,7 +21,7 @@ Use one of these plain-English categories first:
 | browse technical analysis | review curated technical analysis entries |
 | get news or context | search summaries or inspect context around a coin |
 | open an interactive browser | use the TUI instead of a one-shot export |
-| ask for a full market analysis | produce an MCP-ready analysis prompt or a neutral research brief |
+| ask for a full market analysis | produce a documented-MCP-ready analysis prompt or an interface-neutral research brief |
 
 ## Agent-Facing Routing Layer
 
@@ -30,7 +34,7 @@ Use one of these plain-English categories first:
 | browse technical analysis | curated technical analysis | CLI-ready or TUI |
 | get news or context | news search or summary lookup | CLI-ready or interface-neutral |
 | open an interactive browser | TUI surfaces | CLI-ready |
-| ask for a full market analysis | MCP technical-analysis or analysis-oriented brief | MCP-ready or interface-neutral |
+| ask for a full market analysis | documented MCP capability families or an analysis-oriented brief | documented-MCP-ready or interface-neutral |
 
 ## CLI-Oriented Targets
 
@@ -52,7 +56,7 @@ Use one of these plain-English categories first:
 
 ## TUI-Oriented Targets
 
-The installed CLI also exposes these validated TUI surfaces:
+The validated CLI snapshot also exposes these TUI surfaces:
 
 - `af tui markets`
 - `af tui signals`
@@ -63,7 +67,7 @@ Use TUI-oriented targets when the user wants interactive browsing rather than a 
 
 ## MCP-Oriented Target Families
 
-From the official altFINS MCP docs, the safe high-level families are:
+From the documented MCP surface snapshot, the safe high-level families are:
 
 - Screener
 - Technical Analysis
@@ -74,7 +78,7 @@ From the official altFINS MCP docs, the safe high-level families are:
 - Calendar Events
 - Portfolio
 
-Treat these as category labels until the actual MCP client reveals the discovered tool list.
+Treat these as validated capability families until a connected MCP client reveals the discovered runtime tool list.
 
 ## When to Stay Interface-Neutral
 
@@ -82,4 +86,4 @@ Stay interface-neutral if:
 
 - the user goal is clear but the target interface is not
 - required fields such as symbol, interval, or date range are missing
-- the request would otherwise force you to invent flags, JSON keys, or MCP methods
+- the request would otherwise force you to invent flags, JSON keys, or runtime tool names

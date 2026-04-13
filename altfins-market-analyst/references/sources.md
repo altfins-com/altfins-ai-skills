@@ -9,9 +9,10 @@ Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) fo
 ## Preferred source order
 
 1. User-provided requirements and constraints
-2. Official altFINS documentation
-3. Validated altFINS MCP server metadata or tool definitions
-4. Verified repository or environment context relevant to the task
+2. Checked-in MCP documented surface snapshot
+3. Connected MCP client discovery in the current session
+4. Official altFINS documentation
+5. Verified repository or environment context relevant to the task
 
 ## Rules
 

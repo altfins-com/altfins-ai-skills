@@ -1,0 +1,13 @@
+---
+description: altfins-market-analyst project guidance
+alwaysApply: true
+---
+
+This project includes the local altFINS skill `{{SKILL_NAME}}` at `{{PROJECT_SKILL_ROOT}}`.
+
+When a user asks for evidence-backed crypto market analysis:
+- read `{{PROJECT_SKILL_ROOT}}/README.md` to confirm this is the right skill for the task
+- read `{{PROJECT_SKILL_ROOT}}/SKILL.md` before drafting the analysis
+- use the bundled references and assets inside `{{PROJECT_SKILL_ROOT}}/`
+- keep the answer grounded in the validated CLI and MCP surfaces bundled with the skill
+- separate facts, inferences, and open questions clearly

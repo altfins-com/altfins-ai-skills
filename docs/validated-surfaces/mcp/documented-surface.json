@@ -1,0 +1,28 @@
+{
+  "source_kind": "official-docs-curated",
+  "docs_url": "https://altfins.com/crypto-market-and-analytical-data-api/documentation/mcp-server/",
+  "endpoint": "https://mcp.altfins.com/mcp",
+  "transport": "streamable-http",
+  "authentication": {
+    "header": "X-Api-Key",
+    "scheme": "api-key"
+  },
+  "documented_capability_families": [
+    "Screener",
+    "Technical Analysis",
+    "OHLCV Data",
+    "Analytics History",
+    "Signal Feed",
+    "News",
+    "Calendar Events",
+    "Portfolio"
+  ],
+  "documented_client_setups": [
+    "Claude Desktop",
+    "VS Code (GitHub Copilot)",
+    "Microsoft Copilot Studio"
+  ],
+  "runtime_tool_names_confirmed": false,
+  "note": "Use a connected MCP client to discover actual runtime tool identifiers before naming or calling tools in a response.",
+  "validated_on": "2026-04-12"
+}

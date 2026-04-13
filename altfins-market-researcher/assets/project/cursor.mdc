@@ -1,0 +1,13 @@
+---
+description: altfins-market-researcher project guidance
+alwaysApply: true
+---
+
+This project includes the local altFINS skill `{{SKILL_NAME}}` at `{{PROJECT_SKILL_ROOT}}`.
+
+When a user needs repeatable `af` CLI research help:
+- read `{{PROJECT_SKILL_ROOT}}/README.md` to confirm the fit
+- read `{{PROJECT_SKILL_ROOT}}/SKILL.md` before proposing commands
+- use the bundled references and assets inside `{{PROJECT_SKILL_ROOT}}/`
+- stay grounded in the validated CLI snapshots bundled with the skill
+- prefer reproducible commands, safe request shaping, and export-friendly output

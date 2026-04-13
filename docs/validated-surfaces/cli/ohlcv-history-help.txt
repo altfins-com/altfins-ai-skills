@@ -1,0 +1,22 @@
+Get historical OHLCV candles
+
+Usage:
+  af ohlcv history [flags]
+
+Flags:
+      --filter string     JSON filter or @path/to/filter.json
+      --from string       From date/datetime
+  -h, --help              help for history
+      --interval string   Time interval, e.g. DAILY
+      --page int          Zero-based page index
+      --size int          Page size
+      --sort strings      Sort expressions (repeatable)
+      --stdin-json        Read filter JSON from stdin
+      --symbol string     Symbol, e.g. BTC
+      --to string         To date/datetime
+
+Global Flags:
+      --dry-run         Show the API request without executing it
+      --fields string   Comma-separated output field selection
+      --no-color        Disable ANSI color output
+  -o, --output string   Output format: table, json, jsonl, csv (default "table")

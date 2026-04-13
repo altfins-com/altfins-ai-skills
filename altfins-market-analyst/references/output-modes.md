@@ -54,7 +54,7 @@ Typical sections:
 Use when:
 
 - the evidence is incomplete
-- the target interface or runtime tool availability is not yet confirmed
+- the target interface or runtime tool availability is not confirmed in the current session
 - the safest answer is a next-step plan rather than a full analysis
 
 Typical sections:

@@ -1,16 +1,19 @@
 # Validated MCP Anchors
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
+
+Primary snapshot file:
+- [../../docs/validated-surfaces/mcp/documented-surface.json](../../docs/validated-surfaces/mcp/documented-surface.json)
 
 ## Official source
 
 Primary reference: <https://altfins.com/crypto-market-and-analytical-data-api/documentation/mcp-server/>
 
-## Confirmed MCP facts
+## Confirmed MCP Facts
 
 ### Endpoint
 
-The official docs list the MCP endpoint as:
+The documented surface snapshot lists this MCP endpoint:
 
 ```text
 https://mcp.altfins.com/mcp
@@ -18,11 +21,11 @@ https://mcp.altfins.com/mcp
 
 ### Transport
 
-The same docs state that the endpoint supports Streamable HTTP MCP transport.
+The documented surface snapshot records Streamable HTTP MCP transport.
 
 ### Authentication
 
-The official docs state that MCP requests require the API key header:
+The documented surface snapshot records the required API key header:
 
 ```text
 X-Api-Key: YOUR_ALTFINS_API_KEY
@@ -30,7 +33,7 @@ X-Api-Key: YOUR_ALTFINS_API_KEY
 
 ### Documented capability families
 
-The docs describe these tool families as automatically discoverable by compatible clients:
+The official docs currently describe these capability families:
 
 - Screener
 - Technical Analysis
@@ -43,17 +46,17 @@ The docs describe these tool families as automatically discoverable by compatibl
 
 These names are safe to use as high-level categories. They are not a substitute for real runtime tool discovery.
 
-## Client setup anchors
+## Client Setup Anchors
 
-The official docs currently provide setup guidance for:
+The documented surface snapshot currently includes setup guidance for:
 
-- Claude Desktop via `mcp-remote`
-- VS Code with native HTTP MCP configuration
-- Microsoft Copilot Studio via built-in MCP onboarding
+- Claude Desktop
+- VS Code (GitHub Copilot)
+- Microsoft Copilot Studio
 
-## Safe usage guidance
+## Safe Usage Guidance
 
 - Discover real tools from the MCP client before naming or calling them.
-- Use the official categories to decide which research route fits the task.
+- Use the documented capability families to decide which research route fits the task.
 - If the task requires a capability outside the documented families, call that out explicitly.
 - Keep analysis grounded in returned MCP data, not in generic market assumptions.

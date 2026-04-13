@@ -1,0 +1,26 @@
+{
+  "validated_on": "2026-04-12",
+  "cli_bin": "/opt/homebrew/bin/af",
+  "top_level_command": "af",
+  "top_level_children": [
+    "analytics",
+    "auth",
+    "commands",
+    "completion",
+    "help",
+    "markets",
+    "news",
+    "ohlcv",
+    "quota",
+    "refs",
+    "signals",
+    "ta",
+    "tui"
+  ],
+  "global_flags": [
+    "dry-run",
+    "fields",
+    "no-color",
+    "output"
+  ]
+}

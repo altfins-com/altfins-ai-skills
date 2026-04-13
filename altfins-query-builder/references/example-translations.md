@@ -1,6 +1,6 @@
 # Example Translations
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
 
 This file shows how to translate plain-English requests into safe, structured handoffs without inventing unsupported altFINS behavior.
 

@@ -1,6 +1,6 @@
 # Validated Sources
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
 
 This document is the shared source inventory for the repository. Use it to decide which sources are authoritative before you extend any individual skill.
 
@@ -34,11 +34,11 @@ URL: <https://altfins.com/crypto-market-and-analytical-data-api/documentation/mc
 
 Use this as the primary source for:
 
-- MCP endpoint: `https://mcp.altfins.com/mcp`
-- transport: Streamable HTTP MCP
-- required authentication header: `X-Api-Key`
-- documented high-level tool families
-- client setup examples for Claude Desktop, VS Code, and Microsoft Copilot Studio
+- MCP endpoint
+- transport
+- required authentication header
+- documented high-level capability families
+- client setup examples
 
 ### altFINS CLI documentation
 
@@ -51,30 +51,35 @@ Use this as the primary public product documentation for:
 - documented example workflows
 - `af commands -o json` and `--dry-run` positioning
 
+## Checked-In Validated Surfaces
+
+The repository now carries local snapshots under [docs/validated-surfaces/README.md](validated-surfaces/README.md).
+
+### CLI snapshot
+
+Use the files under `docs/validated-surfaces/cli/` when you need a stable, local reference for the currently validated CLI surface.
+
+The checked-in CLI snapshot includes:
+
+- `commands.json`
+- `manifest.json`
+- `af-help.txt`
+- selected subcommand help snapshots
+
+### MCP documented surface snapshot
+
+Use `docs/validated-surfaces/mcp/documented-surface.json` when you need a stable, local reference for the currently documented MCP surface.
+
+This snapshot is intentionally limited to documented endpoint, transport, authentication, client setup targets, and capability families. Runtime tool identifiers still need discovery from the connected MCP client.
+
 ## Locally Observed CLI Surface
 
-The real installed CLI was also inspected on April 11, 2026.
+The local CLI surface was refreshed into `docs/validated-surfaces/cli/` on April 12, 2026 using the real `af` binary.
 
-Observed commands:
+Important note about the local binary:
 
-- `af --help`
-- `af commands -o json`
-- `af markets search --help`
-- `af signals list --help`
-- `af analytics history --help`
-- `af ohlcv history --help`
-- `af news list --help`
-- `af ta list --help`
-
-### Important note about the local binary
-
-The installed binary reported:
-
-```text
-af version dev
-```
-
-Because of that, prefer the observed help output and command metadata for the local command surface, and prefer the official docs and OpenAPI schema for product-level validation.
+- if the installed binary and the checked-in snapshot disagree, prefer the live local binary and refresh the snapshot
+- if the live local binary and official docs disagree, call out the mismatch explicitly and prefer the interface you are actually targeting
 
 ## Key Validated Facts
 
@@ -88,7 +93,7 @@ Because of that, prefer the observed help output and command metadata for the lo
 
 Validated REST paths are under the `/api/v2/public/` namespace.
 
-Examples confirmed from the OpenAPI schema and the installed CLI metadata include:
+Examples confirmed from the OpenAPI schema and the checked-in CLI snapshot include:
 
 - `/api/v2/public/screener-data/search-requests`
 - `/api/v2/public/analytics/search-requests`
@@ -105,11 +110,12 @@ Examples confirmed from the OpenAPI schema and the installed CLI metadata includ
 
 ### Observed top-level CLI groups
 
-Observed from `af --help`:
+Observed from the checked-in CLI snapshot:
 
 - `analytics`
 - `auth`
 - `commands`
+- `completion`
 - `markets`
 - `news`
 - `ohlcv`
@@ -121,7 +127,7 @@ Observed from `af --help`:
 
 ### Observed global CLI flags
 
-Observed from `af --help`:
+Observed from the checked-in CLI snapshot:
 
 - `--dry-run`
 - `--fields`
@@ -131,6 +137,6 @@ Observed from `af --help`:
 ## How to Use This Document
 
 - Use official docs and the OpenAPI schema when validating product capabilities.
-- Use observed CLI help and `af commands -o json` when validating local CLI behavior.
-- Use MCP docs for endpoint, authentication, transport, and high-level capability families.
+- Use checked-in validated surface snapshots when you need a stable local contract.
+- Use a live local CLI binary or connected MCP client when runtime truth matters more than the checked-in snapshot.
 - If two sources disagree, prefer the more direct interface source for that layer and call out the mismatch explicitly.

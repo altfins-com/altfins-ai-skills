@@ -1,10 +1,10 @@
 # Example Prompts
 
-Validated on April 11, 2026.
+Validated on April 12, 2026.
 
 This file provides prompt material for `altfins-market-analyst`.
 
-## Official prompt anchors
+## Official Prompt Anchors
 
 The following user-style prompts are explicitly documented in the official altFINS MCP documentation as examples of MCP usage:
 
@@ -16,7 +16,7 @@ The following user-style prompts are explicitly documented in the official altFI
 
 Use these as validated examples of the kinds of natural-language requests the MCP server is intended to support.
 
-## Safe local wrapper prompts
+## Safe Local Wrapper Prompts
 
 These are repository-local prompt wrappers built on top of the official prompt anchors. They are safe because they do not invent new tool names or undocumented capabilities.
 
@@ -62,8 +62,8 @@ Use validated altFINS data only. Review recent bullish or bearish signal evidenc
 Use validated altFINS data only. Find a small group of technically interesting candidates and summarize them as a market scan. Highlight the strongest evidence, the biggest uncertainty, and the next checks to run.
 ```
 
-## Usage rules
+## Usage Rules
 
 - Use the official prompt anchors as examples of supported question shape, not as proof of a specific runtime tool name.
 - When adding constraints such as timeframe or output format, label them clearly as local prompting additions.
-- If the runtime environment has not yet confirmed a needed MCP capability, fall back to a conservative research plan instead of pretending the prompt is executable as-is.
+- If the current session has not confirmed a needed runtime tool, fall back to a conservative research plan instead of pretending the prompt is executable as-is.

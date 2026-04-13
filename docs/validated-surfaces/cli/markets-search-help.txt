@@ -1,0 +1,21 @@
+Run a screener market search
+
+Usage:
+  af markets search [flags]
+
+Flags:
+      --display-type string   Comma-separated screener display fields
+      --filter string         JSON filter or @path/to/filter.json
+  -h, --help                  help for search
+      --interval string       Time interval, e.g. DAILY or HOURLY
+      --page int              Zero-based page index
+      --size int              Page size
+      --sort strings          Sort expressions (repeatable)
+      --stdin-json            Read filter JSON from stdin
+      --symbols string        Comma-separated symbols
+
+Global Flags:
+      --dry-run         Show the API request without executing it
+      --fields string   Comma-separated output field selection
+      --no-color        Disable ANSI color output
+  -o, --output string   Output format: table, json, jsonl, csv (default "table")

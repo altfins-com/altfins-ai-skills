@@ -82,4 +82,4 @@ Reusable output templates:
 
 Use [../altfins-market-researcher/README.md](../altfins-market-researcher/README.md) when you need actual `af` CLI commands, export formats, or repeatable research workflows.
 
-Use [../altfins-query-builder/README.md](../altfins-query-builder/README.md) when the user starts with a vague plain-English request and the first job is to turn it into a clean structured brief or future query plan.
+Use [../altfins-query-builder/README.md](../altfins-query-builder/README.md) when the user starts with a vague plain-English request and the first job is to turn it into a clean structured brief or validated request plan.

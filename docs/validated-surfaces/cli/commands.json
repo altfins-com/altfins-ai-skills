@@ -1,0 +1,1931 @@
+{
+  "command": "af",
+  "use": "af",
+  "short": "altFINS CLI for market data, signals, analytics, and TUI workflows",
+  "flags": [
+    {
+      "name": "dry-run",
+      "type": "bool",
+      "usage": "Show the API request without executing it",
+      "default": "false"
+    },
+    {
+      "name": "fields",
+      "type": "string",
+      "usage": "Comma-separated output field selection"
+    },
+    {
+      "name": "no-color",
+      "type": "bool",
+      "usage": "Disable ANSI color output",
+      "default": "false"
+    },
+    {
+      "name": "output",
+      "shorthand": "o",
+      "type": "string",
+      "usage": "Output format: table, json, jsonl, csv",
+      "default": "table"
+    }
+  ],
+  "children": [
+    {
+      "command": "af analytics",
+      "use": "analytics",
+      "short": "Historical analytics and metric metadata",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af analytics history",
+          "use": "history",
+          "short": "Fetch historical analytics data for a symbol and metric",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/analytics/search-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "usage": "From date/datetime"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Time interval"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Symbol, e.g. BTC"
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "usage": "To date/datetime"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "usage": "Analytics type id, e.g. RSI14"
+            }
+          ]
+        },
+        {
+          "command": "af analytics types",
+          "use": "types",
+          "short": "List supported analytics types",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/analytics/types"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af auth",
+      "use": "auth",
+      "short": "Manage altFINS API key configuration",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af auth clear",
+          "use": "clear",
+          "short": "Remove locally stored API key from config",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af auth set",
+          "use": "set",
+          "short": "Save an altFINS API key into local config",
+          "flags": [
+            {
+              "name": "api-key",
+              "type": "string",
+              "usage": "API key to save"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af auth status",
+          "use": "status",
+          "short": "Show current auth configuration",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af commands",
+      "use": "commands",
+      "short": "List commands with metadata for agents and automation",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "help",
+          "shorthand": "h",
+          "type": "bool",
+          "usage": "help for commands",
+          "default": "false"
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ]
+    },
+    {
+      "command": "af completion",
+      "use": "completion",
+      "short": "Generate the autocompletion script for the specified shell",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af completion bash",
+          "use": "bash",
+          "short": "Generate the autocompletion script for bash",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "no-descriptions",
+              "type": "bool",
+              "usage": "disable completion descriptions",
+              "default": "false"
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af completion fish",
+          "use": "fish",
+          "short": "Generate the autocompletion script for fish",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "no-descriptions",
+              "type": "bool",
+              "usage": "disable completion descriptions",
+              "default": "false"
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af completion powershell",
+          "use": "powershell",
+          "short": "Generate the autocompletion script for powershell",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "no-descriptions",
+              "type": "bool",
+              "usage": "disable completion descriptions",
+              "default": "false"
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af completion zsh",
+          "use": "zsh",
+          "short": "Generate the autocompletion script for zsh",
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "no-descriptions",
+              "type": "bool",
+              "usage": "disable completion descriptions",
+              "default": "false"
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af help",
+      "use": "help [command]",
+      "short": "Help about any command",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ]
+    },
+    {
+      "command": "af markets",
+      "use": "markets",
+      "short": "Screener market data queries",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af markets fields",
+          "use": "fields",
+          "short": "List screener display field types",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/screener-data/value-types"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af markets search",
+          "use": "search",
+          "short": "Run a screener market search",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/screener-data/search-requests"
+          },
+          "flags": [
+            {
+              "name": "display-type",
+              "type": "string",
+              "usage": "Comma-separated screener display fields"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Time interval, e.g. DAILY or HOURLY"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbols",
+              "type": "string",
+              "usage": "Comma-separated symbols"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af news",
+      "use": "news",
+      "short": "News summary queries",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af news get",
+          "use": "get",
+          "short": "Fetch a single news summary by message and source ids",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/news-summary/find-summary"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "message-id",
+              "type": "int64",
+              "usage": "Message id",
+              "default": "0"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "source-id",
+              "type": "int64",
+              "usage": "Source id",
+              "default": "0"
+            }
+          ]
+        },
+        {
+          "command": "af news list",
+          "use": "list",
+          "short": "List summarized news items",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/news-summary/search-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "usage": "From date/datetime"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "usage": "To date/datetime"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af ohlcv",
+      "use": "ohlcv",
+      "short": "Snapshot and historical OHLCV data",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af ohlcv history",
+          "use": "history",
+          "short": "Get historical OHLCV candles",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/ohlcv/history-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "usage": "From date/datetime"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Time interval, e.g. DAILY"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Symbol, e.g. BTC"
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "usage": "To date/datetime"
+            }
+          ]
+        },
+        {
+          "command": "af ohlcv snapshot",
+          "use": "snapshot",
+          "short": "Get latest OHLCV snapshot",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/ohlcv/snapshot-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Time interval, e.g. DAILY"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbols",
+              "type": "string",
+              "usage": "Comma-separated symbols"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af quota",
+      "use": "quota",
+      "short": "Inspect current permit quotas",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af quota all",
+          "use": "all",
+          "short": "Show both current and monthly permit values",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/all-available-permits"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af quota current",
+          "use": "current",
+          "short": "Show currently available permits",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/available-permits"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af quota monthly",
+          "use": "monthly",
+          "short": "Show monthly remaining permits",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/monthly-available-permits"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af refs",
+      "use": "refs",
+      "short": "Reference data and enums",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af refs intervals",
+          "use": "intervals",
+          "short": "List supported time intervals",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/intervals"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af refs symbols",
+          "use": "symbols",
+          "short": "List supported altFINS symbols",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/symbols"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af signals",
+      "use": "signals",
+      "short": "Trading signal feed and metadata",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af signals keys",
+          "use": "keys",
+          "short": "List all signal keys",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/signals-feed/signal-keys"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af signals list",
+          "use": "list",
+          "short": "Query the trading signal feed",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/signals-feed/search-requests"
+          },
+          "flags": [
+            {
+              "name": "direction",
+              "type": "string",
+              "usage": "Signal direction: BULLISH or BEARISH"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "usage": "From date/datetime"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "signals",
+              "type": "string",
+              "usage": "Comma-separated signal keys"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbols",
+              "type": "string",
+              "usage": "Comma-separated symbol list"
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "usage": "To date/datetime"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af ta",
+      "use": "ta",
+      "short": "Curated technical analysis summaries",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af ta list",
+          "use": "list",
+          "short": "List curated technical analysis entries",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/technical-analysis/data"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringSlice",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Symbol filter"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af tui",
+      "use": "tui",
+      "short": "Interactive terminal UI",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af tui markets",
+          "use": "markets",
+          "short": "Markets TUI",
+          "endpoint": {
+            "method": "TUI",
+            "path": "/api/v2/public/screener-data/search-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Optional symbol seed filter"
+            }
+          ]
+        },
+        {
+          "command": "af tui news",
+          "use": "news",
+          "short": "News TUI",
+          "endpoint": {
+            "method": "TUI",
+            "path": "/api/v2/public/news-summary/search-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Optional symbol seed filter"
+            }
+          ]
+        },
+        {
+          "command": "af tui signals",
+          "use": "signals",
+          "short": "Signals TUI",
+          "endpoint": {
+            "method": "TUI",
+            "path": "/api/v2/public/signals-feed/search-requests"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Optional symbol seed filter"
+            }
+          ]
+        },
+        {
+          "command": "af tui ta",
+          "use": "ta",
+          "short": "Technical analysis TUI",
+          "endpoint": {
+            "method": "TUI",
+            "path": "/api/v2/public/technical-analysis/data"
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Optional symbol seed filter"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

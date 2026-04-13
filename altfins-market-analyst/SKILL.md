@@ -23,7 +23,7 @@ Use this skill to structure crypto market analysis around validated altFINS-faci
 
 ## Validated MCP Anchors
 
-Official altFINS MCP docs currently describe these high-level capability families:
+The documented MCP surface confirms these high-level capability families:
 
 - Screener
 - Technical Analysis
@@ -49,9 +49,9 @@ The output mode should match the user's actual need, not just the amount of avai
 
 ## Working Rules
 
-- Treat official altFINS documentation, validated MCP metadata, and user-provided context as the trusted sources.
+- Treat official altFINS documentation, checked-in validated surfaces, and user-provided context as the trusted sources.
 - Do not invent tool names, server methods, or analysis capabilities.
-- Make uncertainty explicit when MCP coverage is not yet validated.
+- Make uncertainty explicit when the needed runtime tool is not confirmed in the current session.
 - Prefer structured findings, assumptions, and next investigative steps.
 - Separate validated facts from inferences and market interpretation.
 - Keep the skill analytical, not advisory.
@@ -75,6 +75,7 @@ The output mode should match the user's actual need, not just the amount of avai
 ## References
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
+- Read [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
 - Read [references/mcp-anchors.md](references/mcp-anchors.md) for validated MCP facts.
 - Read [references/analysis-workflow.md](references/analysis-workflow.md) for a reusable analysis flow.
 - Read [references/synthesis-rules.md](references/synthesis-rules.md) for evidence and reasoning discipline.
