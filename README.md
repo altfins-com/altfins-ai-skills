@@ -27,14 +27,14 @@ Download the current bundle:
 Then run:
 
 ```powershell
-.ltfins-skills.exe list
-.ltfins-skills.exe install --platform copilot --all
+.\altfins-skills.exe list
+.\altfins-skills.exe install --platform copilot --all
 ```
 
 Python fallback inside the ZIP:
 
 ```powershell
-.ltfins-skills.cmd list
+.\altfins-skills.cmd list
 ```
 
 ### Project-Level Installs
