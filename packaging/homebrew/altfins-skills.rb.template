@@ -14,7 +14,7 @@ class AltfinsSkills < Formula
     (bin/"altfins-skills").write <<~SH
       #!/bin/bash
       export ALTFINS_SKILLS_ROOT="#{libexec}/repo"
-      export ALTFINS_SKILLS_PYTHON="#{Formula["python@3.12"].opt_bin}/python3"
+      export ALTFINS_SKILLS_PYTHON="#{Formula["python@3.12"].opt_bin}/python3.12"
       exec "$ALTFINS_SKILLS_PYTHON" "$ALTFINS_SKILLS_ROOT/scripts/skills.py" "$@"
     SH
   end
