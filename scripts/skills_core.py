@@ -641,6 +641,10 @@ def handle_package(skills: list[Path]) -> None:
         print(f"Packaged {skill_dir.name} -> {destination}")
 
 
+CLI_OPTIONAL_SKILLS = {"altfins-market-researcher", "altfins-market-analyst"}
+CLI_REPO_URL = "https://github.com/altfins-com/altfins-cli"
+
+
 def handle_install(
     platform_name: str,
     mode: str,
@@ -650,6 +654,7 @@ def handle_install(
 ) -> None:
     ensure_valid_repo(profile="distribution")
     target = resolve_target(platform_name, mode, project_dir)
+    installed_names: list[str] = []
     for skill_dir in skills:
         if target.mode == "skills":
             destination = install_destination(target, skill_dir.name)
@@ -658,6 +663,13 @@ def handle_install(
         else:
             install_project_skill(target, skill_dir, force=force)
             print(f"Installed {skill_dir.name} into project -> {target.project_dir}")
+        installed_names.append(skill_dir.name)
+
+    if any(name in CLI_OPTIONAL_SKILLS for name in installed_names) and shutil.which("af") is None:
+        print(
+            "Optional: install the altFINS CLI (af) for CLI-driven workflows: "
+            f"{CLI_REPO_URL}"
+        )
 
 
 def handle_uninstall(

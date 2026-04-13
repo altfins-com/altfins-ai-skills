@@ -16,6 +16,8 @@ altfins-skills install --platform codex --all
 
 Brew installs only the `altfins-skills` command. Your agent homes stay untouched until you run `altfins-skills install ...` yourself.
 
+**Optional but recommended for CLI-driven workflows:** install the **altFINS CLI (`af`)** from [altfins-cli](https://github.com/altfins-com/altfins-cli). This is especially useful for `altfins-market-researcher`, and it can also strengthen `altfins-market-analyst` workflows when you want live CLI evidence.
+
 ### Windows
 
 Download the current bundle:

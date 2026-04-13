@@ -25,6 +25,8 @@ Notes:
 - `brew install` does not touch your agent homes.
 - The actual skill copy into `~/.codex/skills`, `~/.claude/skills`, `~/.gemini/skills`, or `~/.copilot/skills` happens only when you run `altfins-skills install ...`.
 
+**Optional companion install:** if you want CLI-driven research workflows, also install the **altFINS CLI (`af`)** from [altfins-cli](https://github.com/altfins-com/altfins-cli). This is most relevant for `altfins-market-researcher`, while `altfins-market-analyst` can use it as an additional evidence source.
+
 ## Windows
 
 Download:
