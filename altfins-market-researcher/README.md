@@ -66,6 +66,12 @@ A strong answer from this skill should usually include:
 
 This skill should stay honest about uncertainty. If the exact request body is not fully validated, it should say so instead of inventing keys.
 
+## Related Tools
+
+- **altFINS CLI (`af`)**: primary companion tool for this skill. `altfins-market-researcher` is designed to help users work with the real `af` command surface safely and repeatably. See [altfins-cli](https://github.com/altfins-com/altfins-cli).
+- **`altfins-market-analyst`**: use this after data collection when the next step is interpretation rather than command design.
+- **`altfins-query-builder`**: use this first when the user request is still too vague to map cleanly to a CLI workflow.
+
 ## Recommended Reading Inside This Skill
 
 Start here for the core contract:

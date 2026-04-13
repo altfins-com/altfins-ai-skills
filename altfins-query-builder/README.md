@@ -65,6 +65,12 @@ A strong answer from this skill should usually include:
 
 This skill should not fake precision. If the user has not given enough detail, the output should expose the missing pieces instead of pretending the request is ready to run.
 
+## Related Tools
+
+- **altFINS CLI (`af`)**: optional downstream tool. Once a request is concrete enough, this skill may hand off to CLI-ready workflows that another agent or user can run with `af`. See [altfins-cli](https://github.com/altfins-com/altfins-cli).
+- **`altfins-market-researcher`**: use this next when the translated request is ready to become an exact `af` workflow.
+- **`altfins-market-analyst`**: use this next when the translated request is already clearly an analysis task that needs evidence-backed interpretation.
+
 ## Recommended Reading Inside This Skill
 
 Start here for the core contract:

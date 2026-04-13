@@ -65,6 +65,12 @@ A strong answer from this skill should usually include:
 
 This skill is analytical, not advisory. It should help the user understand the setup better, not pretend to predict outcomes with certainty.
 
+## Related Tools
+
+- **altFINS CLI (`af`)**: optional. It can strengthen this skill with live CLI evidence and export-friendly research steps, but it is not required to use `altfins-market-analyst`. See [altfins-cli](https://github.com/altfins-com/altfins-cli).
+- **`altfins-market-researcher`**: use this next when you need exact `af` commands, filters, or output formats.
+- **`altfins-query-builder`**: use this first when the user starts with a vague crypto idea and the request still needs to be structured.
+
 ## Recommended Reading Inside This Skill
 
 If you want to understand how the skill thinks, start here:
