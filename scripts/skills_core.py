@@ -24,6 +24,11 @@ KNOWN_SKILLS = [
     "altfins-query-builder",
 ]
 PROJECT_DATA_ROOT = ".altfins-skills"
+CLAUDE_COWORK_NOTE = (
+    "Claude Cowork uses upload flow. Run `altfins-skills package ...` and upload the resulting "
+    "`.skill.zip` in Claude > Customize > Skills."
+)
+PLATFORM_ALIASES = {"claude": "claude-code"}
 
 
 class SkillsError(Exception):
@@ -34,7 +39,10 @@ class SkillsError(Exception):
 class PlatformSpec:
     name: str
     skills_install_root: Path | None = None
+    skills_mode_adapter: str | None = None
+    skills_payload_root: Path | None = None
     project_adapter: str | None = None
+    package_note: str | None = None
 
     @property
     def supported_modes(self) -> list[str]:
@@ -44,6 +52,10 @@ class PlatformSpec:
         if self.project_adapter is not None:
             modes.append("project")
         return modes
+
+    @property
+    def package_only(self) -> bool:
+        return self.package_note is not None and not self.supported_modes
 
 
 @dataclass(frozen=True)
@@ -127,6 +139,25 @@ def validator_commands(profile: str = "repo") -> list[list[str]]:
     return commands
 
 
+def canonical_platform_name(name: str | None) -> str | None:
+    if name is None:
+        return None
+    return PLATFORM_ALIASES.get(name, name)
+
+
+def platform_choice_names() -> list[str]:
+    return sorted(set(platform_specs()) | set(PLATFORM_ALIASES))
+
+
+def emit_platform_alias_warning(name: str | None) -> None:
+    if name == "claude":
+        print(
+            "Warning: --platform claude is deprecated. Use --platform claude-code for local Claude Code subagents "
+            "or package skill ZIPs for Claude Cowork.",
+            file=sys.stderr,
+        )
+
+
 def platform_specs() -> dict[str, PlatformSpec]:
     codex_home = _expand_home(os.environ.get("CODEX_HOME", "~/.codex"))
     claude_home = _env_home("CLAUDE_HOME", "~/.claude")
@@ -134,7 +165,13 @@ def platform_specs() -> dict[str, PlatformSpec]:
     copilot_home = _env_home("COPILOT_HOME", "~/.copilot")
     return {
         "codex": PlatformSpec("codex", skills_install_root=codex_home / "skills"),
-        "claude": PlatformSpec("claude", skills_install_root=claude_home / "skills"),
+        "claude-code": PlatformSpec(
+            "claude-code",
+            skills_install_root=claude_home / "agents",
+            skills_mode_adapter="claude-code",
+            skills_payload_root=claude_home / "skills",
+        ),
+        "claude-cowork": PlatformSpec("claude-cowork", package_note=CLAUDE_COWORK_NOTE),
         "gemini": PlatformSpec("gemini", skills_install_root=gemini_home / "skills"),
         "copilot": PlatformSpec("copilot", skills_install_root=copilot_home / "skills"),
         "cursor": PlatformSpec("cursor", project_adapter="cursor"),
@@ -180,13 +217,16 @@ def ensure_valid_repo(profile: str = "repo") -> None:
 
 def get_platform(name: str) -> PlatformSpec:
     specs = platform_specs()
-    if name not in specs:
+    canonical = canonical_platform_name(name)
+    if canonical not in specs:
         raise SkillsError(f"Unknown platform: {name}")
-    return specs[name]
+    return specs[canonical]
 
 
 def resolve_target(platform_name: str, mode: str, project_dir: str | None) -> TargetContext:
     platform = get_platform(platform_name)
+    if platform.package_only:
+        raise SkillsError(platform.package_note or f"Platform {platform.name} uses package/upload workflow.")
     if mode not in INSTALL_MODES:
         raise SkillsError(f"Unknown mode: {mode}")
     if mode == "skills":
@@ -214,6 +254,127 @@ def install_destination(target: TargetContext, skill_name: str) -> Path:
     if target.mode != "skills" or target.platform.skills_install_root is None:
         raise SkillsError(f"Platform {target.platform.name} does not have a skills install root.")
     return target.platform.skills_install_root / skill_name
+
+
+def claude_code_agent_path(target: TargetContext, skill_name: str) -> Path:
+    if target.platform.skills_install_root is None:
+        raise SkillsError("Claude Code install requires an agents root.")
+    return target.platform.skills_install_root / f"{skill_name}.md"
+
+
+def claude_code_payload_destination(target: TargetContext, skill_name: str) -> Path:
+    if target.platform.skills_payload_root is None:
+        raise SkillsError("Claude Code install requires a payload root.")
+    return target.platform.skills_payload_root / skill_name
+
+
+def remove_path(path: Path) -> None:
+    if not path.exists():
+        return
+    if path.is_dir():
+        shutil.rmtree(path)
+    else:
+        path.unlink()
+
+
+def parse_skill_frontmatter(skill_path: Path) -> tuple[str, str]:
+    text = skill_path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    if not text.startswith("---\n"):
+        raise SkillsError(f"Expected YAML frontmatter in {skill_path}")
+    closing = text.find("\n---\n", 4)
+    if closing == -1:
+        raise SkillsError(f"Could not find closing frontmatter marker in {skill_path}")
+    frontmatter = text[4:closing]
+    payload: dict[str, str] = {}
+    for line in frontmatter.splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        payload[key.strip()] = value.strip()
+    return payload.get("name", skill_path.parent.name), payload.get("description", skill_path.parent.name)
+
+
+def render_claude_code_agent(skill_dir: Path, payload_dest: Path) -> str:
+    skill_name, description = parse_skill_frontmatter(skill_dir / "SKILL.md")
+    return (
+        "---\n"
+        f"name: {json.dumps(skill_name)}\n"
+        f"description: {json.dumps(description)}\n"
+        "---\n\n"
+        "Use the installed AltFINS skill bundle at the paths below.\n\n"
+        "Read and follow these files in order:\n"
+        f"- `{payload_dest / 'SKILL.md'}`\n"
+        f"- `{payload_dest / 'README.md'}`\n"
+        f"- `{payload_dest / 'references'}` for structured guidance and validation scenarios\n"
+        f"- `{payload_dest / 'assets'}` for reusable templates and packaging assets\n\n"
+        "Treat the installed `SKILL.md` as the primary contract. Load only the additional files you need for the task at hand.\n"
+    )
+
+
+def install_claude_code_skill(target: TargetContext, skill_dir: Path, force: bool) -> tuple[Path, Path]:
+    agent_path = claude_code_agent_path(target, skill_dir.name)
+    payload_dest = claude_code_payload_destination(target, skill_dir.name)
+    if agent_path.exists() and not force:
+        raise SkillsError(
+            f"Claude Code agent already exists: {agent_path}. Re-run with --force to overwrite."
+        )
+    if force:
+        remove_path(agent_path)
+    copy_skill(skill_dir, payload_dest, force=force)
+    agent_path.parent.mkdir(parents=True, exist_ok=True)
+    agent_path.write_text(render_claude_code_agent(skill_dir, payload_dest), encoding="utf-8")
+    return agent_path, payload_dest
+
+
+def uninstall_claude_code_skill(target: TargetContext, skill_name: str, force: bool) -> tuple[Path, Path]:
+    agent_path = claude_code_agent_path(target, skill_name)
+    payload_dest = claude_code_payload_destination(target, skill_name)
+    if not agent_path.exists() and not payload_dest.exists():
+        raise SkillsError(f"Claude Code skill is not installed: {skill_name}")
+    if agent_path.exists():
+        if agent_path.is_dir() and not force:
+            raise SkillsError(
+                f"Claude Code agent target is a directory: {agent_path}. Re-run with --force to remove it."
+            )
+        remove_path(agent_path)
+    if payload_dest.exists():
+        uninstall_skill(payload_dest, force=force)
+    return agent_path, payload_dest
+
+
+def claude_code_status(platform: PlatformSpec, skill_name: str) -> dict[str, object]:
+    agent_root = platform.skills_install_root
+    payload_root = platform.skills_payload_root
+    agent_path = agent_root / f"{skill_name}.md" if agent_root else None
+    payload_dest = payload_root / skill_name if payload_root else None
+    agent_exists = agent_path.exists() if agent_path else False
+    payload_exists = payload_dest.exists() if payload_dest else False
+    return {
+        "installed": agent_exists and payload_exists,
+        "supported": True,
+        "agent_present": agent_exists,
+        "payload_present": payload_exists,
+        "paths": {
+            "agent": str(agent_path) if agent_path else None,
+            "payload": str(payload_dest) if payload_dest else None,
+        },
+    }
+
+
+def package_archive_path(skill_name: str) -> Path:
+    return dist_dir() / f"{skill_name}.skill.zip"
+
+
+def package_upload_status(platform: PlatformSpec, skill_name: str) -> dict[str, object]:
+    archive = package_archive_path(skill_name)
+    return {
+        "name": skill_name,
+        "installed": archive.exists(),
+        "supported": True,
+        "workflow": "package-upload",
+        "reason": platform.package_note,
+        "paths": {"archive": str(archive)},
+    }
 
 
 def project_skill_destination(target: TargetContext, skill_name: str) -> Path:
@@ -474,6 +635,9 @@ def skill_status_for_mode(
         return item
 
     if mode == "skills":
+        if platform.skills_mode_adapter == "claude-code":
+            item.update(claude_code_status(platform, skill_name))
+            return item
         destination = platform.skills_install_root / skill_name if platform.skills_install_root else None
         item.update(
             {
@@ -519,7 +683,11 @@ def list_payload(
             "mode": mode,
             "project_dir": str(resolved_project_dir) if resolved_project_dir else None,
         }
-        if mode:
+        if platform.package_only:
+            item["platform"]["workflow"] = "package-upload"
+            item["platform"]["note"] = platform.package_note
+            item["platform"]["status"] = package_upload_status(platform, skill_dir.name)
+        elif mode:
             item["platform"]["status"] = skill_status_for_mode(
                 platform,
                 mode,
@@ -537,10 +705,27 @@ def status_payload(
 ) -> dict[str, object]:
     skills = skill_names()
     specs = platform_specs()
-    selected = [specs[platform_name]] if platform_name else [specs[name] for name in sorted(specs)]
+    selected = [specs[canonical_platform_name(platform_name)]] if platform_name else [specs[name] for name in sorted(specs)]
     resolved_project_dir = Path(project_dir).expanduser().resolve() if project_dir else None
     platform_items: list[dict[str, object]] = []
     for platform in selected:
+        if platform.package_only and mode is None:
+            mode_item = {
+                "mode": "package",
+                "supported": True,
+                "workflow": "package-upload",
+                "note": platform.package_note,
+                "skills": [package_upload_status(platform, skill_name) for skill_name in skills],
+            }
+            platform_items.append(
+                {
+                    "name": platform.name,
+                    "supported_modes": platform.supported_modes,
+                    "status": mode_item,
+                }
+            )
+            continue
+
         modes = [mode] if mode else platform.supported_modes
         for current_mode in modes:
             mode_item: dict[str, object] = {
@@ -551,6 +736,10 @@ def status_payload(
                 mode_item["install_root"] = (
                     str(platform.skills_install_root) if platform.skills_install_root else None
                 )
+                if platform.skills_payload_root is not None:
+                    mode_item["payload_root"] = str(platform.skills_payload_root)
+                if platform.skills_mode_adapter is not None:
+                    mode_item["adapter"] = platform.skills_mode_adapter
             if current_mode == "project":
                 mode_item["project_dir"] = str(resolved_project_dir) if resolved_project_dir else None
                 mode_item["adapter"] = platform.project_adapter
@@ -575,10 +764,13 @@ def print_list(platform_name: str | None, mode: str | None, project_dir: str | N
         json_dump(list_payload(platform_name, mode, project_dir))
         return
 
-    if platform_name:
-        platform = get_platform(platform_name)
+    platform = get_platform(platform_name) if platform_name else None
+    if platform is not None:
         print(f"Skills for platform {platform.name}:")
-        print(f"Supported modes: {', '.join(platform.supported_modes)}")
+        supported_modes = ', '.join(platform.supported_modes) if platform.supported_modes else "package-upload only"
+        print(f"Supported modes: {supported_modes}")
+        if platform.package_only and platform.package_note:
+            print(platform.package_note)
         if mode:
             print(f"Selected mode: {mode}")
         if project_dir:
@@ -587,8 +779,10 @@ def print_list(platform_name: str | None, mode: str | None, project_dir: str | N
 
     for skill_dir in find_skill_dirs():
         print(f"- {skill_dir.name}")
-        if platform_name and mode:
-            platform = get_platform(platform_name)
+        if platform is not None and platform.package_only:
+            archive = package_archive_path(skill_dir.name)
+            print("  packaged" if archive.exists() else "  not packaged")
+        elif platform is not None and mode:
             status = skill_status_for_mode(
                 platform,
                 mode,
@@ -611,19 +805,28 @@ def print_status(platform_name: str | None, mode: str | None, project_dir: str |
     payload = status_payload(platform_name, mode, project_dir)
     for platform in payload["platforms"]:
         print(f"Platform: {platform['name']}")
-        print(f"  supported modes: {', '.join(platform['supported_modes'])}")
+        supported_modes = ', '.join(platform['supported_modes']) if platform['supported_modes'] else "package-upload only"
+        print(f"  supported modes: {supported_modes}")
         status = platform["status"]
         print(f"  mode: {status['mode']}")
         if status["mode"] == "skills" and status.get("install_root"):
             print(f"  install root: {status['install_root']}")
+            if status.get("payload_root"):
+                print(f"  payload root: {status['payload_root']}")
+            if status.get("adapter"):
+                print(f"  adapter: {status['adapter']}")
         if status["mode"] == "project":
             if status.get("project_dir"):
                 print(f"  project dir: {status['project_dir']}")
             else:
                 print("  project dir: <required>")
+        if status["mode"] == "package" and status.get("note"):
+            print(f"  note: {status['note']}")
         for skill in status["skills"]:
             state = skill["installed"]
-            if state is True:
+            if status["mode"] == "package":
+                rendered = "packaged" if state is True else "not packaged"
+            elif state is True:
                 rendered = "installed"
             elif state is False:
                 rendered = "not installed"
@@ -657,9 +860,14 @@ def handle_install(
     installed_names: list[str] = []
     for skill_dir in skills:
         if target.mode == "skills":
-            destination = install_destination(target, skill_dir.name)
-            copy_skill(skill_dir, destination, force=force)
-            print(f"Installed {skill_dir.name} -> {destination}")
+            if target.platform.skills_mode_adapter == "claude-code":
+                agent_path, payload_dest = install_claude_code_skill(target, skill_dir, force=force)
+                print(f"Installed {skill_dir.name} -> {agent_path}")
+                print(f"Bundled skill payload -> {payload_dest}")
+            else:
+                destination = install_destination(target, skill_dir.name)
+                copy_skill(skill_dir, destination, force=force)
+                print(f"Installed {skill_dir.name} -> {destination}")
         else:
             install_project_skill(target, skill_dir, force=force)
             print(f"Installed {skill_dir.name} into project -> {target.project_dir}")
@@ -682,9 +890,14 @@ def handle_uninstall(
     target = resolve_target(platform_name, mode, project_dir)
     for skill_dir in skills:
         if target.mode == "skills":
-            destination = install_destination(target, skill_dir.name)
-            uninstall_skill(destination, force=force)
-            print(f"Uninstalled {skill_dir.name} <- {destination}")
+            if target.platform.skills_mode_adapter == "claude-code":
+                agent_path, payload_dest = uninstall_claude_code_skill(target, skill_dir.name, force=force)
+                print(f"Uninstalled {skill_dir.name} <- {agent_path}")
+                print(f"Removed bundled skill payload <- {payload_dest}")
+            else:
+                destination = install_destination(target, skill_dir.name)
+                uninstall_skill(destination, force=force)
+                print(f"Uninstalled {skill_dir.name} <- {destination}")
         else:
             uninstall_project_skill(target, skill_dir.name, force=force)
             print(f"Uninstalled {skill_dir.name} from project <- {target.project_dir}")
@@ -696,7 +909,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     list_parser = subparsers.add_parser("list", help="List repo skills.")
     list_parser.add_argument(
-        "--platform", choices=sorted(platform_specs()), help="Show support details for one platform."
+        "--platform", choices=platform_choice_names(), help="Show support details for one platform."
     )
     list_parser.add_argument(
         "--mode",
@@ -717,7 +930,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "install", help="Install one or more skills into a local agent home or project."
     )
     install_parser.add_argument(
-        "--platform", required=True, choices=sorted(platform_specs()), help="Target platform."
+        "--platform", required=True, choices=platform_choice_names(), help="Target platform."
     )
     install_parser.add_argument(
         "--mode",
@@ -737,7 +950,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "uninstall", help="Uninstall one or more skills from a local agent home or project."
     )
     uninstall_parser.add_argument(
-        "--platform", required=True, choices=sorted(platform_specs()), help="Target platform."
+        "--platform", required=True, choices=platform_choice_names(), help="Target platform."
     )
     uninstall_parser.add_argument(
         "--mode",
@@ -757,7 +970,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     status_parser = subparsers.add_parser("status", help="Show install support and installed state.")
     status_parser.add_argument(
-        "--platform", choices=sorted(platform_specs()), help="Show status for one platform."
+        "--platform", choices=platform_choice_names(), help="Show status for one platform."
     )
     status_parser.add_argument(
         "--mode",
@@ -775,6 +988,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str]) -> int:
     args = parse_args(argv)
+    emit_platform_alias_warning(getattr(args, "platform", None))
     try:
         if args.command == "list":
             print_list(args.platform, args.mode, args.project_dir, args.json)

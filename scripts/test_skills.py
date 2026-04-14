@@ -79,7 +79,7 @@ class SkillsCliTest(unittest.TestCase):
             self.assertIn(f"{skill_name}/SKILL.md", names)
 
     def test_install_status_and_uninstall_for_supported_skills_mode_platforms(self) -> None:
-        for platform in ("codex", "claude", "gemini", "copilot"):
+        for platform in ("codex", "gemini", "copilot"):
             run_cli("install", "--platform", platform, "altfins-market-analyst", env=self.env)
             result = run_cli("status", "--platform", platform, "--mode", "skills", "--json", env=self.env)
             payload = json.loads(result.stdout)
@@ -96,6 +96,69 @@ class SkillsCliTest(unittest.TestCase):
                 for item in payload["platforms"][0]["status"]["skills"]
             }
             self.assertFalse(statuses["altfins-market-analyst"])
+
+    def test_install_status_and_uninstall_for_claude_code(self) -> None:
+        run_cli("install", "--platform", "claude-code", "altfins-market-analyst", env=self.env)
+        agent_path = self.homes["CLAUDE_HOME"] / "agents" / "altfins-market-analyst.md"
+        payload_path = self.homes["CLAUDE_HOME"] / "skills" / "altfins-market-analyst" / "SKILL.md"
+        self.assertTrue(agent_path.exists())
+        self.assertTrue(payload_path.exists())
+        agent_text = agent_path.read_text(encoding="utf-8")
+        self.assertIn("Use the installed AltFINS skill bundle", agent_text)
+        self.assertIn(str(payload_path), agent_text)
+
+        result = run_cli("status", "--platform", "claude-code", "--mode", "skills", "--json", env=self.env)
+        payload = json.loads(result.stdout)
+        statuses = {
+            item["name"]: item
+            for item in payload["platforms"][0]["status"]["skills"]
+        }
+        self.assertTrue(statuses["altfins-market-analyst"]["installed"])
+        self.assertTrue(statuses["altfins-market-analyst"]["agent_present"])
+        self.assertTrue(statuses["altfins-market-analyst"]["payload_present"])
+
+        run_cli("uninstall", "--platform", "claude-code", "altfins-market-analyst", env=self.env)
+        self.assertFalse(agent_path.exists())
+        self.assertFalse(payload_path.exists())
+
+    def test_claude_alias_maps_to_claude_code(self) -> None:
+        result = run_cli("status", "--platform", "claude", "--mode", "skills", "--json", env=self.env)
+        self.assertIn("deprecated", result.stderr)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["platforms"][0]["name"], "claude-code")
+
+    def test_claude_cowork_uses_package_upload_flow(self) -> None:
+        result = run_cli("status", "--platform", "claude-cowork", "--json", env=self.env)
+        payload = json.loads(result.stdout)
+        platform = payload["platforms"][0]
+        self.assertEqual(platform["name"], "claude-cowork")
+        self.assertEqual(platform["status"]["mode"], "package")
+        self.assertIn("Customize > Skills", platform["status"]["note"])
+        statuses = {
+            item["name"]: item["installed"]
+            for item in platform["status"]["skills"]
+        }
+        self.assertFalse(statuses["altfins-market-analyst"])
+
+        install_result = run_cli(
+            "install",
+            "--platform",
+            "claude-cowork",
+            "altfins-market-analyst",
+            env=self.env,
+            check=False,
+        )
+        self.assertNotEqual(install_result.returncode, 0)
+        self.assertIn("Customize > Skills", install_result.stderr)
+
+        run_cli("package", "altfins-market-analyst", env=self.env)
+        result = run_cli("status", "--platform", "claude-cowork", "--json", env=self.env)
+        payload = json.loads(result.stdout)
+        statuses = {
+            item["name"]: item["installed"]
+            for item in payload["platforms"][0]["status"]["skills"]
+        }
+        self.assertTrue(statuses["altfins-market-analyst"])
 
     def test_project_mode_install_status_and_uninstall_for_cursor(self) -> None:
         run_cli(

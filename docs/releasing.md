@@ -91,7 +91,7 @@ altfins-skills list
 On Windows, verify the latest bundle after extraction with:
 
 ```powershell
-.ltfins-skills.exe list
+.\altfins-skills.exe list
 ```
 
 ## Notes

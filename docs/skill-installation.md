@@ -4,10 +4,12 @@ This document explains the public installation story for `altfins-ai-skills`.
 
 ## Summary
 
-The project has three user-facing installation paths:
+The project has four user-facing installation paths:
 
 - `macOS and Linux`: Homebrew-first
 - `Windows`: downloadable ZIP-first
+- `Claude Code`: local subagent install
+- `Claude Cowork`: package-and-upload flow
 - `Cursor` and `OpenClaw`: project-mode integration
 
 A direct repo checkout remains available as a developer fallback.
@@ -23,7 +25,7 @@ altfins-skills install --platform codex --all
 Notes:
 - Homebrew installs the `altfins-skills` command.
 - `brew install` does not touch your agent homes.
-- The actual skill copy into `~/.codex/skills`, `~/.claude/skills`, `~/.gemini/skills`, or `~/.copilot/skills` happens only when you run `altfins-skills install ...`.
+- The actual skill copy into `$CODEX_HOME/skills`, `~/.claude/agents` plus `~/.claude/skills`, `~/.gemini/skills`, or `~/.copilot/skills` happens only when you run `altfins-skills install ...`.
 
 **Optional companion install:** if you want CLI-driven research workflows, also install the **altFINS CLI (`af`)** from [altfins-cli](https://github.com/altfins-com/altfins-cli). This is most relevant for `altfins-market-researcher`, while `altfins-market-analyst` can use it as an additional evidence source.
 
@@ -50,6 +52,41 @@ The Windows ZIP contains:
 - `altfins-skills.exe`
 - `altfins-skills.cmd`
 - `repo/` with the bundled skills, docs, and validator scripts
+
+## Claude
+
+### Claude Code
+
+Use `claude-code` when you want local subagents inside Claude Code.
+
+```bash
+altfins-skills install --platform claude-code altfins-market-analyst
+```
+
+This writes:
+- `~/.claude/agents/<skill>.md`
+- `~/.claude/skills/<skill>/`
+
+The `.md` file is the Claude Code subagent entrypoint. The bundled skill folder stays alongside it so the subagent can reference the installed skill contract and assets.
+
+### Claude Cowork
+
+Use `claude-cowork` when you want to upload a skill ZIP in the Claude UI.
+
+```bash
+altfins-skills package altfins-market-analyst
+```
+
+Then upload:
+
+```text
+dist/skills/altfins-market-analyst.skill.zip
+```
+
+Upload path in Claude:
+- `Customize > Skills`
+
+`claude-cowork` is intentionally package-oriented. It does not support `altfins-skills install ...` because Claude Cowork imports skills through the UI.
 
 ## Project-Mode Platforms
 
@@ -90,7 +127,8 @@ python3 scripts/skills.py package --all
 | Platform | Supported mode(s) | Install surface |
 |----------|-------------------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
-| Claude | `skills` | `~/.claude/skills/<skill>` |
+| Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
+| Claude Cowork | `package-upload` | `dist/skills/<skill>.skill.zip` uploaded in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
@@ -107,6 +145,11 @@ altfins-skills status [--platform PLATFORM] [--mode MODE] [--project-dir PATH] [
 ```
 
 The same subcommands are available through `python3 scripts/skills.py ...` in a repo checkout.
+
+Notes:
+- Use `--platform claude-code` for local Claude Code subagents.
+- Use `altfins-skills package ...` for Claude Cowork ZIP uploads.
+- `--platform claude` still works as a backward-compatible alias for `claude-code`, but `claude-code` is the preferred name.
 
 ## Package Output
 

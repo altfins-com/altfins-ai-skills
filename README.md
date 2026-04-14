@@ -37,6 +37,30 @@ Python fallback inside the ZIP:
 .\altfins-skills.cmd list
 ```
 
+### Claude
+
+For **Claude Code**, install local subagents with:
+
+```bash
+altfins-skills install --platform claude-code altfins-market-analyst
+```
+
+This writes:
+- `~/.claude/agents/<skill>.md` as the Claude Code subagent entrypoint
+- `~/.claude/skills/<skill>/` as the bundled skill payload referenced by that subagent
+
+For **Claude Cowork**, package the skill and upload the ZIP in `Customize > Skills`:
+
+```bash
+altfins-skills package altfins-market-analyst
+```
+
+Then upload:
+
+```text
+dist/skills/altfins-market-analyst.skill.zip
+```
+
 ### Project-Level Installs
 
 `Cursor` and `OpenClaw` are project integrations rather than user-home skill folders.
@@ -128,7 +152,8 @@ Use $altfins-market-analyst to assess the current technical outlook for ETH and 
 | Platform | Mode | Install surface |
 |----------|------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
-| Claude | `skills` | `~/.claude/skills/<skill>` |
+| Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
+| Claude Cowork | `package-upload` | `dist/skills/<skill>.skill.zip` uploaded in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
