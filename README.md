@@ -153,7 +153,7 @@ Use $altfins-market-analyst to assess the current technical outlook for ETH and 
 |----------|------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
 | Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
-| Claude Cowork | `package-upload` | `dist/skills/<skill>.skill.zip` uploaded in `Customize > Skills` |
+| Claude Cowork | `package-upload` | generated `.skill.zip` from `dist/skills/...` in a repo checkout or `~/.altfins-skills/dist/skills/...` from the installed command, then uploaded in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
