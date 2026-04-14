@@ -73,15 +73,24 @@ The `.md` file is the Claude Code subagent entrypoint. The bundled skill folder 
 
 Use `claude-cowork` when you want to upload a skill ZIP in the Claude UI.
 
+The flow is:
+1. Install `altfins-skills`.
+2. Run `package` to create the ZIP.
+3. Open `Claude > Customize > Skills` and upload that ZIP manually.
+
 ```bash
 altfins-skills package --platform claude-cowork altfins-market-analyst
 ```
 
-Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.
+Homebrew installs the `altfins-skills` command only. It does **not** copy or upload the skill into Claude Cowork automatically.
+
+When you run the installed command, the ZIP is created here:
 
 ```text
 ~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
 ```
+
+In a repo checkout, the same command writes to `dist/skills/`.
 
 Upload path in Claude:
 - `Customize > Skills`
@@ -128,7 +137,7 @@ python3 scripts/skills.py package --all
 |----------|-------------------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
 | Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
-| Claude Cowork | `package-upload` | generated `.skill.zip` from `dist/skills/...` in a repo checkout or `~/.altfins-skills/dist/skills/...` from the installed command, then uploaded in `Customize > Skills` |
+| Claude Cowork | `package-upload` | create a `.skill.zip` with `altfins-skills package --platform claude-cowork ...`, then manually upload it in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |

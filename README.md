@@ -49,17 +49,27 @@ This writes:
 - `~/.claude/agents/<skill>.md` as the Claude Code subagent entrypoint
 - `~/.claude/skills/<skill>/` as the bundled skill payload referenced by that subagent
 
-For **Claude Cowork**, package the skill and upload the ZIP in `Customize > Skills`:
+For **Claude Cowork**, the flow has three explicit steps:
+
+1. Install `altfins-skills` with Homebrew.
+2. Run the package command to create the skill ZIP.
+3. Open `Claude > Customize > Skills` and upload that ZIP manually.
 
 ```bash
 altfins-skills package --platform claude-cowork altfins-market-analyst
 ```
 
-Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.
+Homebrew installs the `altfins-skills` command only. It does **not** upload anything into Claude Cowork for you.
+
+When you run the installed command, the ZIP is created here:
 
 ```text
 ~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
 ```
+
+In a repo checkout, the same command writes to `dist/skills/`.
+
+Then pick that ZIP in `Claude > Customize > Skills`.
 
 ### Project-Level Installs
 
@@ -153,7 +163,7 @@ Use $altfins-market-analyst to assess the current technical outlook for ETH and 
 |----------|------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
 | Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
-| Claude Cowork | `package-upload` | generated `.skill.zip` from `dist/skills/...` in a repo checkout or `~/.altfins-skills/dist/skills/...` from the installed command, then uploaded in `Customize > Skills` |
+| Claude Cowork | `package-upload` | create a `.skill.zip` with `altfins-skills package --platform claude-cowork ...`, then manually upload it in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
