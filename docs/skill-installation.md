@@ -77,10 +77,10 @@ Use `claude-cowork` when you want to upload a skill ZIP in the Claude UI.
 altfins-skills package altfins-market-analyst
 ```
 
-Then upload:
+Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.
 
 ```text
-dist/skills/altfins-market-analyst.skill.zip
+~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
 ```
 
 Upload path in Claude:
@@ -154,7 +154,8 @@ Notes:
 ## Package Output
 
 ```text
-dist/skills/<skill-name>.skill.zip
+repo checkout: dist/skills/<skill-name>.skill.zip
+installed command: ~/.altfins-skills/dist/skills/<skill-name>.skill.zip
 ```
 
 Each archive contains the skill folder itself as the zip root.

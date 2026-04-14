@@ -122,11 +122,21 @@ def repo_root() -> Path:
     return resolve_repo_root()
 
 
+def checkout_layout(root: Path | None = None) -> bool:
+    base = root or repo_root()
+    return (
+        (base / ".gitignore").exists()
+        and (base / ".github" / "workflows" / "validate-skills.yml").exists()
+    )
+
+
 def dist_dir() -> Path:
     override = os.environ.get(DIST_OVERRIDE_ENV)
     if override:
         return Path(override).expanduser().resolve()
-    return repo_root() / "dist" / "skills"
+    if checkout_layout():
+        return repo_root() / "dist" / "skills"
+    return Path.home() / ".altfins-skills" / "dist" / "skills"
 
 
 def validator_commands(profile: str = "repo") -> list[list[str]]:
@@ -837,7 +847,7 @@ def print_status(platform_name: str | None, mode: str | None, project_dir: str |
 
 
 def handle_package(skills: list[Path]) -> None:
-    ensure_valid_repo(profile="repo")
+    ensure_valid_repo(profile="repo" if checkout_layout() else "distribution")
     for skill_dir in skills:
         destination = dist_dir() / f"{skill_dir.name}.skill.zip"
         create_skill_zip(skill_dir, destination)

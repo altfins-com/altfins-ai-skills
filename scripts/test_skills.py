@@ -341,6 +341,44 @@ class SkillsCliTest(unittest.TestCase):
             (self.homes["CODEX_HOME"] / "skills" / "altfins-market-analyst" / "SKILL.md").exists()
         )
 
+    def test_package_works_with_distribution_layout(self) -> None:
+        repo_copy = self.tmpdir / "distribution-copy-package"
+        shutil.copytree(
+            ROOT,
+            repo_copy,
+            ignore=shutil.ignore_patterns(
+                ".git",
+                ".github",
+                "bin",
+                ".gitignore",
+                "dist",
+                "__pycache__",
+                ".pytest_cache",
+                "tmp",
+            ),
+        )
+        package_home = self.tmpdir / "package-home"
+        package_home.mkdir(parents=True, exist_ok=True)
+        env = self.env.copy()
+        env["ALTFINS_SKILLS_ROOT"] = str(repo_copy)
+        env.pop("ALTFINS_SKILLS_DIST_DIR", None)
+        env["HOME"] = str(package_home)
+        result = subprocess.run(
+            [
+                PYTHON,
+                str(repo_copy / "scripts" / "skills.py"),
+                "package",
+                "altfins-market-analyst",
+            ],
+            cwd=repo_copy,
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        archive = package_home / ".altfins-skills" / "dist" / "skills" / "altfins-market-analyst.skill.zip"
+        self.assertTrue(archive.exists(), archive)
+
     @unittest.skipUnless(os.name == "posix", "Unix launcher test only runs on POSIX hosts")
     def test_unix_wrapper_falls_back_to_python3(self) -> None:
         portable = self.tmpdir / "portable-python3"

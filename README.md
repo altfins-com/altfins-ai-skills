@@ -55,10 +55,10 @@ For **Claude Cowork**, package the skill and upload the ZIP in `Customize > Skil
 altfins-skills package altfins-market-analyst
 ```
 
-Then upload:
+Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.
 
 ```text
-dist/skills/altfins-market-analyst.skill.zip
+~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
 ```
 
 ### Project-Level Installs
@@ -174,7 +174,8 @@ python3 scripts/skills.py package --all
 Artifacts land here:
 
 ```text
-dist/skills/<skill-name>.skill.zip
+repo checkout: dist/skills/<skill-name>.skill.zip
+installed command: ~/.altfins-skills/dist/skills/<skill-name>.skill.zip
 ```
 
 ## Why This Repo Is a Monorepo
