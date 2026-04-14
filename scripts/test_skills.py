@@ -160,6 +160,17 @@ class SkillsCliTest(unittest.TestCase):
         }
         self.assertTrue(statuses["altfins-market-analyst"])
 
+    def test_package_with_claude_cowork_platform_prints_upload_guidance(self) -> None:
+        result = run_cli(
+            "package",
+            "--platform",
+            "claude-cowork",
+            "altfins-market-analyst",
+            env=self.env,
+        )
+        self.assertIn("Packaged altfins-market-analyst", result.stdout)
+        self.assertIn("Customize > Skills", result.stdout)
+
     def test_project_mode_install_status_and_uninstall_for_cursor(self) -> None:
         run_cli(
             "install",

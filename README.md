@@ -52,7 +52,7 @@ This writes:
 For **Claude Cowork**, package the skill and upload the ZIP in `Customize > Skills`:
 
 ```bash
-altfins-skills package altfins-market-analyst
+altfins-skills package --platform claude-cowork altfins-market-analyst
 ```
 
 Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.

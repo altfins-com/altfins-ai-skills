@@ -74,7 +74,7 @@ The `.md` file is the Claude Code subagent entrypoint. The bundled skill folder 
 Use `claude-cowork` when you want to upload a skill ZIP in the Claude UI.
 
 ```bash
-altfins-skills package altfins-market-analyst
+altfins-skills package --platform claude-cowork altfins-market-analyst
 ```
 
 Then upload the produced ZIP. Output goes to `~/.altfins-skills/dist/skills/` when you run the installed command, or `dist/skills/` in a repo checkout.
@@ -138,7 +138,7 @@ python3 scripts/skills.py package --all
 
 ```bash
 altfins-skills list [--platform PLATFORM] [--mode MODE] [--project-dir PATH] [--json]
-altfins-skills package [SKILL ... | --all]
+altfins-skills package [--platform PLATFORM] [SKILL ... | --all]
 altfins-skills install --platform PLATFORM [--mode skills|project] [--project-dir PATH] [SKILL ... | --all] [--force]
 altfins-skills uninstall --platform PLATFORM [--mode skills|project] [--project-dir PATH] [SKILL ... | --all] [--force]
 altfins-skills status [--platform PLATFORM] [--mode MODE] [--project-dir PATH] [--json]

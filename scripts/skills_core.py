@@ -846,12 +846,15 @@ def print_status(platform_name: str | None, mode: str | None, project_dir: str |
         print()
 
 
-def handle_package(skills: list[Path]) -> None:
+def handle_package(skills: list[Path], platform_name: str | None = None) -> None:
     ensure_valid_repo(profile="repo" if checkout_layout() else "distribution")
+    platform = get_platform(platform_name) if platform_name else None
     for skill_dir in skills:
         destination = dist_dir() / f"{skill_dir.name}.skill.zip"
         create_skill_zip(skill_dir, destination)
         print(f"Packaged {skill_dir.name} -> {destination}")
+        if platform and platform.package_only and platform.package_note:
+            print(platform.package_note)
 
 
 CLI_OPTIONAL_SKILLS = {"altfins-market-researcher", "altfins-market-analyst"}
@@ -933,6 +936,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     list_parser.add_argument("--json", action="store_true", help="Print JSON output.")
 
     package_parser = subparsers.add_parser("package", help="Package one or more skills into dist/skills.")
+    package_parser.add_argument(
+        "--platform",
+        choices=platform_choice_names(),
+        help="Optional target platform to tailor packaging guidance, for example claude-cowork.",
+    )
     package_parser.add_argument("skills", nargs="*", help="Skill names to package.")
     package_parser.add_argument("--all", action="store_true", help="Package all discovered skills.")
 
@@ -1007,7 +1015,7 @@ def main(argv: list[str]) -> int:
             print_status(args.platform, args.mode, args.project_dir, args.json)
             return 0
         if args.command == "package":
-            handle_package(resolve_skills(args.skills, args.all))
+            handle_package(resolve_skills(args.skills, args.all), args.platform)
             return 0
         if args.command == "install":
             handle_install(
