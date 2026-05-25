@@ -57,6 +57,8 @@ From the checked-in `commands.json` snapshot:
 | `af refs symbols` | `GET` | `/api/v2/public/symbols` |
 | `af refs intervals` | `GET` | `/api/v2/public/intervals` |
 | `af quota all` | `GET` | `/api/v2/public/all-available-permits` |
+| `af quota current` | `GET` | `/api/v2/public/available-permits` |
+| `af quota monthly` | `GET` | `/api/v2/public/monthly-available-permits` |
 
 ## Query-Surface Examples
 

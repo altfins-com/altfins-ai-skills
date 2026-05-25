@@ -53,6 +53,9 @@ Use one of these plain-English categories first:
 | Fetch a specific news summary | `af news get` | `/api/v2/public/news-summary/find-summary` |
 | Discover intervals | `af refs intervals` | `/api/v2/public/intervals` |
 | Discover symbols | `af refs symbols` | `/api/v2/public/symbols` |
+| Inspect all API permit balances | `af quota all` | `/api/v2/public/all-available-permits` |
+| Inspect current API permit balance | `af quota current` | `/api/v2/public/available-permits` |
+| Inspect monthly API permit balance | `af quota monthly` | `/api/v2/public/monthly-available-permits` |
 
 Current `af markets search` direct flags cover simple REST screener filters for support/resistance, 52-week high/low proximity, RSI divergence, new local highs/lows, MACD, exchange, trading type, category, coin type, ATH date bounds, and minimum market cap. Use `--filter` or `--stdin-json` for object-array filters such as numeric, signal, cross-analytic, candlestick, and analytics-comparison filters.
 

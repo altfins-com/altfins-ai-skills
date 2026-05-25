@@ -96,6 +96,7 @@ Validated REST paths are under the `/api/v2/public/` namespace.
 Examples confirmed from the OpenAPI schema and the checked-in CLI snapshot include:
 
 - `/api/v2/public/screener-data/search-requests`
+- `/api/v2/public/screener-data/value-types`
 - `/api/v2/public/analytics/search-requests`
 - `/api/v2/public/analytics/types`
 - `/api/v2/public/ohlcv/history-requests`
@@ -107,6 +108,9 @@ Examples confirmed from the OpenAPI schema and the checked-in CLI snapshot inclu
 - `/api/v2/public/technical-analysis/data`
 - `/api/v2/public/symbols`
 - `/api/v2/public/intervals`
+- `/api/v2/public/all-available-permits`
+- `/api/v2/public/available-permits`
+- `/api/v2/public/monthly-available-permits`
 
 ### Public schema details checked on May 24, 2026
 
