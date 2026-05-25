@@ -707,6 +707,26 @@
           },
           "flags": [
             {
+              "name": "ath-after",
+              "type": "string",
+              "usage": "ATH date on or after this date/datetime"
+            },
+            {
+              "name": "ath-before",
+              "type": "string",
+              "usage": "ATH date on or before this date/datetime"
+            },
+            {
+              "name": "categories",
+              "type": "string",
+              "usage": "Comma-separated coin category filters"
+            },
+            {
+              "name": "coin-type",
+              "type": "string",
+              "usage": "Coin type filter, e.g. REGULAR"
+            },
+            {
               "name": "display-type",
               "type": "string",
               "usage": "Comma-separated screener display fields"
@@ -717,6 +737,11 @@
               "usage": "Show the API request without executing it",
               "default": "false",
               "inherited": true
+            },
+            {
+              "name": "exchanges",
+              "type": "string",
+              "usage": "Comma-separated exchange filters"
             },
             {
               "name": "fields",
@@ -733,6 +758,32 @@
               "name": "interval",
               "type": "string",
               "usage": "Time interval, e.g. DAILY or HOURLY"
+            },
+            {
+              "name": "macd",
+              "type": "string",
+              "usage": "MACD crossover filter: BUY or SELL"
+            },
+            {
+              "name": "macd-histogram",
+              "type": "string",
+              "usage": "MACD histogram filter"
+            },
+            {
+              "name": "min-market-cap",
+              "type": "float64",
+              "usage": "Minimum market cap value",
+              "default": "0"
+            },
+            {
+              "name": "new-high",
+              "type": "string",
+              "usage": "New high period filter, e.g. PERIODS_10"
+            },
+            {
+              "name": "new-low",
+              "type": "string",
+              "usage": "New low period filter, e.g. PERIODS_30"
             },
             {
               "name": "no-color",
@@ -756,6 +807,11 @@
               "default": "0"
             },
             {
+              "name": "rsi-divergence",
+              "type": "string",
+              "usage": "RSI divergence filter"
+            },
+            {
               "name": "size",
               "type": "int",
               "usage": "Page size",
@@ -774,9 +830,29 @@
               "default": "false"
             },
             {
+              "name": "support-resistance",
+              "type": "string",
+              "usage": "Support/resistance filter"
+            },
+            {
+              "name": "support-resistance-lookback",
+              "type": "string",
+              "usage": "Support/resistance lookback intervals: 1-5"
+            },
+            {
               "name": "symbols",
               "type": "string",
               "usage": "Comma-separated symbols"
+            },
+            {
+              "name": "trading-types",
+              "type": "string",
+              "usage": "Comma-separated trading type filters"
+            },
+            {
+              "name": "week-52",
+              "type": "string",
+              "usage": "52-week analytics filter"
             }
           ]
         }

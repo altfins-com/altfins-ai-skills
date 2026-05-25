@@ -24,10 +24,16 @@ Use when the user wants a quick screener-style overview for a known set of symbo
 af markets search --symbols BTC,ETH,SOL --interval DAILY --display-type MARKET_CAP,RSI14,MACD
 ```
 
+#### Screener filter flags version
+
+```bash
+af markets search --coin-type REGULAR --support-resistance BROKEN_ABOVE_RESISTANCE --rsi-divergence BULLISH --display-type MARKET_CAP,RSI14,PRICE_CHANGE_1W
+```
+
 #### Body-planning version
 
 ```text
-Use af markets search with --filter @market-screen.json or --stdin-json when the request is a true screen with richer conditions than a fixed symbol list. If the exact body keys are not validated for the current task, describe the JSON at the planning level and add a --dry-run preview step.
+Use af markets search with --filter @market-screen.json or --stdin-json when the request needs object-array filters such as numericFilters, signalFilters, crossAnalyticFilters, candlestickPatternFilters, or analyticsComparisonsFilters. If the exact body keys are not validated for the current task, describe the JSON at the planning level and add a --dry-run preview step.
 ```
 
 ### Signal scan

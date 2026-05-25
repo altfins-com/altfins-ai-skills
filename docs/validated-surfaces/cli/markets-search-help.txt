@@ -4,15 +4,30 @@ Usage:
   af markets search [flags]
 
 Flags:
-      --display-type string   Comma-separated screener display fields
-      --filter string         JSON filter or @path/to/filter.json
-  -h, --help                  help for search
-      --interval string       Time interval, e.g. DAILY or HOURLY
-      --page int              Zero-based page index
-      --size int              Page size
-      --sort strings          Sort expressions (repeatable)
-      --stdin-json            Read filter JSON from stdin
-      --symbols string        Comma-separated symbols
+      --ath-after string                     ATH date on or after this date/datetime
+      --ath-before string                    ATH date on or before this date/datetime
+      --categories string                    Comma-separated coin category filters
+      --coin-type string                     Coin type filter, e.g. REGULAR
+      --display-type string                  Comma-separated screener display fields
+      --exchanges string                     Comma-separated exchange filters
+      --filter string                        JSON filter or @path/to/filter.json
+  -h, --help                                 help for search
+      --interval string                      Time interval, e.g. DAILY or HOURLY
+      --macd string                          MACD crossover filter: BUY or SELL
+      --macd-histogram string                MACD histogram filter
+      --min-market-cap float                 Minimum market cap value
+      --new-high string                      New high period filter, e.g. PERIODS_10
+      --new-low string                       New low period filter, e.g. PERIODS_30
+      --page int                             Zero-based page index
+      --rsi-divergence string                RSI divergence filter
+      --size int                             Page size
+      --sort strings                         Sort expressions (repeatable)
+      --stdin-json                           Read filter JSON from stdin
+      --support-resistance string            Support/resistance filter
+      --support-resistance-lookback string   Support/resistance lookback intervals: 1-5
+      --symbols string                       Comma-separated symbols
+      --trading-types string                 Comma-separated trading type filters
+      --week-52 string                       52-week analytics filter
 
 Global Flags:
       --dry-run         Show the API request without executing it

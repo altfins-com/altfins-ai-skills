@@ -72,7 +72,30 @@ af markets search --symbols BTC,ETH,SOL --interval DAILY --display-type MARKET_C
 
 ### Caveat
 
-If the user wants broader market filters rather than a fixed symbol list, prefer a request brief or validated JSON body planning rather than inventing unsupported shorthand flags.
+If the user wants object-array filters such as numeric, signal, cross-analytic, candlestick, or analytics-comparison filters, prefer a request brief or validated JSON body planning rather than inventing unsupported shorthand flags.
+
+## Example 3B: Market screening with REST screener filters
+
+### User intent
+
+```text
+Find regular coins breaking above resistance with bullish RSI divergence.
+```
+
+### Best target family
+
+- market screening
+
+### Safe CLI-ready plan
+
+- Command family: `af markets search`
+- Required inputs: `--coin-type REGULAR`, `--support-resistance BROKEN_ABOVE_RESISTANCE`, `--rsi-divergence BULLISH`
+- Useful display fields: `MARKET_CAP,RSI14,PRICE_CHANGE_1W`
+- Example command:
+
+```bash
+af markets search --coin-type REGULAR --support-resistance BROKEN_ABOVE_RESISTANCE --rsi-divergence BULLISH --display-type MARKET_CAP,RSI14,PRICE_CHANGE_1W
+```
 
 ## Example 4: Interactive browsing request
 

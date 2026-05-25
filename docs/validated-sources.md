@@ -74,7 +74,7 @@ This snapshot is intentionally limited to documented endpoint, transport, authen
 
 ## Locally Observed CLI Surface
 
-The local CLI surface was refreshed into `docs/validated-surfaces/cli/` on April 12, 2026 using the real `af` binary.
+The local CLI surface was refreshed into `docs/validated-surfaces/cli/` on May 24, 2026 using a local `af` binary built from the current source.
 
 Important note about the local binary:
 
@@ -107,6 +107,12 @@ Examples confirmed from the OpenAPI schema and the checked-in CLI snapshot inclu
 - `/api/v2/public/technical-analysis/data`
 - `/api/v2/public/symbols`
 - `/api/v2/public/intervals`
+
+### Public schema details checked on May 24, 2026
+
+The OpenAPI schema for `/api/v2/public/screener-data/search-requests` includes direct simple filter fields for support/resistance, 52-week high/low proximity, RSI divergence, new local highs/lows, MACD, exchange, trading type, category, coin type, ATH date bounds, and minimum market cap.
+
+The OpenAPI schema for `/api/v2/public/signals-feed/search-requests` exposes signal result direction as a `bullish` boolean response field. CLI table/TUI workflows may derive a human-readable `direction` label from that field.
 
 ### Observed top-level CLI groups
 

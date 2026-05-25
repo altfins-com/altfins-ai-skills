@@ -54,6 +54,8 @@ Use one of these plain-English categories first:
 | Discover intervals | `af refs intervals` | `/api/v2/public/intervals` |
 | Discover symbols | `af refs symbols` | `/api/v2/public/symbols` |
 
+Current `af markets search` direct flags cover simple REST screener filters for support/resistance, 52-week high/low proximity, RSI divergence, new local highs/lows, MACD, exchange, trading type, category, coin type, ATH date bounds, and minimum market cap. Use `--filter` or `--stdin-json` for object-array filters such as numeric, signal, cross-analytic, candlestick, and analytics-comparison filters.
+
 ## TUI-Oriented Targets
 
 The validated CLI snapshot also exposes these TUI surfaces:

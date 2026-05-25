@@ -9,14 +9,31 @@ Validated surface:
 - `--symbols`
 - `--interval`
 - `--display-type`
+- `--coin-type`
+- `--categories`
+- `--trading-types`
+- `--exchanges`
+- `--ath-before`
+- `--ath-after`
+- `--support-resistance`
+- `--support-resistance-lookback`
+- `--week-52`
+- `--rsi-divergence`
+- `--new-low`
+- `--new-high`
+- `--macd`
+- `--macd-histogram`
+- `--min-market-cap`
 - `--filter`
 - `--stdin-json`
 
 Guidance:
 
 - use flag-first when the symbol list and display fields are straightforward
-- switch to `--filter` or `--stdin-json` when the request becomes a true screen rather than a fixed symbol lookup
-- if the exact body keys are not fully validated for the current task, describe the body at the planning level instead of writing fake JSON
+- stay flag-first for current simple screener filters such as support/resistance, 52-week high/low proximity, RSI divergence, new local highs/lows, MACD, exchange, trading type, category, coin type, ATH date bounds, and minimum market cap
+- switch to `--filter` or `--stdin-json` when the request needs object-array filters such as `numericFilters`, `signalFilters`, `crossAnalyticFilters`, `candlestickPatternFilters`, or `analyticsComparisonsFilters`
+- current simple body keys validated from OpenAPI are `coinTypeFilter`, `coinCategoryFilter`, `tradingTypeFilter`, `exchangeFilter`, `athDateBeforeFilter`, `athDateAfterFilter`, `supportResistanceFilter`, `supportResistanceLookBackIntervals`, `weekAnalytics52Filter`, `rsiDivergenceFilter`, `newLowInLastPeriodFilter`, `newHighInLastPeriodFilter`, `macdFilter`, `macdHistogramFilter`, and `minimumMarketCapValue`
+- if a requested body key is not in the validated list, describe the body at the planning level instead of writing fake JSON
 
 ## Signals Feed
 

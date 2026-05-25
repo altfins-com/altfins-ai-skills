@@ -1,6 +1,6 @@
 {
-  "validated_on": "2026-04-12",
-  "cli_bin": "/opt/homebrew/bin/af",
+  "validated_on": "2026-05-24",
+  "cli_bin": "/tmp/af",
   "top_level_command": "af",
   "top_level_children": [
     "analytics",
