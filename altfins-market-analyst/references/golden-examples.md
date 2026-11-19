@@ -118,3 +118,7 @@ Suggested Follow-Up Checks
 - it chooses a scan-summary mode instead of forcing a single-asset memo
 - it keeps the candidate summaries short and evidence-led
 - it still highlights uncertainty and next steps
+
+## Apple outlook and mixed coverage
+
+If curated TA returns zero rows for `CS_AAPL`, name the gap and assess Apple using its own last completed stock candles and RSI14. If a mixed snapshot returns BTC and `FX_EURUSD` only, identify Apple as missing and date any historical Apple bar used alongside it. In the FX note preserve a supplied volume of zero and omit liquidity conclusions.

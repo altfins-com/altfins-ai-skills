@@ -11,8 +11,9 @@ Validated surface:
 - `--display-type`
 - `--coin-type`
 - `--categories`
-- `--trading-types`
-- `--exchanges`
+- `--trading-type` and `--exchange` take one value each
+- `--asset-class stock|forex` resolves the catalogue universe
+- `--percent-down-from-ath`
 - `--ath-before`
 - `--ath-after`
 - `--support-resistance`
@@ -32,7 +33,7 @@ Guidance:
 - use flag-first when the symbol list and display fields are straightforward
 - stay flag-first for current simple screener filters such as support/resistance, 52-week high/low proximity, RSI divergence, new local highs/lows, MACD, exchange, trading type, category, coin type, ATH date bounds, and minimum market cap
 - switch to `--filter` or `--stdin-json` when the request needs object-array filters such as `numericFilters`, `signalFilters`, `crossAnalyticFilters`, `candlestickPatternFilters`, or `analyticsComparisonsFilters`
-- current simple body keys validated from OpenAPI are `coinTypeFilter`, `coinCategoryFilter`, `tradingTypeFilter`, `exchangeFilter`, `athDateBeforeFilter`, `athDateAfterFilter`, `supportResistanceFilter`, `supportResistanceLookBackIntervals`, `weekAnalytics52Filter`, `rsiDivergenceFilter`, `newLowInLastPeriodFilter`, `newHighInLastPeriodFilter`, `macdFilter`, `macdHistogramFilter`, and `minimumMarketCapValue`
+- current simple body keys validated from OpenAPI are `coinTypeFilter`, `coinCategoryFilter`, `tradingTypeFilter`, `exchangeFilter`, `athDateBeforeFilter`, `athDateAfterFilter`, `percentDownFromAthFilter`, `supportResistanceFilter`, `supportResistanceLookBackIntervals`, `weekAnalytics52Filter`, `rsiDivergenceFilter`, `newLowInLastPeriodFilter`, `newHighInLastPeriodFilter`, `macdFilter`, `macdHistogramFilter`, and `minimumMarketCapValue`
 - if a requested body key is not in the validated list, describe the body at the planning level instead of writing fake JSON
 
 ## Signals Feed
@@ -99,7 +100,7 @@ Validated surface:
 Guidance:
 
 - use flag-first for date-window searches
-- use request-body planning only when the user wants a more complex news query than the obvious flags express
+- use the discovered MCP crypto-news tool for supported source or symbol-keyword filters
 
 ## Core safety rule
 
@@ -111,3 +112,5 @@ If field-level certainty is missing, write:
 - an optional `--dry-run` preview step
 
 Do not fill in speculative JSON keys just to make the example look complete.
+
+REST screener bodies use scalar strings for `exchangeFilter` and `tradingTypeFilter`, and an integer from 1 to 5 for `supportResistanceLookBackIntervals`. An asset class is expanded by the CLI to explicit symbols. Preset bodies use `presetFilterType`, optional `timeInterval` and `displayType`. News lists accept `fromDate` and `toDate`. Calendar accepts `assetSymbols` as CSV. Its current schema omits `myData`.

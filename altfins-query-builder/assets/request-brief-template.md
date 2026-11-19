@@ -12,9 +12,10 @@
 
 ## Known Inputs
 
-- Assets:
+- Requested asset class and universe:
+- Catalogue-confirmed IDs and ambiguous candidates:
 - Timeframe or interval:
-- Date range:
+- UTC start and end:
 - Filters:
 - Desired output:
 

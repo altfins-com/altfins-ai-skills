@@ -4,7 +4,10 @@
 
 - Research question:
 - Asset or asset set:
-- Timeframe:
+- Canonical IDs, asset classes and covered sessions:
+- Interval, latest bar and retrieval time (UTC):
+- Requested IDs absent from this source:
+- Signal detection time and any plan delay:
 - Requested output:
 
 ## Validated Facts

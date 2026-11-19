@@ -4,7 +4,7 @@ Use this skill conservatively.
 
 ## Shared starting point
 
-Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) for the shared cross-repository source inventory.
+Start with [validated-sources.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-sources.md) for the shared cross-repository source inventory.
 
 ## Preferred source order
 

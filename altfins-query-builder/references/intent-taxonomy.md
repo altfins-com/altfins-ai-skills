@@ -2,7 +2,7 @@
 
 Use this taxonomy to classify beginner-friendly requests before producing a handoff.
 
-## Category 1: Find coins
+## Category 1: Find instruments
 
 ### What it sounds like
 
@@ -25,7 +25,7 @@ Use this taxonomy to classify beginner-friendly requests before producing a hand
 ### Common missing inputs
 
 - the timeframe is often missing
-- the user may not define the coin universe
+- the user may not define the instrument universe
 - the screening rule may be too vague to map directly
 
 ### Safe default output mode

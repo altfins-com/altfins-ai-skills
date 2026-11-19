@@ -48,12 +48,15 @@ jobs:
             --sha256 "$SHA" \
             --output dist/release/altfins-skills.rb
 
+      - name: Package individual skills
+        run: python3 scripts/skills.py package --all --platform claude-cowork
+
       - name: Create or update GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 || gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --generate-notes
-          gh release upload "${GITHUB_REF_NAME}" dist/release/altfins-ai-skills-src.tar.gz dist/release/altfins-skills.rb --clobber
+          gh release upload "${GITHUB_REF_NAME}" dist/release/altfins-ai-skills-src.tar.gz dist/release/altfins-skills.rb dist/skills/*.skill.zip --clobber
 
       - name: Update Homebrew tap
         env:
@@ -61,8 +64,8 @@ jobs:
           RELEASE_VERSION: ${{ steps.version.outputs.value }}
         run: |
           if [ -z "$HOMEBREW_TAP_TOKEN" ]; then
-            echo "Missing required secret HOMEBREW_TAP_GITHUB_TOKEN" >&2
-            exit 1
+            echo "::notice::Publish the released altfins-skills.rb to the tap manually. Tap credentials are not configured."
+            exit 0
           fi
           git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/altfins-com/homebrew-tap.git" dist/homebrew-tap
           cp dist/release/altfins-skills.rb dist/homebrew-tap/Formula/altfins-skills.rb
@@ -75,6 +78,7 @@ jobs:
           git push origin HEAD:main
 
   windows-bundle:
+    needs: source-formula-and-tap
     runs-on: windows-latest
     steps:
       - name: Check out repository

@@ -1,0 +1,834 @@
+{
+  "validated_on": "2026-11-19",
+  "endpoint": "https://mcp.altfins.com/mcp",
+  "method": "tools/list",
+  "tools": [
+    {
+      "name": "analytics_getAllLatestHistoryData",
+      "title": "Latest Analytics Values",
+      "description": "\n            Retrieves the most recent value(s) of a specific technical indicator or financial metric \n            for a cryptocurrency from the altFINS platform.\n\n            ### WHAT IS RETURNED:\n            - The latest data point(s) for a single indicator and single symbol\n            - Each record contains a timestamp and the indicator value at that point\n            - Returns the most current available value for the requested analyticsType\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks \"what is the current RSI for BTC?\"\n            - User wants to validate a single indicator value before making a decision\n            - You need the most recent value of an indicator to construct or confirm a technical analysis\n            - User asks \"what is ETH's current market cap?\"\n            - User asks \"what is the latest MACD value for SOL?\"\n            - You are building a technical analysis and need to verify current indicator values\n\n            ### DO NOT USE THIS TOOL WHEN:\n            - User wants HISTORICAL data over a time range \u2192 use getHistoryAnalyticsData instead\n            - User wants to SCREEN or FILTER multiple coins \u2192 use screener_getAltfinsScreenerData instead\n            - User wants OHLCV price candles \u2192 use ohlc_getLatestData instead\n            - User wants to compare an indicator across many coins simultaneously \u2192 use screener_getAltfinsScreenerData\n\n            ### DIFFERENCE FROM getHistoryAnalyticsData:\n            - This tool \u2192 returns the LATEST/CURRENT value only (no date range needed)\n            - getHistoryAnalyticsData \u2192 returns a time-series of HISTORICAL values over a date range\n\n            ### COMBINE WITH OTHER TOOLS:\n            - Use screener_getAltfinsScreenerData to find interesting coins first,\n              then call this tool to get the exact current indicator value for confirmation\n            - Combine multiple calls (one per analyticsType) to build a complete \n              current technical picture for a single coin\n\n            ### IMPORTANT:\n            - One call returns data for ONE symbol and ONE analyticsType only\n            - To get multiple indicators for the same coin, make separate calls per analyticsType\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "\n            Uppercase cryptocurrency symbol to retrieve the latest indicator value for.\n            \n            ### FORMAT:\n            - Single symbol, uppercase only (e.g. BTC, ETH, SOL, ADA)\n            \n            \u26a0\ufe0f Use uppercase ticker symbols only.\n            \u26a0\ufe0f Do not use full names (e.g. use BTC not Bitcoin).\n            \u26a0\ufe0f Do not use trading pairs (e.g. use ETH not ETHUSDT).\n        "
+          },
+          "timeInterval": {
+            "type": "string",
+            "description": "\n                Time interval for the analytics data point.\n            \n                ### ALLOWED VALUES:\n                - MINUTES15 \u2192 15-minute interval (intraday, short-term)\n                - HOURLY    \u2192 1-hour interval (intraday analysis)\n                - HOURS4    \u2192 4-hour interval (swing trading)\n                - HOURS12   \u2192 12-hour interval (medium-term)\n                - DAILY     \u2192 daily interval (default, recommended for most use cases)\n                \n                ### SELECTION GUIDE:\n                - \"current RSI right now\" or \"intraday\"  \u2192 HOURLY or MINUTES15\n                - \"daily RSI\" or \"standard analysis\"     \u2192 DAILY (default)\n                - \"swing trade setup\"                    \u2192 HOURS4\n                \n                \u26a0\ufe0f Only these exact values are accepted. Default is DAILY.\n            "
+          },
+          "analyticsType": {
+            "type": "string",
+            "description": "\n                The type of technical indicator or financial metric to retrieve the latest value for.\n                This is the MOST IMPORTANT parameter \u2014 choose carefully based on user intent.\n            \n                \u26a0\ufe0f Use ONLY the exact values listed below (case-sensitive uppercase).\n                Sending an unknown value will cause a deserialization error.\n\n                ### PRICE & PERFORMANCE:\n                PERFORMANCE, PRICE_CHANGE_1D, PRICE_CHANGE_1W, PRICE_CHANGE_1M,\n                PRICE_CHANGE_3M, PRICE_CHANGE_6M, PRICE_CHANGE_1Y, PRICE_CHANGE_YTD,\n                HIGH, LOW, HIGH_52W, LOW_52W, ATH, VWMA20, ATR, TR_VS_ATR\n    \n                ### MARKET DATA:\n                MARKET_CAP, CIRCULATING_SUPPLY, CMC_RANK, DOLLAR_PRICE\n    \n                ### VOLUME:\n                VOLUME, VOLUME_AVG, VOLUME_CHANGE, VOLUME_RELATIVE, OBV, OBV_TREND\n    \n                ### MOVING AVERAGES:\n                SMA5, SMA10, SMA20, SMA30, SMA50, SMA100, SMA200,\n                EMA9, EMA12, EMA13, EMA26, EMA50, EMA100, EMA200,\n                SMA5_TREND, SMA10_TREND, SMA20_TREND, SMA30_TREND, SMA50_TREND,\n                SMA100_TREND, SMA200_TREND, EMA9_TREND, EMA12_TREND, EMA13_TREND,\n                EMA26_TREND, EMA50_TREND, EMA100_TREND, EMA200_TREND\n    \n                ### OSCILLATORS & MOMENTUM:\n                RSI9, RSI14, RSI25, STOCH, STOCH_SLOW, STOCH_RSI, STOCH_RSI_K, STOCH_RSI_D,\n                CCI20, ADX, MOM, MACD, MACD_SIGNAL_LINE, MACD_HISTOGRAM,\n                WILLIAMS, BULL_POWER, BEAR_POWER, ULTIMATE_OSCILLATOR,\n                BOLLINGER_BAND_UPPER, BOLLINGER_BAND_LOWER\n    \n                ### TREND SIGNALS:\n                SHORT_TERM_TREND, MEDIUM_TERM_TREND, LONG_TERM_TREND,\n                SHORT_TERM_TREND_CHANGE, MEDIUM_TERM_TREND_CHANGE, LONG_TERM_TREND_CHANGE,\n                OSCILLATOR_RATING\n    \n                ### FUNDAMENTALS:\n                TOTAL_REVENUE, TOTAL_REVENUE_1W, TOTAL_REVENUE_1M, TOTAL_REVENUE_ANNUALIZED,\n                TOTAL_REVENUE_PERFORMANCE, TOTAL_REVENUE_PERFORMANCE_7D, TOTAL_REVENUE_PERFORMANCE_30D,\n                TOTAL_REVENUE_PERFORMANCE_90D, TOTAL_REVENUE_PERFORMANCE_180D, TOTAL_REVENUE_PERFORMANCE_365D, \n                PROTOCOL_REVENUE, PROTOCOL_REVENUE_1W,\n                PROTOCOL_REVENUE_1M, PROTOCOL_REVENUE_ANNUALIZED, PROTOCOL_REVENUE_PERFORMANCE,\n                PROTOCOL_REVENUE_PERFORMANCE_7D, PROTOCOL_REVENUE_PERFORMANCE_30D,\n                PROTOCOL_REVENUE_PERFORMANCE_90D, PROTOCOL_REVENUE_PERFORMANCE_180D, PROTOCOL_REVENUE_PERFORMANCE_365D, \n                MARKET_CAP_SALES, MARKET_CAP_FULLY_DILUTED, MARKET_CAP_PR, MARKET_CAP_PR_PERFORMANCE, \n                MARKET_CAP_PR_PERFORMANCE_7D, MARKET_CAP_PR_PERFORMANCE_30D, MARKET_CAP_PR_PERFORMANCE_90D,\n                MARKET_CAP_PR_PERFORMANCE_180D, MARKET_CAP_PR_PERFORMANCE_365D, \n                TVL, TVL_PERFORMANCE, TVL_PERFORMANCE_7D,\n                TVL_PERFORMANCE_30D, TVL_PERFORMANCE_90D, TVL_PERFORMANCE_180D, TVL_PERFORMANCE_365D, \n                MARKET_CAP_TVL, MARKET_CAP_TVL_PERFORMANCE_7D, MARKET_CAP_TVL_PERFORMANCE_30D, \n                MARKET_CAP_TVL_PERFORMANCE_90D, MARKET_CAP_SALES_PERFORMANCE, MARKET_CAP_SALES_PERFORMANCE_7D, \n                MARKET_CAP_SALES_PERFORMANCE_30D, MARKET_CAP_SALES_PERFORMANCE_90D, \n                MARKET_CAP_SALES_PERFORMANCE_180D, MARKET_CAP_SALES_PERFORMANCE_365D\n                \n                ### INDICATORS:                              \n                IR_RSI9, IR_RSI14, IR_RSI25, IR_STOCH, IR_STOCH_SLOW, IR_WILLIAMS,\n                IR_CCI20, IR_BANDED_OSC, IR_NEW_HIGH_CREATED_5, IR_NEW_HIGH_CREATED_10,\n                IR_NEW_HIGH_CREATED_15, IR_NEW_HIGH_CREATED_20, IR_NEW_HIGH_CREATED_30,\n                IR_NEW_HIGH_CREATED_50, IR_NEW_LOW_CREATED_5, IR_NEW_LOW_CREATED_10,\n                IR_NEW_LOW_CREATED_15, IR_NEW_LOW_CREATED_20, IR_NEW_LOW_CREATED_30,\n                IR_NEW_LOW_CREATED_50\n    \n                ### SELECTION GUIDE \u2014 map user intent to correct value:\n                - \"current RSI\"              \u2192 RSI14\n                - \"current MACD\"             \u2192 MACD\n                - \"MACD signal line\"         \u2192 MACD_SIGNAL_LINE\n                - \"current SMA\"              \u2192 SMA50 or SMA200 depending on context\n                - \"current market cap\"       \u2192 MARKET_CAP\n                - \"current volume\"           \u2192 VOLUME\n                - \"current trend\"            \u2192 SHORT_TERM_TREND or MEDIUM_TERM_TREND\n                - \"Bollinger band value\"     \u2192 BOLLINGER_BAND_UPPER or BOLLINGER_BAND_LOWER\n                - \"stochastic RSI\"           \u2192 STOCH_RSI\n                - \"current TVL\"              \u2192 TVL\n                - \"weekly revenue\"           \u2192 TOTAL_REVENUE_1W\n            "
+          }
+        },
+        "required": [
+          "symbol",
+          "analyticsType"
+        ]
+      },
+      "annotations": {
+        "title": "Latest Analytics Values",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_getAnalyticsTypes",
+      "title": "Analytics Types",
+      "description": "\n            Returns the complete list of available analytics types from the altFINS platform.\n            Each entry includes a machine-readable identifier and a human-friendly display name.\n\n            ### WHAT IS RETURNED:\n            - A list of all valid analyticsType values accepted by the getHistoryAnalyticsData tool\n            - Each item contains:\n            - identifier   \u2192 the exact string value to pass as 'analyticsType' parameter\n            - displayName  \u2192 human-readable label (e.g. \"RSI 14\", \"SMA 50\", \"Market Cap\")\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks \"what indicators are available?\" or \"what metrics can I track?\"\n            - User asks \"what analytics types does altFINS support?\"\n            - You are unsure whether a specific analyticsType value is valid before calling \n              getHistoryAnalyticsData \u2014 use this tool to verify first\n            - User wants to browse or explore available metrics before choosing one\n\n            ### DO NOT USE THIS TOOL WHEN:\n            - You already know the analyticsType value the user needs (e.g. RSI14, MACD, SMA50)\n              \u2192 call getHistoryAnalyticsData directly without discovery step\n            - User wants actual historical data \u2192 use getHistoryAnalyticsData instead\n            - User wants current indicator values \u2192 use screener_getAltfinsScreenerData instead\n\n            ### RELATIONSHIP TO OTHER TOOLS:\n            - This is a DISCOVERY tool for getHistoryAnalyticsData\n            - The identifier values returned here are the exact valid inputs for the \n              'analyticsType' parameter in getHistoryAnalyticsData\n            - Call this tool once if needed, then use the identifier in subsequent calls\n\n            ### IMPORTANT:\n            - This tool takes no parameters and requires no input\n            - Results are static \u2014 the list of analytics types does not change between calls\n            - No need to call this tool repeatedly in the same session\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "title": "Analytics Types",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_getHistoryData",
+      "title": "Analytics History",
+      "description": "\n            Retrieves historical time-series data for technical indicators and financial metrics \n            for a specific cryptocurrency over a given time range.\n\n            ### WHAT IS RETURNED:\n            - A time-ordered list of historical values for a single indicator (e.g. RSI14 values over last 30 days)\n            - Each record contains a timestamp and the indicator value at that point in time\n            - Supports all major technicals: SMA, EMA, RSI, MACD, Bollinger Bands, Volume, Market Cap, Revenue, TVL, and more\n    \n            ### WHEN TO USE THIS TOOL:\n            - User asks \"how has RSI changed over the last 30 days for BTC?\"\n            - User wants to see the historical trend of an indicator, not just its current value\n            - User asks \"show me ETH market cap history for this year\"\n            - User wants to chart or analyze how a metric evolved over time\n            - User asks \"was SOL overbought last month?\" (requires historical RSI data)\n            - User wants to compare indicator values across different time periods\n    \n            ### DO NOT USE THIS TOOL WHEN:\n            - User wants the CURRENT value of an indicator \u2192 use screener_getAltfinsScreenerData instead\n            - User wants to SCREEN or FILTER multiple coins by an indicator \u2192 use screener_getAltfinsScreenerData\n            - User wants OHLCV price history \u2192 use ohlc_getHistoryData instead\n            - User wants the latest single value \u2192 use analytics_getAllLatestHistoryData instead\n    \n            ### COMBINE WITH OTHER TOOLS:\n            - Use screener_getAltfinsScreenerData first to identify interesting coins, \n              then call this tool to get the historical indicator trend for a specific coin\n            - Combine with ohlc_getHistoryData to correlate price action with indicator history\n            \n            ### IMPORTANT:\n            - This tool returns data for ONE symbol and ONE analyticsType per call\n            - To compare multiple indicators, make separate calls for each analyticsType\n            - Always specify a meaningful time range \u2014 without from/to the results may be limited\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "\n                Uppercase cryptocurrency symbol to retrieve historical data for.\n            \n                ### FORMAT:\n                - Single symbol, uppercase only (e.g. BTC, ETH, SOL, ADA)\n            \n                \u26a0\ufe0f Do not use full names (e.g. use BTC not Bitcoin).\n                \u26a0\ufe0f Do not use trading pairs (e.g. use ETH not ETHUSDT).\n            "
+          },
+          "timeInterval": {
+            "type": "string",
+            "description": "\n                Time interval for the historical data points.\n            \n                ### ALLOWED VALUES:\n                - MINUTES15 \u2192 15-minute candles (intraday, short-term scalping)\n                - HOURLY    \u2192 1-hour candles (intraday analysis)\n                - HOURS4    \u2192 4-hour candles (swing trading)\n                - HOURS12   \u2192 12-hour candles (medium-term)\n                - DAILY     \u2192 daily candles (default, recommended for most use cases)\n            \n                ### SELECTION GUIDE:\n                - \"today\" or \"last few hours\"    \u2192 HOURLY or MINUTES15\n                - \"last week\" or \"last month\"    \u2192 DAILY or HOURS4\n                - \"last year\" or \"long term\"     \u2192 DAILY\n            \n                \u26a0\ufe0f Only these exact values are accepted. Default is DAILY.\n            "
+          },
+          "analyticsType": {
+            "type": "string",
+            "description": "\n                The type of technical indicator or financial metric to retrieve historical data for.\n                This is the MOST IMPORTANT parameter \u2014 choose carefully based on user intent.\n            \n                \u26a0\ufe0f Use ONLY the exact values listed below (case-sensitive uppercase).\n                Sending an unknown value will cause a deserialization error.\n            \n                ### PRICE & PERFORMANCE:\n                PERFORMANCE, PRICE_CHANGE_1D, PRICE_CHANGE_1W, PRICE_CHANGE_1M,\n                PRICE_CHANGE_3M, PRICE_CHANGE_6M, PRICE_CHANGE_1Y, PRICE_CHANGE_YTD,\n                HIGH, LOW, HIGH_52W, LOW_52W, ATH, VWMA20, ATR, TR_VS_ATR\n    \n                ### MARKET DATA:\n                MARKET_CAP, CIRCULATING_SUPPLY, CMC_RANK, DOLLAR_PRICE\n    \n                ### VOLUME:\n                VOLUME, VOLUME_AVG, VOLUME_CHANGE, VOLUME_RELATIVE, OBV, OBV_TREND\n    \n                ### MOVING AVERAGES:\n                SMA5, SMA10, SMA20, SMA30, SMA50, SMA100, SMA200,\n                EMA9, EMA12, EMA13, EMA26, EMA50, EMA100, EMA200,\n                SMA5_TREND, SMA10_TREND, SMA20_TREND, SMA30_TREND, SMA50_TREND,\n                SMA100_TREND, SMA200_TREND, EMA9_TREND, EMA12_TREND, EMA13_TREND,\n                EMA26_TREND, EMA50_TREND, EMA100_TREND, EMA200_TREND\n\n                ### OSCILLATORS & MOMENTUM:\n                RSI9, RSI14, RSI25, STOCH, STOCH_SLOW, STOCH_RSI, STOCH_RSI_K, STOCH_RSI_D,\n                CCI20, ADX, MOM, MACD, MACD_SIGNAL_LINE, MACD_HISTOGRAM,\n                WILLIAMS, BULL_POWER, BEAR_POWER, ULTIMATE_OSCILLATOR,\n                BOLLINGER_BAND_UPPER, BOLLINGER_BAND_LOWER\n    \n                ### TREND SIGNALS:\n                SHORT_TERM_TREND, MEDIUM_TERM_TREND, LONG_TERM_TREND,\n                SHORT_TERM_TREND_CHANGE, MEDIUM_TERM_TREND_CHANGE, LONG_TERM_TREND_CHANGE,\n                OSCILLATOR_RATING\n    \n                ### FUNDAMENTALS:\n                TOTAL_REVENUE, TOTAL_REVENUE_1W, TOTAL_REVENUE_1M, TOTAL_REVENUE_ANNUALIZED,\n                TOTAL_REVENUE_PERFORMANCE, TOTAL_REVENUE_PERFORMANCE_7D, TOTAL_REVENUE_PERFORMANCE_30D,\n                TOTAL_REVENUE_PERFORMANCE_90D, TOTAL_REVENUE_PERFORMANCE_180D, TOTAL_REVENUE_PERFORMANCE_365D, \n                PROTOCOL_REVENUE, PROTOCOL_REVENUE_1W,\n                PROTOCOL_REVENUE_1M, PROTOCOL_REVENUE_ANNUALIZED, PROTOCOL_REVENUE_PERFORMANCE,\n                PROTOCOL_REVENUE_PERFORMANCE_7D, PROTOCOL_REVENUE_PERFORMANCE_30D,\n                PROTOCOL_REVENUE_PERFORMANCE_90D, PROTOCOL_REVENUE_PERFORMANCE_180D, PROTOCOL_REVENUE_PERFORMANCE_365D, \n                MARKET_CAP_SALES, MARKET_CAP_FULLY_DILUTED, MARKET_CAP_PR, MARKET_CAP_PR_PERFORMANCE, \n                MARKET_CAP_PR_PERFORMANCE_7D, MARKET_CAP_PR_PERFORMANCE_30D, MARKET_CAP_PR_PERFORMANCE_90D,\n                MARKET_CAP_PR_PERFORMANCE_180D, MARKET_CAP_PR_PERFORMANCE_365D, \n                TVL, TVL_PERFORMANCE, TVL_PERFORMANCE_7D,\n                TVL_PERFORMANCE_30D, TVL_PERFORMANCE_90D, TVL_PERFORMANCE_180D, TVL_PERFORMANCE_365D, \n                MARKET_CAP_TVL, MARKET_CAP_TVL_PERFORMANCE_7D, MARKET_CAP_TVL_PERFORMANCE_30D, \n                MARKET_CAP_TVL_PERFORMANCE_90D, MARKET_CAP_SALES_PERFORMANCE, MARKET_CAP_SALES_PERFORMANCE_7D, \n                MARKET_CAP_SALES_PERFORMANCE_30D, MARKET_CAP_SALES_PERFORMANCE_90D, \n                MARKET_CAP_SALES_PERFORMANCE_180D, MARKET_CAP_SALES_PERFORMANCE_365D\n                \n                ### INDICATORS:\n                IR_RSI9, IR_RSI14, IR_RSI25, IR_STOCH, IR_STOCH_SLOW, IR_WILLIAMS,\n                IR_CCI20, IR_BANDED_OSC, IR_NEW_HIGH_CREATED_5, IR_NEW_HIGH_CREATED_10,\n                IR_NEW_HIGH_CREATED_15, IR_NEW_HIGH_CREATED_20, IR_NEW_HIGH_CREATED_30,\n                IR_NEW_HIGH_CREATED_50, IR_NEW_LOW_CREATED_5, IR_NEW_LOW_CREATED_10,\n                IR_NEW_LOW_CREATED_15, IR_NEW_LOW_CREATED_20, IR_NEW_LOW_CREATED_30,\n                IR_NEW_LOW_CREATED_50\n    \n                ### SELECTION GUIDE \u2014 map user intent to correct value:\n                - \"RSI history\"                \u2192 RSI14\n                - \"MACD history\"               \u2192 MACD (or MACD_SIGNAL_LINE for signal line)\n                - \"moving average history\"     \u2192 SMA50 or EMA200 depending on context\n                - \"market cap over time\"       \u2192 MARKET_CAP\n                - \"volume history\"             \u2192 VOLUME\n                - \"revenue history\"            \u2192 TOTAL_REVENUE_1W or TOTAL_REVENUE_1M\n                - \"TVL history\"                \u2192 TVL\n                - \"price performance\"          \u2192 PERFORMANCE or PRICE_CHANGE_1W\n                - \"trend history\"              \u2192 SHORT_TERM_TREND or MEDIUM_TERM_TREND\n                - \"Bollinger bands history\"    \u2192 BOLLINGER_BAND_UPPER or BOLLINGER_BAND_LOWER\n                - \"stochastic history\"         \u2192 STOCH or STOCH_RSI\n            "
+          },
+          "from": {
+            "type": "string",
+            "description": "\n                Start of the time range (inclusive) for historical data retrieval.\n            \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                ### COMMON USE CASES:\n                - \"last 30 days of RSI\"  \u2192 from='last 30 days'\n                - \"RSI this year\"        \u2192 from='this year'\n                - \"last week's MACD\"     \u2192 from='last week'\n                \n                \ud83d\udca1 TIP: Always pair with 'to' parameter to define a complete range.\n                \ud83d\udca1 TIP: For 'last X days' queries, set from='last X days' and omit 'to' (defaults to now).\n            "
+          },
+          "to": {
+            "type": "string",
+            "description": "\n                End of the time range (inclusive) for historical data retrieval.\n            \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: If the user asks for data \"up to now\" or \"until today\", set to='today'.\n                \ud83d\udca1 TIP: Can be omitted when using natural language in 'from' \u2014 end of range is derived automatically.\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination, zero-based index. Default is 0 (first page)."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                Number of records per page. Default is 10. Maximum is 1000.\n            \n                ### SELECTION GUIDE:\n                - Quick overview (last few values)  \u2192 10\u201320\n                - Weekly analysis (DAILY interval)  \u2192 7\n                - Monthly analysis (DAILY interval) \u2192 30\n                - Yearly analysis (DAILY interval)  \u2192 365\n                - Intraday analysis (HOURLY)        \u2192 24\u201348\n                - Full history export               \u2192 1000 (use sparingly)\n                \n                \u26a0\ufe0f Requesting more than 1000 will return an error.\n            "
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                Field to sort the historical records by.\n            \n                ### ALLOWED VALUES:\n                - timestamp \u2192 sort by date/time of the data point (default, recommended)\n                - time      \u2192 same as timestamp (the name of the response field)\n                - value     \u2192 sort by the indicator value (useful for finding min/max periods)\n            \n                \u26a0\ufe0f Only these values are accepted; any other value is rejected.\n            "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Sort order direction.\n            \n                ### ALLOWED VALUES:\n                - ASC  \u2192 ascending, oldest data first (use for charting/plotting over time)\n                - DESC \u2192 descending, most recent data first (default, use for \"latest values\")\n            \n                \ud83d\udca1 TIP: Use ASC when you need data in chronological order for trend analysis or charting.\n                \ud83d\udca1 TIP: Use DESC (default) when the user wants the most recent values first.\n            "
+          }
+        },
+        "required": [
+          "symbol",
+          "analyticsType"
+        ]
+      },
+      "annotations": {
+        "title": "Analytics History",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getCryptoCalendarEvents",
+      "title": "Crypto Calendar Events",
+      "description": "\n            Search and filter cryptocurrency calendar events such as AMAs, exchange listings, \n            airdrops, partnerships, protocol releases, and conferences.\n            \n            ### CORE CAPABILITIES:\n            - Filter by asset symbol, event category, date ranges, keywords, and vote rankings\n            - Supports pagination and sorting for large result sets\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks about \"upcoming events\" for a coin or the market\n            - User asks about \"catalysts\", \"news events\", \"airdrops\", \"listings\", or \"conferences\"\n            - User wants to combine technical analysis with fundamental event context\n            - User asks \"what's happening with [coin] this week/month\\\"\n            \n            ### BEST FOR:\n            \"Show me upcoming Solana events this week\", \"Any airdrops coming soon?\",\n            \"What conferences are happening this month?\", \"Show hot events for BTC and ETH\"\n            \n            ### NO RESULTS:\n            - Strict filters often match nothing; relaxed filters (no titleKeyword, a wider date\n              range) usually find events.\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "quickSearch": {
+            "type": "string",
+            "description": "\n                Full-text search term matched across all event data fields (title, description, asset name).\n                Use for broad keyword searches when you don't know the exact field to search.\n            \n                Examples: \"Binance listing\", \"mainnet launch\", \"token burn\"\n            "
+          },
+          "releaseFrom": {
+            "type": "string",
+            "description": "\n                Filter events by their RELEASE DATE (the date the event was published/announced).\n                This is NOT the date the event takes place \u2014 use eventFrom/eventTo for that.\n                \n                Defines the START of the release date range (inclusive).\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: Always pair with releaseTo to define a complete range.\n                \u26a0\ufe0f Do NOT use this to filter when an event happens \u2014 use eventFrom instead.\n            "
+          },
+          "releaseTo": {
+            "type": "string",
+            "description": "\n                Filter events by their RELEASE DATE (the date the event was published/announced).\n                This is NOT the date the event takes place \u2014 use eventFrom/eventTo for that.\n                \n                Defines the END of the release date range (inclusive).\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: Always pair with releaseFrom to define a complete range.\n                \u26a0\ufe0f Do NOT use this to filter when an event happens \u2014 use eventTo instead.\n            "
+          },
+          "eventFrom": {
+            "type": "string",
+            "description": "\n                Filter events by their EVENT DATE (the actual date the event takes place).\n                This is NOT the publication/announcement date \u2014 use releaseFrom/releaseTo for that.\n                \n                Defines the START of the event date range (inclusive).\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: For \"upcoming events\", use eventFrom=today and eventTo=end of desired range.\n                \ud83d\udca1 TIP: Always pair with eventTo to define a complete range.\n            "
+          },
+          "eventTo": {
+            "type": "string",
+            "description": "\n                Filter events by their EVENT DATE (the actual date the event takes place).\n                This is NOT the publication/announcement date \u2014 use releaseFrom/releaseTo for that.\n                \n                Defines the END of the event date range (inclusive).\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.000\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: Always pair with eventFrom to define a complete range.\n            "
+          },
+          "titleKeyword": {
+            "type": "string",
+            "description": "\n                Filter events whose TITLE contains this keyword (case-insensitive, partial match).\n                Use when the user is looking for a specific type of event by name.\n                \n                Examples: \"AMA\", \"listing\", \"mainnet\", \"airdrop\", \"burn\"\n                \n                \ud83d\udca1 TIP: Use quickSearch instead if you want to search across all fields, not just the title.\n            "
+          },
+          "assetSymbols": {
+            "type": "string",
+            "description": "\n                One or more cryptocurrency symbols to filter events by asset.\n            \n                ### FORMAT:\n                - Single symbol: BTC\n                - Multiple symbols: BTC,ETH,SOL (comma-separated, no spaces)\n                \n                ### EXAMPLES:\n                - User asks \"show BTC events\" \u2192 assetSymbols=BTC\n                - User asks \"events for BTC and ETH\" \u2192 assetSymbols=BTC,ETH\n                \n                \u26a0\ufe0f Use uppercase symbols only. Do not include trading pairs (e.g. use BTC not BTCUSDT).\n            "
+          },
+          "voteIsHot": {
+            "type": "boolean",
+            "description": "\n                Filter events marked as HOT by community voting.\n                Hot events have high immediate engagement and attention.\n                \n                Set to true to include only hot events.\n                \n                \ud83d\udca1 TIP: Combine voteIsHot=true + voteIsTrending=true to find the most \n                socially active events right now.\n            "
+          },
+          "voteIsTrending": {
+            "type": "boolean",
+            "description": "\n                Filter events marked as TRENDING by community voting.\n                Trending events are gaining momentum in community interest.\n                \n                Set to true to include only trending events.\n                \n                \ud83d\udca1 TIP: Combine voteIsTrending=true + voteIsSignificant=true to find \n                events that are both gaining traction and considered important.\n            "
+          },
+          "voteIsSignificant": {
+            "type": "boolean",
+            "description": "\n                Filter events marked as SIGNIFICANT by community voting.\n                Significant events are considered high-impact or important by the community.\n                \n                Set to true to include only significant events.\n                \n                \ud83d\udca1 TIP: Use voteIsSignificant=true when the user asks for \"important events\", \n                \"major catalysts\", or \"high impact news\".\n            "
+          },
+          "category": {
+            "type": "string",
+            "description": "\n                Filter events by category type.\n            \n                ### ALLOWED VALUES (use exact values, case-sensitive):\n                RELEASE, BRANDING, TOKENOMICS, EXCHANGE, CONFERENCE, COMMUNITY,\n                OTHER, AIRDROP, AMA, PARTNERSHIP, ROADMAP_UPDATE, FORK_SWAP,\n                WHITEPAPER_UPDATE, DEV_UPDATE\n                \n                ### FORMAT:\n                - Single category: AIRDROP\n                - Multiple categories: RELEASE,EXCHANGE,AIRDROP (comma-separated, no spaces)\n                \n                ### CATEGORY GUIDE \u2014 map user intent to correct value:\n                - \"listing\" or \"exchange listing\"   \u2192 EXCHANGE\n                - \"airdrop\" or \"token drop\"         \u2192 AIRDROP\n                - \"AMA\" or \"ask me anything\"         \u2192 AMA\n                - \"conference\" or \"summit\"           \u2192 CONFERENCE\n                - \"partnership\" or \"collaboration\"   \u2192 PARTNERSHIP\n                - \"roadmap\" or \"milestone update\"    \u2192 ROADMAP_UPDATE\n                - \"fork\" or \"swap\" or \"migration\"    \u2192 FORK_SWAP\n                - \"whitepaper\"                       \u2192 WHITEPAPER_UPDATE\n                - \"tokenomics\" or \"token burn\"       \u2192 TOKENOMICS\n                - \"dev update\" or \"developer update\" \u2192 DEV_UPDATE\n                - \"release\" or \"launch\" or \"mainnet\" \u2192 RELEASE\n                - \"rebranding\" or \"brand change\"     \u2192 BRANDING\n                - \"community\" or \"social\"            \u2192 COMMUNITY\n                \n                \u26a0\ufe0f Do NOT send values outside this list \u2014 unknown values will be rejected.\n            "
+          },
+          "descriptionKeyword": {
+            "type": "string",
+            "description": "\n                Filter events whose DESCRIPTION contains this keyword (case-insensitive, partial match).\n                Use when the user wants to search inside event details, not just the title.\n                \n                Examples: \"Binance\", \"staking rewards\", \"v2 upgrade\"\n                \n                \ud83d\udca1 TIP: Use quickSearch for broader matching across all fields, \n                use descriptionKeyword only when the user specifically refers to event content/details.\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination, zero-based index. Default is 0 (first page)."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of records per page. Default is 10. Maximum recommended is 50."
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                Field to sort results by.\n            \n                ### ALLOWED VALUES (use exact values, case-sensitive):\n                - dateEvent   \u2192 sort by the date the event takes place\n                - createdDate \u2192 sort by the date the event was published (default)\n                \n                \u26a0\ufe0f Only these two values are accepted. Any other value will be ignored or cause an error.\n            "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Sort order direction.\n            \n                ### ALLOWED VALUES:\n                - ASC  \u2192 ascending (oldest first)\n                - DESC \u2192 descending (newest first, default)\n            "
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Crypto Calendar Events",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "news_getCryptoNewsMessages",
+      "title": "Crypto News",
+      "description": "\n            Search and filter cryptocurrency news articles and messages from multiple \n            crypto news sources, with support for time ranges, asset filtering,\n            and keyword search.\n\n            ### WHAT IS RETURNED:\n            - A list of news message summaries matching the filters\n            - Each result includes the title, text, link to the original article, source, timestamp,\n              and related asset symbols\n            - The items are written by third-party news sites and X accounts; altFINS collects them\n              but does not write or edit them\n            - Results are sorted by timestamp (newest first) by default\n\n            ### TYPICAL USES:\n            - Latest news for a coin or for the crypto market\n            - \"What's happening with BTC/ETH/SOL?\"\n            - News context for a technical analysis\n            - News about a coin within a time range, such as this week\n            - What is being reported about a crypto topic\n            - News from a specific news source\n\n            ### NOT COVERED BY THIS TOOL:\n            - Upcoming scheduled events (AMAs, listings, conferences): getCryptoCalendarEvents\n            - Technical analysis or price data: screener_getAltfinsScreenerData\n            - Social sentiment scores\n\n            ### RELATED TOOLS:\n            - screener_getAltfinsScreenerData finds technically interesting coins; this tool adds\n              recent news context for them\n            - getCryptoCalendarEvents adds upcoming events to the news for a fuller fundamental picture\n            - news_getCryptoNewsSources lists the exact source names accepted by 'sources'\n            - getUserPortfolio returns the coins the user holds; their tickers in\n              assetSymbolsKeywords give news about the user's portfolio\n\n            ### FILTERS:\n            - Broad topic: quickSearch with a topic keyword\n            - Specific coins: assetSymbolsKeywords with the coin tickers\n            - Headline or article wording: titleKeyword or contentKeyword\n            - All filters that are set must match (AND logic)\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "quickSearch": {
+            "type": "string",
+            "description": "\n                Search term matched against the news text and the related asset symbols\n                (case-insensitive, partial match).\n                Suits broad topic searches that do not target one specific field.\n            \n                ### EXAMPLES:\n                - \"Bitcoin ETF\"\n                - \"Ethereum upgrade\"\n                - \"SEC regulation\"\n                - \"DeFi hack\"\n\n                \ud83d\udca1 TIP: titleKeyword matches the headline only; contentKeyword matches the headline\n                or the article text. quickSearch does not match the headline.\n                \ud83d\udca1 TIP: Combined with titleKeyword or contentKeyword, every search term that is set\n                must match.\n            "
+          },
+          "from": {
+            "type": "string",
+            "description": "\n                Start of the news time range (inclusive). Filters news published at or after this time.\n\n                ### ACCEPTED FORMATS:\n                - ISO-8601 UTC: 2025-11-01T00:00:00Z\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n\n                \ud83d\udca1 TIP: A natural-language value sets both ends of the range, and 'to' is not used.\n                With an ISO-8601 value, 'to' sets the end; without 'to' the range is open-ended.\n                \ud83d\udca1 TIP: from='today' or from='last 7 days' covers \"latest news\".\n                \u26a0\ufe0f Natural-language values are matched as whole phrases, including the spaces.\n            "
+          },
+          "to": {
+            "type": "string",
+            "description": "\n                End of the news time range (inclusive), as an ISO-8601 UTC timestamp,\n                for example 2025-11-03T00:00:00Z. Filters news published at or before this time.\n\n                \ud83d\udca1 TIP: Not used when 'from' is a natural-language value, which sets both ends.\n                \ud83d\udca1 TIP: Without 'to', the range runs up to now.\n            "
+          },
+          "assetSymbolsKeywords": {
+            "type": "string",
+            "description": "\n                Filter news by one or more cryptocurrency asset symbols.\n                Returns only news articles related to the specified coins.\n            \n                ### FORMAT:\n                - Single symbol:   BTC\n                - Multiple symbols: BTC,ETH,SOL (comma-separated, no spaces)\n                \n                ### EXAMPLES:\n                - User asks \"BTC news\"          \u2192 assetSymbolsKeywords=BTC\n                - User asks \"news for BTC, ETH\" \u2192 assetSymbolsKeywords=BTC,ETH\n                - User asks \"Solana news\"       \u2192 assetSymbolsKeywords=SOL\n\n                \u26a0\ufe0f Values are coin ticker symbols (BTC, not Bitcoin; ETH, not Ethereum).\n                \u26a0\ufe0f Trading pairs such as BTCUSDT match nothing.\n            "
+          },
+          "sources": {
+            "type": "string",
+            "description": "\n                Filter news by one or more news source names.\n                Returns only articles from the specified sources.\n\n                ### FORMAT:\n                - Single source:    one source name\n                - Multiple sources: comma-separated source names\n\n                \ud83d\udca1 TIP: news_getCryptoNewsSources lists the exact source names.\n                \u26a0\ufe0f Names are matched exactly, ignoring case. If any name matches no source, the\n                request fails with an error that lists the unknown names; it is never widened to\n                all sources.\n            "
+          },
+          "titleKeyword": {
+            "type": "string",
+            "description": "\n                Filter news whose TITLE contains this keyword (case-insensitive, partial match).\n                Suits requests for articles with a specific topic in the headline.\n            \n                ### EXAMPLES:\n                - \"ETF approval\"\n                - \"hack\"\n                - \"upgrade\"\n                - \"partnership\"\n                \n                \ud83d\udca1 TIP: titleKeyword suits requests about article headlines.\n                \ud83d\udca1 TIP: contentKeyword matches the headline or the article text.\n                \ud83d\udca1 TIP: quickSearch matches the article text or the related asset symbols.\n            "
+          },
+          "contentKeyword": {
+            "type": "string",
+            "description": "\n                Filter news whose headline OR article text contains this keyword (case-insensitive,\n                partial match). Suits requests for articles that mention something anywhere in the\n                article, not only in the headline.\n\n                ### EXAMPLES:\n                - \"Binance listing\"\n                - \"staking rewards\"\n                - \"regulatory approval\"\n\n                \ud83d\udca1 TIP: titleKeyword matches the headline only.\n                \ud83d\udca1 TIP: quickSearch matches the article text or the related asset symbols, but not\n                the headline.\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination, zero-based index. Default is 0 (first page)."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                Number of news articles per page. Default is 10. Values above 1000 are capped at 1000.\n\n                \ud83d\udca1 TIP: 10-20 articles suit a normal news question; each article carries its text,\n                so pages above 50 produce very long responses.\n            "
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                Field to sort news results by.\n            \n                ### ALLOWED VALUES:\n                - timestamp    \u2192 sort by publication date/time (default)\n                - assetSymbols \u2192 sort alphabetically by related coin symbols\n                - title        \u2192 sort alphabetically by article title\n                - content      \u2192 sort alphabetically by article content\n\n                ### SELECTION GUIDE:\n                - \"latest news first\"           \u2192 timestamp + sortDirection=DESC (default)\n                - \"oldest news first\"           \u2192 timestamp + sortDirection=ASC\n                - \"news grouped by coin\"        \u2192 assetSymbols\n\n                \u26a0\ufe0f Any other value is rejected with an error that lists these four values.\n            "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Sort order direction.\n            \n                ### ALLOWED VALUES:\n                - ASC  \u2192 ascending, oldest articles first\n                - DESC \u2192 descending, newest articles first (default)\n\n                \ud83d\udca1 TIP: ASC suits requests for chronological order.\n            "
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Crypto News",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "news_getCryptoNewsSources",
+      "title": "Crypto News Sources",
+      "description": "\n            Lists the crypto news sources that altFINS aggregates. Each entry has an id and a name.\n            Optionally narrows the list to sources whose name contains a search term.\n\n            ### TYPICAL USES:\n            - \"Which crypto news sources does altFINS cover?\"\n            - Finding the exact name of a source for the 'sources' parameter of news_getCryptoNewsMessages\n\n            ### NOTES:\n            - The 'sources' parameter of news_getCryptoNewsMessages accepts exactly these names and rejects other names\n            - This tool returns source names only; news_getCryptoNewsMessages returns the articles\n            - The list changes rarely\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "quickSearch": {
+            "type": "string",
+            "description": "\n                Optional search term that narrows the list to sources whose name contains it\n                (case-insensitive; spaces are ignored). Omit quickSearch to get all news sources.\n\n                ### EXAMPLES:\n                - quickSearch=\"news\" \u2192 every source whose name contains \"news\"\n                - quickSearch omitted \u2192 the full list\n            "
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Crypto News Sources",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "ohlc_getHistoryData",
+      "title": "OHLC Price History",
+      "description": "\n            Fetches historical OHLCV (Open, High, Low, Close, Volume) price candle data \n            for a specific cryptocurrency symbol over a given time range and interval.\n\n            ### WHAT IS RETURNED:\n            - A list of OHLCV candles for the requested symbol and time range\n            - Each candle contains: timestamp, open, high, low, close, volume\n            - Results represent raw price action data \u2014 the building blocks of all technical analysis\n    \n            ### WHEN TO USE THIS TOOL:\n            - User asks for historical price data or candlestick data for a coin\n            - User asks \"what was BTC's price last month?\"\n            - User asks \"show me ETH candles for the last 30 days\"\n            - You need raw OHLCV data to perform or validate manual technical analysis calculations\n            - User wants to analyze price action patterns over a specific period\n            - User asks \"what was the highest price SOL reached last week?\"\n    \n            ### DO NOT USE THIS TOOL WHEN:\n            - User wants CURRENT price or latest candle only \u2192 use ohlc_getLatestData instead\n            - User wants pre-calculated technical indicators (RSI, MACD, SMA) \n              \u2192 use screener_getAltfinsScreenerData or getHistoryAnalyticsData instead\n            - User wants to SCREEN or FILTER multiple coins \u2192 use screener_getAltfinsScreenerData\n            - User wants fundamental data (revenue, TVL) \u2192 use getHistoryAnalyticsData instead\n    \n            ### COMBINE WITH OTHER TOOLS:\n            - Combine with getHistoryAnalyticsData to correlate raw price candles \n              with indicator history (e.g. overlay RSI on price chart data)\n            - Use screener_getAltfinsScreenerData first to identify interesting coins,\n              then call this tool to get their detailed price history\n    \n            ### IMPORTANT:\n            - Both 'from' and 'to' are required \u2014 always provide a time range\n            - One call returns data for ONE symbol only\n            - Use the 'size' parameter to control how many candles are returned\n            - Default is 10 candles \u2014 increase size for longer time range analysis\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "\n                Uppercase cryptocurrency symbol to retrieve OHLCV candle data for.\n            \n                ### FORMAT:\n                - Single symbol, uppercase only (e.g. BTC, ETH, SOL, ADA)\n                \n                \u26a0\ufe0f Use uppercase ticker symbols only.\n                \u26a0\ufe0f Do not use full names (e.g. use BTC not Bitcoin).\n                \u26a0\ufe0f Do not use trading pairs (e.g. use ETH not ETHUSDT).\n            "
+          },
+          "timeInterval": {
+            "type": "string",
+            "description": "\n                Time interval for each OHLCV candle (the granularity of price data).\n            \n                ### ALLOWED VALUES:\n                - MINUTES15 \u2192 15-minute candles (intraday scalping, short-term)\n                - HOURLY    \u2192 1-hour candles (intraday analysis)\n                - HOURS4    \u2192 4-hour candles (swing trading)\n                - HOURS12   \u2192 12-hour candles (medium-term overview)\n                - DAILY     \u2192 daily candles (default, recommended for most use cases)\n                \n                ### SELECTION GUIDE:\n                - \"today's price action\" or \"intraday\"     \u2192 HOURLY or MINUTES15\n                - \"last few days\" or \"swing trading\"       \u2192 HOURS4\n                - \"last month\" or \"standard analysis\"      \u2192 DAILY\n                - \"last year\" or \"long-term price history\" \u2192 DAILY\n                \n                \u26a0\ufe0f Only these exact values are accepted. Default is DAILY.\n            "
+          },
+          "from": {
+            "type": "string",
+            "description": "\n                Start of the time range for OHLCV data (inclusive). Required.\n            \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00Z\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                ### COMMON USE CASES:\n                - \"last 30 days of candles\"  \u2192 from='last 30 days', to='today'\n                - \"price history this year\"  \u2192 from='this year', to='today'\n                - \"last week's candles\"      \u2192 from='last week', to='today'\n                \n                \ud83d\udca1 TIP: Always pair with 'to' \u2014 both are required for this tool.\n                \u26a0\ufe0f This parameter is required \u2014 never omit it.\n            "
+          },
+          "to": {
+            "type": "string",
+            "description": "\n                End of the time range for OHLCV data (inclusive). Required.\n            \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00Z\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n                \n                \ud83d\udca1 TIP: For \"up to now\" or \"until today\", set to='today'.\n                \ud83d\udca1 TIP: Can be derived automatically when using natural language in 'from'.\n                \u26a0\ufe0f This parameter is required \u2014 never omit it.\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination, zero-based index. Default is 0 (first page)."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                Number of OHLCV candles per page. Default is 10. Maximum recommended is 1000.\n            \n                ### SELECTION GUIDE:\n                - Last 7 daily candles    \u2192 size=7\n                - Last 30 daily candles   \u2192 size=30\n                - Last 90 daily candles   \u2192 size=90\n                - Last 365 daily candles  \u2192 size=365\n                - Last 24 hourly candles  \u2192 size=24\n                - Last 96 x 4h candles    \u2192 size=96\n                \n                \ud83d\udca1 TIP: Match size to your time range and interval combination.\n                \ud83d\udca1 TIP: For \"last month\" with DAILY interval, use size=30.\n                \ud83d\udca1 TIP: For \"last week\" with HOURLY interval, use size=168 (7 \u00d7 24).\n            "
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                Field to sort the OHLCV candles by.\n            \n                ### ALLOWED VALUES (use exact values, case-sensitive):\n                - time   \u2192 sort by candle timestamp (default, recommended)\n                - open   \u2192 sort by opening price\n                - high   \u2192 sort by highest price in candle\n                - low    \u2192 sort by lowest price in candle\n                - close  \u2192 sort by closing price\n                - volume \u2192 sort by trading volume\n                \n                ### SELECTION GUIDE:\n                - \"chronological candles\"         \u2192 time + sortDirection=ASC\n                - \"most recent candles first\"     \u2192 time + sortDirection=DESC (default)\n                - \"highest volume candles\"        \u2192 volume + sortDirection=DESC\n                - \"biggest price range candles\"   \u2192 high + sortDirection=DESC\n                \n                \u26a0\ufe0f Only these exact values are accepted. Any other value will be ignored.\n            "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Sort order direction.\n            \n                ### ALLOWED VALUES:\n                - ASC  \u2192 ascending, oldest candles first (use for charting/time-series analysis)\n                - DESC \u2192 descending, most recent candles first (default)\n                \n                \ud83d\udca1 TIP: Use ASC when you need candles in chronological order for charting or \n                sequential price analysis.\n                \ud83d\udca1 TIP: Use DESC (default) when you want the most recent price action first.\n            "
+          }
+        },
+        "required": [
+          "symbol",
+          "from",
+          "to"
+        ]
+      },
+      "annotations": {
+        "title": "OHLC Price History",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "ohlc_getLatestData",
+      "title": "Latest OHLC Prices",
+      "description": "\n            Fetches the latest OHLCV (Open, High, Low, Close, Volume) price candle(s) \n            for one or more cryptocurrency symbols at a specified time interval.\n            Returns the most recent available candle data \u2014 not historical time series.\n    \n            ### WHAT IS RETURNED:\n            - The latest OHLCV candle for each requested symbol\n            - Each record contains: symbol, timestamp, open, high, low, close, volume\n            - Reflects the most current price action snapshot available\n    \n            ### WHEN TO USE THIS TOOL:\n            - User asks \"what is the current price of BTC?\"\n            - User asks \"show me the latest candle for ETH\"\n            - User wants a quick price snapshot for one or more coins\n            - User asks \"what's the current volume for SOL?\"\n            - User wants to check current price action before making a decision\n            - You need current OHLCV data to validate or enrich a technical analysis\n            - User asks for price data on multiple coins simultaneously\n    \n            ### DO NOT USE THIS TOOL WHEN:\n            - User wants HISTORICAL candles over a time range \n              \u2192 use ohlc_getHistoryData instead\n            - User wants pre-calculated technical indicators (RSI, MACD, SMA) \n              \u2192 use screener_getAltfinsScreenerData instead\n            - User wants fundamental data (revenue, TVL, market cap) \n              \u2192 use screener_getAltfinsScreenerData or getHistoryAnalyticsData instead\n    \n            ### DIFFERENCE FROM ohlc_getHistoryData:\n            - This tool   \u2192 returns the LATEST/CURRENT candle only (no date range needed)\n            - getHistoryData \u2192 returns a TIME-SERIES of historical candles over a date range\n    \n            ### COMBINE WITH OTHER TOOLS:\n            - Use screener_getAltfinsScreenerData first to identify interesting coins,\n              then call this tool to get their current OHLCV snapshot\n            - Combine with getHistoryAnalyticsData to enrich current price data \n              with the latest indicator values\n    \n            ### IMPORTANT:\n            - Provide at least one symbol \u2014 this parameter is required\n            - Multiple symbols can be queried in a single call (comma-separated)\n            - Returns one candle per symbol per call\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "string",
+            "description": "\n        One or more cryptocurrency symbols to query, comma separated values for more cryptocurrency symbols (e.g., BTC, ETH), \n        only one symbol for one cryptocurrency symbol (e.g., BTC).\n    "
+          },
+          "timeInterval": {
+            "type": "string",
+            "description": "\n        Time interval of screener values. Default time interval is DAILY. \n        Only these values are allowed: MINUTES15, HOURLY, HOURS4, HOURS12, DAILY\"\n    "
+          }
+        },
+        "required": [
+          "symbols"
+        ]
+      },
+      "annotations": {
+        "title": "Latest OHLC Prices",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "symbols_getAvailableSymbols",
+      "title": "Available Symbols",
+      "description": "\n            Retrieves the list of cryptocurrency symbols (coin ids) available on the altFINS platform,\n            optionally together with the smart contract address of each symbol on every blockchain it is deployed on.\n\n            ### WHAT IS RETURNED:\n            - 'name' \u2014 the exact symbol to pass to the 'symbol' parameter of the other tools (e.g. \"ETH\")\n            - 'friendlyName' \u2014 the display name of the coin (e.g. \"Ethereum\")\n            - 'platforms' \u2014 contract addresses keyed by the blockchain (asset platform) name, for example\n              {\"ethereum\": \"0xb9ef770b6a5e12e45983c5d80545258aa38f3b78\",\n               \"polygon-pos\": \"0x8bb30e0e67b11b978a5040144c410e1ccddcba30\"}\n              Possible platform keys: 'ethereum', 'binance-smart-chain', 'polygon-pos', 'fantom',\n              'arbitrum-one', 'avalanche'. The object is EMPTY when altFINS knows no contract address for\n              the symbol \u2014 native coins such as BTC and coins that are not ERC20-style tokens have no\n              contract address at all.\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks \"which coins/symbols does altFINS support?\"\n            - User asks for the contract address of a coin, or on which chains a coin is deployed\n            - User gives a coin by its full name (\"Ethereum\", \"solana\") and you need the exact symbol\n              before calling another tool\n            - A previous tool call returned empty and you want to verify the symbol actually exists\n\n            ### DO NOT USE THIS TOOL WHEN:\n            - You already know the exact symbol \u2192 call the data tool directly\n            - User wants prices, indicators or patterns \u2192 use ohlc_*, analytics_* or screener_* tools\n\n            ### PARAMETERS:\n            - Use 'quickSearch' to narrow the result down \u2014 the full list contains thousands of symbols\n            - Set 'includePlatforms' to false when you only need the symbol names; it makes the call\n              cheaper and the response much smaller\n\n            ### IMPORTANT:\n            - Results are relatively static \u2014 the symbol list does not change frequently,\n              there is no need to call this tool repeatedly in the same session\n            - Contract addresses are returned in the lower-case form stored by altFINS\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "quickSearch": {
+            "type": "string",
+            "description": "\n                Optional search term filtering the symbols by symbol or by friendly name\n                (case-insensitive, partial match).\n\n                ### WHEN TO USE:\n                - Leave null to retrieve ALL available symbols (large response)\n                - Provide a partial symbol or coin name to find a specific coin\n\n                ### RESULT LIMITS:\n                At most 2000 symbols are returned in one call, or 200 when includePlatforms is true,\n                because contract addresses add an entry per blockchain per asset. A search matching\n                more than that is rejected with a message saying so \u2014 narrow the term, or set\n                includePlatforms=false to get the names alone.\n\n                ### EXAMPLES:\n                - quickSearch=\"eth\"      \u2192 matches ETH/Ethereum, ETHW, WETH, ...\n                - quickSearch=\"bitcoin\"  \u2192 matches BTC (friendly name \"Bitcoin\")\n                - quickSearch=null       \u2192 returns the full symbol list\n\n                \ud83d\udca1 TIP: Prefer a short partial term to maximize matches.\n            "
+          },
+          "includePlatforms": {
+            "type": "boolean",
+            "description": "\n                Whether the contract addresses per blockchain should be returned in the 'platforms' field.\n                Defaults to true when not provided.\n\n                ### WHEN TO USE:\n                - true (or omitted) \u2014 the user asks about contract addresses, chains, or token deployments\n                - false \u2014 you only need the symbol names, e.g. to validate a symbol before another tool call.\n                  This skips the contract address lookup and returns a much smaller response.\n            "
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Available Symbols",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "screener_getPresetFilterTypes",
+      "title": "Screener Preset Filters",
+      "description": "\n            Fetches all available preset filter ids (pre-built screener strategies) supported by\n            the altFINS crypto screener. Each preset encodes a complete filter recipe that can be\n            run with screener_getAltfinsScreenerDataByPresetFilter.\n\n            ### WHAT IS RETURNED:\n            - A list of every valid preset filter id\n            - Each entry includes:\n              - id                  \u2192 the exact string to pass as 'presetFilterType' in\n                                      screener_getAltfinsScreenerDataByPresetFilter\n              - friendlyName        \u2192 human-readable label derived from the id\n              - category            \u2192 the id prefix (SR, SB, TCP, CP1, CP2, CP3, TM, OSC, DIV, FUND, CAT)\n              - categoryDescription \u2192 what that category covers\n            - Examples: SR_RESISTANCE_BREAKOUT, SB_OVERSOLD_UPTREND, TM_MA_RIBBON, CAT_DEFI\n\n            ### WHEN TO USE THIS TOOL:\n            - BEFORE the first call to screener_getAltfinsScreenerDataByPresetFilter in a session\n            - User asks \"what screener strategies / presets / setups are available?\"\n            - You are about to choose a 'presetFilterType' and are not certain of the exact id\n            - A previous screener_getAltfinsScreenerDataByPresetFilter call was rejected with an\n              unknown preset id \u2192 call this tool and pick the correct id, do not guess again\n\n            ### DO NOT USE THIS TOOL WHEN:\n            - You already have the exact preset id from an earlier call in this session\n              \u2192 call screener_getAltfinsScreenerDataByPresetFilter directly\n            - User wants actual coin data\n              \u2192 use screener_getAltfinsScreenerDataByPresetFilter or screener_getAltfinsScreenerData\n            - User wants screener display/filter metrics (RSI14, MARKET_CAP, \u2026)\n              \u2192 use screener_getAltfinsScreenerDataTypes instead (different set of values)\n\n            ### RELATIONSHIP TO OTHER TOOLS:\n            - This is a DISCOVERY tool for screener_getAltfinsScreenerDataByPresetFilter\n            - The ids returned here are the ONLY valid values for its 'presetFilterType' parameter\n            - Preset ids CANNOT be constructed by hand from the naming convention \u2014 they must\n              come from this tool\n            - Typical workflow: call this tool once, pick the id matching the user's intent,\n              then call screener_getAltfinsScreenerDataByPresetFilter with it\n\n            ### DIFFERENCE FROM screener_getAltfinsScreenerDataTypes:\n            - This tool          \u2192 preset STRATEGY ids for the preset filter tool\n            - getScreenerDataTypes \u2192 METRIC ids for displayTypes / numericFilters\n            - These are DIFFERENT sets \u2014 do not mix them across tools\n\n            ### IMPORTANT:\n            - This tool takes no input \u2014 results are the same regardless of caller\n            - Results are static \u2014 the preset list does not change between calls\n            - No need to call this tool repeatedly in the same session\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "title": "Screener Preset Filters",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "screener_getAltfinsScreenerData",
+      "title": "Crypto Screener",
+      "description": "\n            Primary crypto screening engine with technical and fundamental filters (AND logic).\n            Use for RSI/MACD/SMA queries, price patterns, category screens, and financial metrics.\n            FALLBACK: If technicalAnalysis_getTechnicalAnalysisData returns empty, call THIS tool with that symbol.\n            Call screener_getAltfinsScreenerDataTypes to discover all valid displayType and numericFilterType values.\n            DO NOT use LAST_PRICE, CURRENT_PRICE, or MACD_HISTOGRAM as displayTypes.\n            Best practices: technical analysis \u2192 [RSI14, MACD, SHORT_TERM_TREND, SMA50]; ATH queries \u2192 [ATH, ATH_PERCENT_DOWN, ATH_DATE].\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Coin symbols to filter, e.g. [\"BTC\",\"ETH\"]. Omit or empty list for all symbols."
+          },
+          "timeInterval": {
+            "type": "string",
+            "description": "Time interval of screener values. Default time interval is DAILY. Only these values are allowed: MINUTES15, HOURLY, HOURS4, HOURS12, DAILY"
+          },
+          "displayTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Metrics to return in additionalData. Pass ONLY parent enum keys (UPPERCASE_UNDERSCORE).\n           Composite metrics return NESTED objects in the response \u2014 never pass the inner leaf keys back as displayTypes:\n             - SUPPORT      \u2192 {SUPPORT_1 ... SUPPORT_6}          pass \"SUPPORT\", not \"SUPPORT_1\"\n             - RESISTANCE   \u2192 {RESISTANCE_1 ... RESISTANCE_6}    pass \"RESISTANCE\", not \"RESISTANCE_1\"\n             - MACD         \u2192 {line, signal, histogram}              pass \"MACD\", not \"MACD_HISTOGRAM\" or \"MACD_HISTOGRAM_TREND\"\n          SUPPORT/RESISTANCE values are chart-aligned key levels: up to 3 newest calculated S&R levels plus up to 3 nearby\n          ATH/HIGH_52W/LOW_52W levels when within range of last price. ATH and HIGH_52W default to resistance; LOW_52W\n          defaults to support. Recent closes can reclassify those defaults only when all required closes are on the other side.\n          Levels are returned sorted ascending.\n           Invalid/stale levels are hidden. Missing SUPPORT_1..6 / RESISTANCE_1..6 slots use \"-\" as the empty value.\n           Common valid values:\n             Trend ratings: SHORT_TERM_TREND, MEDIUM_TERM_TREND, LONG_TERM_TREND (and *_CHANGE variants)\n             Momentum: RSI9, RSI14, RSI25, MACD, MACD_SIGNAL_LINE, STOCH, STOCH_SLOW, STOCH_RSI, CCI20, ADX, MOM, WILLIAMS, RSI_DIVERGENCE\n             Levels: SUPPORT, RESISTANCE, ATH, HIGH, LOW, HIGH_52W, LOW_52W, BOLLINGER_BAND_LOWER, BOLLINGER_BAND_UPPER\n             Moving averages: SMA20, SMA50, SMA100, SMA200, EMA12, EMA26, EMA50, EMA200 (and *_TREND variants)\n             Volume: VOLUME, VOLUME_RELATIVE, DOLLAR_VOLUME, OBV, OBV_TREND, VWMA20\n             Performance: PRICE_CHANGE_1D, PRICE_CHANGE_1W, PRICE_CHANGE_1M, PRICE_CHANGE_3M, PRICE_CHANGE_1Y, ATH_PERCENT_DOWN, DAYS_SINCE_ATH\n             Market: MARKET_CAP, CIRCULATING_SUPPLY, ATR, TR_VS_ATR\n           Do NOT use LAST_PRICE / CURRENT_PRICE (already in the lastPrice field) or MACD_HISTOGRAM.\n           Call screener_getAltfinsScreenerDataTypes for the full enumerated list."
+          },
+          "numericFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "gteFilter": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "lteFilter": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "numericFilterType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "gteFilter",
+                "lteFilter",
+                "numericFilterType"
+              ]
+            },
+            "description": "Numeric range filters. Each: {numericFilterType, gteFilter?, lteFilter?}. E.g. {RSI14, lte:30} for oversold. Do NOT use ATH_PERCENT_DOWN, HIGH_52W, LOW_52W, ATR here \u2014 use dedicated params."
+          },
+          "signalFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "signalFilterType": {
+                  "type": "string"
+                },
+                "signalFilterValue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "signalFilterType",
+                "signalFilterValue"
+              ]
+            },
+            "description": "Trend filters. Each: {signalFilterType, signalFilterValue}. Types: SHORT_TERM_TREND, MEDIUM_TERM_TREND, LONG_TERM_TREND, IR_NEW_HIGH_CREATED, IR_NEW_LOW_CREATED. Values: STRONG_DOWN, DOWN, NEUTRAL, UP, STRONG_UP, NEUTRAL_AND_DOWN, NEUTRAL_AND_UP, plus _UPGRADE/_DOWNGRADE variants."
+          },
+          "crossAnalyticFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "crossAnalyticFilterType": {
+                  "type": "string"
+                },
+                "crossAnalyticFilterValue": {
+                  "type": "string"
+                },
+                "crossLookBackIntervals": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "required": [
+                "crossAnalyticFilterType",
+                "crossAnalyticFilterValue",
+                "crossLookBackIntervals"
+              ]
+            },
+            "description": "Crossover filters. Each: {crossAnalyticFilterType, crossAnalyticFilterValue(ABOVE|BELOW), crossLookBackIntervals(1-5)}. Format: X_[METRIC1]_CROSS_[METRIC2]. E.g. X_SMA50_CROSS_SMA200 + ABOVE = golden cross."
+          },
+          "candlestickPatternFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "candlestickLookBackIntervals": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "candlestickPatternFilterType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "candlestickLookBackIntervals",
+                "candlestickPatternFilterType"
+              ]
+            },
+            "description": "Candlestick pattern filters. Each: {candlestickPatternFilterType, candlestickLookBackIntervals(1-5)}. E.g. CD_HAMMER, CD_DOJI, CD_MORNING_STAR."
+          },
+          "analyticsComparisonsFilters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "analyticsComparisonsFilterType": {
+                  "type": "string"
+                },
+                "analyticsComparisonsFilterValue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "analyticsComparisonsFilterType",
+                "analyticsComparisonsFilterValue"
+              ]
+            },
+            "description": "Metric comparison filters. Each: {analyticsComparisonsFilterType, analyticsComparisonsFilterValue(ABOVE|BELOW)}. E.g. LAST_PRICE_VS_SMA200, SMA50_VS_SMA200."
+          },
+          "coinTypeFilter": {
+            "type": "string",
+            "description": "Coin type: REGULAR (default, standard coins), STABLE (stablecoins), LEVERAGED (3x tokens)."
+          },
+          "coinCategoryFilter": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Sector/ecosystem category filter (AND logic). E.g. AI_BIG_DATA, DEFI, MEMES, SOLANA_ECOSYSTEM. Use UPPERCASE_UNDERSCORE format."
+          },
+          "tradingTypeFilter": {
+            "type": "string",
+            "description": "Trading type: ALL, SPOT, PERPETUAL, FUTURES, or FUTURES_OR_PERPETUAL (preferred for any derivative)."
+          },
+          "exchangeFilter": {
+            "type": "string",
+            "description": "Exchange filter. E.g. BINANCE, COINBASE, KRAKEN, OKX, BYBIT."
+          },
+          "athDateBeforeFilter": {
+            "type": "string",
+            "description": "ATH date upper bound. ISO-8601 or natural language (today, last 7 days, etc)."
+          },
+          "athDateAfterFilter": {
+            "type": "string",
+            "description": "ATH date lower bound. ISO-8601 or natural language (today, last 7 days, etc)."
+          },
+          "percentDownFromAthFilter": {
+            "type": "string",
+            "description": "ATH proximity. BELOW_ATH = near peak, MORE_ATH = far from peak. Format: PRICE_AT_LEAST_{1,5,10,15,20,30}_PERCENT_{BELOW,MORE}_ATH."
+          },
+          "supportResistanceFilter": {
+            "type": "string",
+            "description": "Support/resistance filter. Values: APPROACHING_SUPPORT, BROKEN_BELOW_SUPPORT, APPROACHING_RESISTANCE, BROKEN_ABOVE_RESISTANCE."
+          },
+          "supportResistanceLookBackIntervals": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Support/resistance look-back window (1-5) for broken/crossover filters. Default 5. Ignored for approaching filters."
+          },
+          "weekAnalytics52Filter": {
+            "type": "string",
+            "description": "52-week filter. E.g. HIGH_52W_IN_THE_LAST_2DAYS, LAST_PRICE_WITHIN_{5,10,20}PERCENT_OF_{HIGH,LOW}_52W."
+          },
+          "rsiDivergenceFilter": {
+            "type": "string",
+            "description": "RSI divergence: BULLISH (bottom), BEARISH (top), HIDDEN_BULLISH (uptrend), HIDDEN_BEARISH (downtrend)."
+          },
+          "newLowInLastPeriodFilter": {
+            "type": "string",
+            "description": "New low look-back: PERIODS_5/10/15/20/30/50. Short = recent crash, long = major breakdown."
+          },
+          "newHighInLastPeriodFilter": {
+            "type": "string",
+            "description": "New high look-back: PERIODS_5/10/15/20/30/50. Short = fast momentum, long = major breakout."
+          },
+          "macdFilter": {
+            "type": "string",
+            "description": "MACD state: BUY (above signal) or SELL (below signal). Combine with macdHistogramFilter."
+          },
+          "macdHistogramFilter": {
+            "type": "string",
+            "description": "MACD histogram momentum: H1_UP/H2_UP (bullish) or H1_DOWN/H2_DOWN (bearish). H2 = confirmed."
+          },
+          "minimumMarketCapValue": {
+            "type": "number",
+            "format": "double",
+            "description": "Optional filter: minimum market cap value filter e.g. 100000."
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination of result, zero-based page index of the results, default is zero (0)"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of records per page to be returned, default is 25. Values above 100 are capped at 100."
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n        Sort by metric. Default is 'MARKET_CAP'. Only these properties are allowed: \n        LAST_PRICE, MARKET_CAP, DOLLAR_VOLUME, VOLUME, VOLUME_RELATIVE,\n        PRICE_CHANGE_{1D|1W|1M|3M|6M|1Y|YTD}, PERFORMANCE, HIGH, LOW, HIGH_52W,\n        LOW_52W, PERCENTAGE_DOWN_FROM_52_WEEK_HIGH, PERCENTAGE_ABOVE_FROM_52_WEEK_LOW,\n        ATH, DAYS_SINCE_ATH, ATR, TR_VS_ATR, OBV, OBV_TREND, CIRCULATING_SUPPLY,\n        SMA{5|10|20|30|50|100|200} (+ _TREND), EMA{9|12|13|26|50|100|200} (+ _TREND),\n        RSI{9|14|25}, RSI_DIVERGENCE, STOCH, STOCH_SLOW, STOCH_RSI, CCI20, ADX, MOM,\n        MACD, MACD_SIGNAL_LINE, WILLIAMS, BULL_POWER, BEAR_POWER, ULTIMATE_OSCILLATOR,\n        BOLLINGER_BAND_LOWER, BOLLINGER_BAND_UPPER, VWMA20, TIME, AGE.\n    "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "Determines whether the sorting should be in ascending or descending order. Valid options are ASC (for ascending) and DESC (for descending). If not specified, the default is DESC (descending)."
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Crypto Screener",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "screener_getAltfinsScreenerDataByPresetFilter",
+      "title": "Crypto Screener by Preset Filter",
+      "description": "\n        Get a screener market-data snapshot filtered by a pre-set altFINS screener strategy.\n        Runs one of 150+ curated screener presets (trend, momentum, chart/candlestick\n        patterns, oscillators, fundamentals, market-segment categories) against the\n        altFINS crypto universe and returns the matching coins together with the\n        requested market-data values.\n        \n        Use this tool when the user wants to discover coins matching a well-known\n        trading strategy or technical setup (e.g. \"resistance breakouts\", \"oversold\n        RSI in an uptrend\", \"bullish MACD crossover\", \"approaching support\", \"new\n        1-month high\", \"DeFi tokens with growing TVL\") and does not want to assemble\n        the underlying numeric / signal / pattern filters by hand.\n\n        ### REQUIRED FIRST STEP:\n        'presetFilterType' must be an EXACT preset id. Call screener_getPresetFilterTypes\n        first to get the full list of valid ids \u2014 do NOT guess an id from the naming\n        convention, and do NOT invent one. An unknown id is rejected.\n\n        ### RELATED TOOLS:\n        - screener_getPresetFilterTypes \u2192 the discovery tool for the 'presetFilterType' argument\n        - screener_getAltfinsScreenerData \u2192 use for fully custom multi-filter queries\n          (numericFilters, signalFilters, crossAnalyticFilters, \u2026) when no preset matches\n\n        Results are paginated; sortable by any supported screener metric. The default\n        sort is MARKET_CAP descending.\n    ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "timeInterval": {
+            "type": "string",
+            "description": "\n        Candle interval used to evaluate the preset filter and compute the returned\n        market-data values. Only these values are allowed: MINUTES15, HOURLY, HOURS4, HOURS12, DAILY.\n        Default time interval is DAILY. Use a shorter interval for intraday setups, DAILY for swing/position views.\n    "
+          },
+          "presetFilterType": {
+            "type": "string",
+            "description": "\n        The preset screener strategy to evaluate. Each value encodes a complete,\n        pre-built filter recipe; pick the one that matches the user's intent.\n\n        MUST be one of the 160+ exact ids returned by screener_getPresetFilterTypes.\n        Call that tool first and copy an id verbatim. The prefix legend below only tells\n        you WHICH category to look in \u2014 it is NOT a recipe for constructing ids, and ids\n        assembled by hand from it will be rejected.\n\n        Naming convention (prefix \u2192 category):\n        SR_*   Support / Resistance levels (breakouts, approaches, trend-filtered variants)\n        SB_*   Setups & signals (pullbacks, momentum, new highs/lows, near-ATH)\n        TCP_*  Technical chart patterns (triangles, channels, H&S, wedges, flags\u2026)\n        CP1_*  Single-candle patterns (hammer, doji, shooting star\u2026)\n        CP2_*  Two-candle patterns (engulfing, harami, piercing line\u2026)\n        CP3_*  Three-candle patterns (morning/evening star, three soldiers/crows\u2026)\n        TM_*   Trend & momentum (MA ribbons, MA crossovers, RVOL, OBV, ATR ranges)\n        OSC_*  Oscillator extremes (oversold RSI/Stoch/Williams, bull/bear power)\n        DIV_*  RSI divergences (bullish, hidden bullish)\n        FUND_* On-chain fundamentals (TVL, revenue, MCap ratios)\n        CAT_*  Market-segment categories (DeFi, Gaming, Metaverse, Stablecoins, NFTs, Memes)\n    \n        Example ids: \"SR_RESISTANCE_BREAKOUT\", \"SR_RESISTANCE_BREAKOUT_UPTREND\",\n        \"SR_SUPPORT_BREAKOUT_DOWNTREND\", \"SB_OVERSOLD_UPTREND\", \"TCP_ASCENDING_TRIANGLE\",\n        \"OSC_OVERSOLD_RSI14\", \"CAT_DEFI\" \u2014 these are only 7 of the 160+ available ids.\n    "
+          },
+          "displayTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Metrics to return in additionalData. Pass ONLY parent enum keys (UPPERCASE_UNDERSCORE).\n           Composite metrics return NESTED objects in the response \u2014 never pass the inner leaf keys back as displayTypes:\n             - SUPPORT      \u2192 {SUPPORT_1 ... SUPPORT_6}          pass \"SUPPORT\", not \"SUPPORT_1\"\n             - RESISTANCE   \u2192 {RESISTANCE_1 ... RESISTANCE_6}    pass \"RESISTANCE\", not \"RESISTANCE_1\"\n             - MACD         \u2192 {line, signal, histogram}              pass \"MACD\", not \"MACD_HISTOGRAM\" or \"MACD_HISTOGRAM_TREND\"\n          SUPPORT/RESISTANCE values are chart-aligned key levels: up to 3 newest calculated S&R levels plus up to 3 nearby\n          ATH/HIGH_52W/LOW_52W levels when within range of last price. ATH and HIGH_52W default to resistance; LOW_52W\n          defaults to support. Recent closes can reclassify those defaults only when all required closes are on the other side.\n          Levels are returned sorted ascending.\n           Invalid/stale levels are hidden. Missing SUPPORT_1..6 / RESISTANCE_1..6 slots use \"-\" as the empty value.\n           Common valid values:\n             Trend ratings: SHORT_TERM_TREND, MEDIUM_TERM_TREND, LONG_TERM_TREND (and *_CHANGE variants)\n             Momentum: RSI9, RSI14, RSI25, MACD, MACD_SIGNAL_LINE, STOCH, STOCH_SLOW, STOCH_RSI, CCI20, ADX, MOM, WILLIAMS, RSI_DIVERGENCE\n             Levels: SUPPORT, RESISTANCE, ATH, HIGH, LOW, HIGH_52W, LOW_52W, BOLLINGER_BAND_LOWER, BOLLINGER_BAND_UPPER\n             Moving averages: SMA20, SMA50, SMA100, SMA200, EMA12, EMA26, EMA50, EMA200 (and *_TREND variants)\n             Volume: VOLUME, VOLUME_RELATIVE, DOLLAR_VOLUME, OBV, OBV_TREND, VWMA20\n             Performance: PRICE_CHANGE_1D, PRICE_CHANGE_1W, PRICE_CHANGE_1M, PRICE_CHANGE_3M, PRICE_CHANGE_1Y, ATH_PERCENT_DOWN, DAYS_SINCE_ATH\n             Market: MARKET_CAP, CIRCULATING_SUPPLY, ATR, TR_VS_ATR\n           Do NOT use LAST_PRICE / CURRENT_PRICE (already in the lastPrice field) or MACD_HISTOGRAM.\n           Call screener_getAltfinsScreenerDataTypes for the full enumerated list."
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination of result, zero-based page index of the results, default is zero (0)"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of records per page to be returned, default is 25. Values above 100 are capped at 100."
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n        Sort by metric. Default is 'MARKET_CAP'. Only these properties are allowed: \n        LAST_PRICE, MARKET_CAP, DOLLAR_VOLUME, VOLUME, VOLUME_RELATIVE,\n        PRICE_CHANGE_{1D|1W|1M|3M|6M|1Y|YTD}, PERFORMANCE, HIGH, LOW, HIGH_52W,\n        LOW_52W, PERCENTAGE_DOWN_FROM_52_WEEK_HIGH, PERCENTAGE_ABOVE_FROM_52_WEEK_LOW,\n        ATH, DAYS_SINCE_ATH, ATR, TR_VS_ATR, OBV, OBV_TREND, CIRCULATING_SUPPLY,\n        SMA{5|10|20|30|50|100|200} (+ _TREND), EMA{9|12|13|26|50|100|200} (+ _TREND),\n        RSI{9|14|25}, RSI_DIVERGENCE, STOCH, STOCH_SLOW, STOCH_RSI, CCI20, ADX, MOM,\n        MACD, MACD_SIGNAL_LINE, WILLIAMS, BULL_POWER, BEAR_POWER, ULTIMATE_OSCILLATOR,\n        BOLLINGER_BAND_LOWER, BOLLINGER_BAND_UPPER, VWMA20, TIME, AGE.\n    "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "Determines whether the sorting should be in ascending or descending order. Valid options are ASC (for ascending) and DESC (for descending). If not specified, the default is DESC (descending)."
+          }
+        },
+        "required": [
+          "presetFilterType"
+        ]
+      },
+      "annotations": {
+        "title": "Crypto Screener by Preset Filter",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "screener_getAltfinsScreenerDataTypes",
+      "title": "Screener Data Types",
+      "description": "\n            Fetches all available value types (field identifiers) supported by the altFINS \n            crypto screener. Each value type represents a metric that can be used as a \n            display column or filter criterion in screener_getAltfinsScreenerData.\n    \n            ### WHAT IS RETURNED:\n            - A list of all valid screener value type identifiers\n            - Each entry includes:\n              - identifier  \u2192 the exact string to use in 'displayTypes' or 'numericFilters' \n                              in screener_getAltfinsScreenerData\n              - displayName \u2192 human-readable label (e.g. \"RSI 14\", \"Market Cap\", \"SMA 50\")\n            - Examples: RSI14, MACD, SMA50, MARKET_CAP, VOLUME, PRICE_CHANGE_1D\n    \n            ### WHEN TO USE THIS TOOL:\n            - User asks \"what fields or metrics are available in the screener?\"\n            - User asks \"what can I filter or display in altFINS screener?\"\n            - You are unsure whether a specific displayType or numericFilter value is valid\n              before calling screener_getAltfinsScreenerData \u2014 use this tool to verify first\n            - User wants to explore all available screener metrics before choosing which to use\n    \n            ### DO NOT USE THIS TOOL WHEN:\n            - You already know the valid displayType or numericFilter values you need\n              \u2192 call screener_getAltfinsScreenerData directly without discovery step\n            - User wants actual screener results or coin data \n              \u2192 use screener_getAltfinsScreenerData instead\n            - User wants analytics indicator types \n              \u2192 use analytics_getAnalyticsTypes instead (different set of types)\n    \n            ### RELATIONSHIP TO OTHER TOOLS:\n            - This is a DISCOVERY tool for screener_getAltfinsScreenerData\n            - The identifier values returned here are valid inputs for:\n              - 'displayTypes' parameter in screener_getAltfinsScreenerData\n              - 'numericFilterType' field within 'numericFilters' in screener_getAltfinsScreenerData\n            - Typical workflow: call this tool once to discover valid identifiers,\n              then use them in screener_getAltfinsScreenerData in the same session\n    \n            ### DIFFERENCE FROM analytics_getAnalyticsTypes:\n            - This tool       \u2192 identifiers for screener_getAltfinsScreenerData filters/display\n            - getAnalyticsTypes \u2192 identifiers for getHistoryAnalyticsData analyticsType param\n            - These are DIFFERENT sets \u2014 do not mix them across tools\n    \n            ### IMPORTANT:\n            - This tool takes no meaningful input \u2014 results are the same regardless of input\n            - Results are static \u2014 the list of screener value types does not change between calls\n            - No need to call this tool repeatedly in the same session\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "title": "Screener Data Types",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "signal_feed_data",
+      "title": "Trading Signal Feed",
+      "description": "\n            Fetches trading signals generated by the altFINS platform.\n            Use this tool when the user wants to:\n            - Find new trade opportunities (bullish or bearish) for specific crypto assets\n            - Filter signals by asset symbols, signal types, or signal direction (BULLISH / BEARISH)\n            - Browse recent or historical signal activity within a date range\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "\n                A list of cryptocurrency symbols to filter the results (e.g., [\"BTC\", \"ETH\", \"SOL\"]). \n        \n                ### USAGE RULES:\n                - Provide symbols as an array of exact uppercase strings.\n                - **Single Asset:** Pass a list with one item, e.g., [\"BTC\"].\n                - **Multiple Assets:** Pass all relevant symbols, e.g., [\"BTC\", \"ETH\", \"ADA\"].\n                - **Global Search:** Omit this parameter or provide an empty list to load data for all available symbols.\n            "
+          },
+          "signals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "\n                Filter by signal type keys. Leave empty to include ALL signal types.\n        \n                TREND signals:\n                  UP_DOWN_TREND, MOMENTUM_UP_DOWN_TREND, SIGNALS_SUMMARY_STRONG_UP_DOWN_TREND,\n                  SIGNALS_SUMMARY_SHORT_TERM_TREND_UPGRADE_DOWNGRADE\n                \n                MOMENTUM signals:\n                  FRESH_MOMENTUM_MACD_SIGNAL_LINE_CROSSOVER, EARLY_MOMENTUM_MACD_HISTOGRAM_INFLECTION,\n                  MOMENTUM_RSI_CONFIRMATION, EMA_12_50_CROSSOVERS, UP_DOWN_TREND_AND_FRESH_MOMENTUM_INFLECTION\n                \n                PULLBACK signals:\n                  PULLBACK_UP_DOWN_TREND, PULLBACK_UP_DOWN_TREND_1W\n                \n                SUPPORT / RESISTANCE signals:\n                  SUPPORT_RESISTANCE_BREAKOUT, SUPPORT_RESISTANCE_APPROACHING,\n                  SUPPORT_RESISTANCE_APPROACHING_OVERSOLD, SIGNALS_SUMMARY_HORIZONTAL_SUPPORT,\n                  SIGNALS_SUMMARY_HORIZONTAL_RESISTANCE\n                \n                CANDLESTICK PATTERN signals:\n                  SIGNALS_SUMMARY_HAMMER, SIGNALS_SUMMARY_INVERTED_HAMMER, SIGNALS_SUMMARY_SHOOTING_STAR,\n                  SIGNALS_SUMMARY_DOJI, SIGNALS_SUMMARY_DRAGONFLY_DOJI, SIGNALS_SUMMARY_DRAGONFLY_DOJI_V2,\n                  SIGNALS_SUMMARY_GRAVESTONE_DOJI, SIGNALS_SUMMARY_GRAVESTONE_DOJI_V2,\n                  SIGNALS_SUMMARY_SPINNING_TOP, SIGNALS_SUMMARY_HANGING_MAN,\n                  SIGNALS_SUMMARY_ENGULFING, SIGNALS_SUMMARY_HARAMI,\n                  SIGNALS_SUMMARY_PIERCING_LINE, SIGNALS_SUMMARY_DARK_CLOUD_COVER,\n                  SIGNALS_SUMMARY_MORNING_STAR, SIGNALS_SUMMARY_MORNING_DOJI_STAR,\n                  SIGNALS_SUMMARY_EVENING_STAR, SIGNALS_SUMMARY_EVENING_DOJI_STAR,\n                  SIGNALS_SUMMARY_ABANDONED_BABY, SIGNALS_SUMMARY_KICKER,\n                  SIGNALS_SUMMARY_THREE_WHITE_SOLDIERS, SIGNALS_SUMMARY_THREE_BLACK_CROWS,\n                  SIGNALS_SUMMARY_THREE_INSIDE_UP, SIGNALS_SUMMARY_THREE_INSIDE_DOWN,\n                  SIGNALS_SUMMARY_THREE_OUTSIDE_UP, SIGNALS_SUMMARY_THREE_OUTSIDE_DOWN,\n                  SIGNALS_SUMMARY_THREE_LINE_STRIKE, SIGNALS_SUMMARY_CONSECUTIVE_CANDLES,\n                  SIGNALS_SUMMARY_TWEEZER_TOP, SIGNALS_SUMMARY_TWEEZER_BOTTOM\n                \n                CHART PATTERN signals:\n                  SIGNALS_SUMMARY_HEAD_AND_SHOULDERS, SIGNALS_SUMMARY_INVERSE_HEAD_AND_SHOULDERS,\n                  SIGNALS_SUMMARY_DOUBLE_TOP, SIGNALS_SUMMARY_DOUBLE_BOTTOM,\n                  SIGNALS_SUMMARY_TRIPLE_TOP, SIGNALS_SUMMARY_TRIPLE_BOTTOM,\n                  SIGNALS_SUMMARY_ASCENDING_TRIANGLE, SIGNALS_SUMMARY_DESCENDING_TRIANGLE,\n                  SIGNALS_SUMMARY_TRIANGLE, SIGNALS_SUMMARY_CHANNEL_UP, SIGNALS_SUMMARY_CHANNEL_DOWN,\n                  SIGNALS_SUMMARY_FLAG, SIGNALS_SUMMARY_PENNANT,\n                  SIGNALS_SUMMARY_RISING_WEDGE, SIGNALS_SUMMARY_FALLING_WEDGE,\n                  SIGNALS_SUMMARY_RECTANGLE, SIGNALS_SUMMARY_TRADING_RANGE, SIGNALS_SUMMARY_TRADING_RANGE_V2,\n                  SIGNALS_SUMMARY_PATTERN_BREAKOUTS, SIGNALS_SUMMARY_PATTERN_BREAKOUTS_UPTREND_DOWNTREND,\n                  SIGNALS_SUMMARY_EMERGING_PATTERNS\n                \n                HARMONIC PATTERN signals:\n                  SIGNALS_SUMMARY_GARTLEY, SIGNALS_SUMMARY_BUTTERFLY,\n                  SIGNALS_SUMMARY_ABCD, SIGNALS_SUMMARY_DRIVE\n                \n                MOVING AVERAGE signals:\n                  SIGNALS_SUMMARY_SMA_5_10, SIGNALS_SUMMARY_SMA_10_20, SIGNALS_SUMMARY_SMA_20_30,\n                  SIGNALS_SUMMARY_SMA_30_50, SIGNALS_SUMMARY_SMA_50_200, SIGNALS_SUMMARY_SMA_100_200,\n                  SIGNALS_SUMMARY_EMA_9_12, SIGNALS_SUMMARY_EMA_12_26, SIGNALS_SUMMARY_EMA_26_50,\n                  SIGNALS_SUMMARY_EMA_50_100, SIGNALS_SUMMARY_EMA_50_200, SIGNALS_SUMMARY_EMA_100_200,\n                  SIGNALS_SUMMARY_MA_RIBBON\n                \n                PRICE vs MOVING AVERAGE signals:\n                  SIGNALS_SUMMARY_PRICE_SMA_5_10, SIGNALS_SUMMARY_PRICE_SMA_10_20,\n                  SIGNALS_SUMMARY_PRICE_SMA_30_50, SIGNALS_SUMMARY_PRICE_SMA_100_200,\n                  SIGNALS_SUMMARY_PRICE_EMA_9_12, SIGNALS_SUMMARY_PRICE_EMA_12_26,\n                  SIGNALS_SUMMARY_PRICE_EMA_50_100, SIGNALS_SUMMARY_PRICE_EMA_100_200\n                \n                OSCILLATOR / MOMENTUM INDICATOR signals:\n                  SIGNALS_SUMMARY_RSI_9, SIGNALS_SUMMARY_RSI_14, SIGNALS_SUMMARY_RSI_25,\n                  SIGNALS_SUMMARY_RSI_DIVERGENCE, SIGNALS_SUMMARY_STOCH, SIGNALS_SUMMARY_STOCH_RSI,\n                  SIGNALS_SUMMARY_WILLIAMS, SIGNALS_SUMMARY_OBV_TREND,\n                  SIGNALS_SUMMARY_OVERSOLD_OVERBOUGHT_MOMENTUM, SIGNALS_SUMMARY_OVERSOLD_OVERBOUGHT_UP_DOWN,\n                  SIGNALS_SUMMARY_VERY_OVERSOLD_OVERBOUGHT\n                \n                VOLATILITY / VOLUME signals:\n                  SIGNALS_SUMMARY_BOLLBAND_PRICE_UPPER_LOWER, SIGNALS_SUMMARY_TR_ATR_1x,\n                  SIGNALS_SUMMARY_TR_ATR_2x, SIGNALS_SUMMARY_TR_ATR_3x, SIGNALS_SUMMARY_TR_ATR_4x,\n                  SIGNALS_SUMMARY_TR_ATR_5x, SIGNALS_SUMMARY_BIG_MOVEMENT,\n                  SIGNALS_SUMMARY_RVOL_SPIKE_IN_UPTREND_DOWNTREND, SIGNALS_SUMMARY_UNUSUAL_VOLUME_GAINERS_DECLINERS\n                \n                ATH / LOCAL HIGH-LOW signals:\n                  SIGNALS_SUMMARY_RECENT_ATH, SIGNALS_SUMMARY_RECENT_ATH_NOT_OVERBOUGHT,\n                  SIGNALS_SUMMARY_WITHIN_5_PERCENT_ATH, SIGNALS_SUMMARY_WITHIN_5_PERCENT_ATH_NOT_OVERBOUGHT,\n                  SIGNALS_SUMMARY_WITHIN_5_PERCENT_ATH_BULLISH_MACD_HISTO,\n                  SIGNALS_SUMMARY_WITHIN_5_PERCENT_ATH_BULLISH_MACD_CROSS,\n                  SIGNALS_SUMMARY_RECENT_ATH_PULLBACK_MACD_INFLECT,\n                  SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_5_PERIODS, SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_10_PERIODS,\n                  SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_15_PERIODS, SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_20_PERIODS,\n                  SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_30_PERIODS, SIGNALS_SUMMARY_NEW_LOCAL_HIGH_LOW_50_PERIODS\n                \n                FIBONACCI signals:\n                  SIGNALS_SUMMARY_POINT_RETRACEMENT, SIGNALS_SUMMARY_POINT_EXTENSION\n                \n                FUNDAMENTALS signals:\n                  SIGNALS_SUMMARY_FUNDAMENTALS_MCAP_TR, SIGNALS_SUMMARY_FUNDAMENTALS_MCAP_TVL,\n                  SIGNALS_SUMMARY_FUNDAMENTALS_TVL_ABOVE, SIGNALS_SUMMARY_FUNDAMENTALS_TVL_GROWTH,\n                  SIGNALS_SUMMARY_FUNDAMENTALS_TR_GROWTH, SIGNALS_SUMMARY_FUNDAMENTALS_ANNUALIZED_TR_ABOVE\n                \n                MARKET SCREENER signals:\n                  SIGNALS_SUMMARY_TOP_GAINERS, SIGNALS_SUMMARY_TOP_LOSERS\n            "
+          },
+          "signalDirection": {
+            "type": "string",
+            "description": "\n                (Optional) Filter by signal direction.\n                - \"BULLISH\" \u2014 return only bullish (buy) signals\n                - \"BEARISH\" \u2014 return only bearish (sell) signals\n                - omit or null \u2014 return both directions\n            "
+          },
+          "from": {
+            "type": "string",
+            "description": "\n                (Optional) Start of the time range. ISO-8601 UTC datetime.\n                Example: \"2025-01-01T00:00:00Z\"\n                If omitted, no lower bound is applied.\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.00Z\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n            "
+          },
+          "to": {
+            "type": "string",
+            "description": "\n                (Optional) End of the time range. ISO-8601 UTC datetime.\n                Example: \"2025-12-31T23:59:59Z\"\n                If omitted, no upper bound is applied.\n                \n                ### ACCEPTED FORMATS:\n                - ISO 8601: 2025-10-28T00:00:00.00Z\n                - Natural language: 'today', 'yesterday', 'this week', 'this month', 'this year',\n                  'last 7 days', 'last 30 days', 'last 90 days', 'last 12 months',\n                  'last week', 'last month', 'last year'\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                (Optional) page number for pagination, starting at 0\n            \""
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                (optional) number of results per page, default is 25.\n            \""
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                (Optional) field name to sort results by, e.g. \"timestamp\"\n            \""
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Determines whether the sorting should be in ascending or descending order. \n                Valid options are ASC (for ascending) and DESC (for descending). \n                If not specified, the default is DESC (descending).\n            "
+          }
+        },
+        "required": [
+          "signals"
+        ]
+      },
+      "annotations": {
+        "title": "Trading Signal Feed",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "technicalAnalysis_getTechnicalAnalysisData",
+      "title": "Technical Analysis",
+      "description": "\n            Returns a structured technical analysis summary including curated trade setups \n            for cryptocurrency assets, prepared by professional analysts on the altFINS platform.\n\n            ### WHAT IS RETURNED:\n            - Trade setup guidance with entry/exit context\n            - Proprietary trend scoring (short, medium, long term)\n            - Momentum assessment using MACD and RSI\n            - Detection of major price patterns (triangles, wedges, channels, head & shoulders, etc.)\n            - Identification of key support and resistance zones\n            - Near-term outlook and pattern stage\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks for \"technical analysis\", \"trade setup\", \"chart analysis\", or \"price patterns\"\n            - User asks \"is [coin] bullish or bearish?\"\n            - User asks \"what is the outlook for [coin]?\"\n            - User wants a professional analyst view on a specific coin or the whole market\n\n            ### COVERAGE:\n            Curated setups exist only for the coins altFINS analysts cover, so for many symbols\n            the result is empty or carries STATUS=NO_TRADE_SETUP_FOUND. That means no analyst\n            setup exists for the symbol, not that altFINS has no data on it: the raw indicators\n            for the same symbol are available from 'screener_getAltfinsScreenerData', with\n            timeInterval=DAILY and displayTypes such as RSI14, MACD, SHORT_TERM_TREND,\n            MEDIUM_TERM_TREND, SMA50, SUPPORT and RESISTANCE.\n        ",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "\n                Cryptocurrency symbol to retrieve technical analysis for.\n            \n                ### FORMAT:\n                - Single symbol only, uppercase (e.g. BTC, ETH, SOL)\n                - Leave empty or null to retrieve analysis for ALL available symbols\n            \n                ### EXAMPLES:\n                - User asks \"technical analysis for Bitcoin\" \u2192 symbol=BTC\n                - User asks \"trade setup for Ethereum\"      \u2192 symbol=ETH\n                - User asks \"show all trade setups\"         \u2192 symbol=null\n            \n                \u26a0\ufe0f Use uppercase ticker symbols only. Do not use full names (e.g. use BTC not Bitcoin).\n                \u26a0\ufe0f Do not pass multiple symbols here \u2014 call this tool once per symbol if needed.\n            "
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Page number for pagination, zero-based index. Default is 0 (first page)."
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "\n                Number of records per page. Default is 25. Maximum recommended is 50.\n            \n            \ud83d\udca1 TIP: Use a lower value (10-20) for single symbol queries.\n                Use a higher value (50) only when fetching all trade setups for a broad market overview.\n            "
+          },
+          "sortField": {
+            "type": "string",
+            "description": "\n                Field to sort results by.\n            \n                ### ALLOWED VALUES (use exact values, case-sensitive):\n                - updatedDate    \u2192 sort by when the analysis was last updated (default)\n                - symbol         \u2192 sort alphabetically by coin ticker\n                - friendlyName   \u2192 sort alphabetically by coin full name\n                - nearTermOutlook \u2192 sort by bullish/bearish outlook score\n                - patternType    \u2192 sort by chart pattern type (e.g. triangle, wedge)\n                - patternStage   \u2192 sort by how advanced the pattern is (early vs mature)\n                - description    \u2192 sort by description text\n                \n                ### SELECTION GUIDE:\n                - \"most recently updated setups\"     \u2192 updatedDate (default)\n                - \"most bullish setups\"              \u2192 nearTermOutlook + sortDirection=DESC\n                - \"setups by pattern type\"           \u2192 patternType\n                - \"most advanced/mature patterns\"    \u2192 patternStage + sortDirection=DESC\n                \n                \u26a0\ufe0f Only these exact values are accepted. Any other value will be ignored.\n            "
+          },
+          "sortDirection": {
+            "type": "string",
+            "description": "\n                Sort order direction.\n            \n                ### ALLOWED VALUES:\n                - ASC  \u2192 ascending (oldest / lowest first)\n                - DESC \u2192 descending (newest / highest first, default)\n            "
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "title": "Technical Analysis",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getUserPortfolio",
+      "title": "My Portfolio",
+      "description": "\n            Returns the authenticated user's full crypto portfolio from the altFINS platform.\n            The portfolio contains all cryptocurrencies the user owns across connected CEX and DEX exchanges,\n            including current balances, asset symbols, and wallet details.\n\n            ### WHEN TO USE THIS TOOL:\n            - User asks about \"my portfolio\", \"my holdings\", \"my coins\", \"my balance\", or \"what do I own\"\n            - User wants to know which cryptocurrencies they currently hold\n            - User asks \"how much BTC/ETH/SOL do I have?\"\n            - User wants a portfolio overview before making trading decisions\n\n            ### WHAT IS RETURNED:\n            - List of wallets, each containing the exchange/DEX name, asset symbol, and current balance\n            - Covers both CEX (e.g. Binance, Coinbase) and DEX wallets connected to the user's altFINS account\n\n            ### COMBINE WITH OTHER TOOLS FOR RICHER ANALYSIS:\n            - After fetching the portfolio, call `screener_getAltfinsScreenerData` with the returned symbols\n              to get technical analysis (RSI, MACD, trends) for the user's held assets\n            - Call `getCryptoCalendarEvents` with the returned symbols in assetSymbols to find upcoming\n              events for the user's portfolio coins\n            - Call `technicalAnalysis_getTechnicalAnalysisData` with the returned symbols to get\n              curated trade setups for coins the user already holds\n\n            ### IMPORTANT:\n            - This tool requires the user to have connected at least one exchange or wallet to altFINS\n            - Returns an empty list if no wallets are connected\n            - Does NOT return trade history or PnL \u2014 only current balances\n        \"",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "title": "My Portfolio",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

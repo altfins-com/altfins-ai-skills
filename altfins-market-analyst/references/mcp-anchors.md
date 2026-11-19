@@ -1,9 +1,9 @@
 # Validated MCP Anchors
 
-Validated on April 12, 2026.
+Documentation and authenticated native discovery reviewed on 19 November 2026.
 
 Primary snapshot file:
-- [../../docs/validated-surfaces/mcp/documented-surface.json](../../docs/validated-surfaces/mcp/documented-surface.json)
+- [documented-surface.json](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/mcp/documented-surface.json)
 
 ## Official source
 
@@ -60,3 +60,9 @@ The documented surface snapshot currently includes setup guidance for:
 - Use the documented capability families to decide which research route fits the task.
 - If the task requires a capability outside the documented families, call that out explicitly.
 - Keep analysis grounded in returned MCP data, not in generic market assumptions.
+
+## Observed tools
+
+Use `symbols_getAvailableSymbols` for catalogue search and `screener_getPresetFilterTypes` for preset metadata when the current connection exposes them. `analytics_getAllLatestHistoryData`, `news_getCryptoNewsSources` and `news_getCryptoNewsMessages` provide latest metrics, news sources and richer crypto-news filters. Calendar accepts explicit symbol CSV. Portfolio is an opt-in account read. This capture contained no chart-pattern or AI setup tool. Consult the [dated input schemas](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/mcp/tools-list.json).
+
+Direct clients use an API key. The hosted OAuth connectors for Claude and ChatGPT were described as in review on the observation date.

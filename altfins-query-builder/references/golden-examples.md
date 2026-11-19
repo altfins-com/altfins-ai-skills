@@ -51,13 +51,13 @@ What are the best coins right now?
 ### Golden output
 
 ```text
-Best matching category: find coins
+Best matching category: find instruments
 Validated target family: market screening
 Safest output mode: interface-neutral research brief
 
 The request is still underspecified. Before turning this into a concrete CLI or MCP request, clarify or record these missing inputs:
 - timeframe
-- coin universe
+- instrument universe
 - what “best” means for this task: momentum, technical setups, signals, or context-driven opportunities
 
 Suggested brief:
@@ -130,3 +130,7 @@ Reason:
 - it chooses the correct output mode
 - it gives a reusable prompt with strong evidence-label discipline
 - it stays conservative about MCP runtime details
+
+## Comparing Apple and EUR/USD
+
+“Compare Apple common stock and EUR/USD on daily RSI” maps to catalogue discovery followed by RSI14 history for `CS_AAPL` and `FX_EURUSD`. If the user only says “Apple,” check whether they mean the equity or tokenized exposure and show the catalogue candidates. Carry the UTC window and the daily interval through both queries.

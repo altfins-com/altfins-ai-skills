@@ -80,7 +80,7 @@ Start here for the core contract:
 - [references/translation-playbook.md](references/translation-playbook.md)
 - [references/example-translations.md](references/example-translations.md)
 - [references/golden-examples.md](references/golden-examples.md)
-- [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md)
+- [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/README.md)
 
 Reusable handoff templates:
 - [assets/request-brief-template.md](assets/request-brief-template.md)
@@ -88,6 +88,6 @@ Reusable handoff templates:
 
 ## When to Use Another Skill Instead
 
-Use [../altfins-market-researcher/README.md](../altfins-market-researcher/README.md) when the request is already concrete enough that the next step is choosing or shaping the exact `af` CLI command.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-market-researcher/README.md) when the request is already concrete enough that the next step is choosing or shaping the exact `af` CLI command.
 
-Use [../altfins-market-analyst/README.md](../altfins-market-analyst/README.md) when the request is already an analysis task and the user needs evidence-backed interpretation rather than request translation.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-market-analyst/README.md) when the request is already an analysis task and the user needs evidence-backed interpretation rather than request translation.

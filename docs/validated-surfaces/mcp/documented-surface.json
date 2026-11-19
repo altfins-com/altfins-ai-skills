@@ -4,8 +4,10 @@
   "endpoint": "https://mcp.altfins.com/mcp",
   "transport": "streamable-http",
   "authentication": {
-    "header": "X-Api-Key",
-    "scheme": "api-key"
+    "direct_clients": {
+      "header": "X-Api-Key"
+    },
+    "hosted_connectors": "OAuth. Official docs list the Claude connector and ChatGPT plugin as in review."
   },
   "documented_capability_families": [
     "Screener",
@@ -22,7 +24,6 @@
     "VS Code (GitHub Copilot)",
     "Microsoft Copilot Studio"
   ],
-  "runtime_tool_names_confirmed": false,
-  "note": "Use a connected MCP client to discover actual runtime tool identifiers before naming or calling tools in a response.",
-  "validated_on": "2026-04-12"
+  "note": "See tools-list.json for observed tools and input schemas. Discover tools on the current connection.",
+  "validated_on": "2026-11-19"
 }

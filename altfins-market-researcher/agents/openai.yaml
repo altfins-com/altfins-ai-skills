@@ -1,7 +1,7 @@
 interface:
   display_name: "AltFINS Market Researcher"
   short_description: "Repeatable altFINS CLI research workflows"
-  default_prompt: "Use $altfins-market-researcher to plan a repeatable altFINS CLI research workflow for this market question."
+  default_prompt: "Use $altfins-market-researcher to export daily EUR/USD RSI as CSV with the observation window and source."
 
 policy:
   allow_implicit_invocation: false

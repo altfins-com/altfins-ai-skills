@@ -7,14 +7,18 @@ Usage:
 Available Commands:
   analytics   Historical analytics and metric metadata
   auth        Manage altFINS API key configuration
+  calendar    Crypto calendar event queries
   commands    List commands with metadata for agents and automation
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   markets     Screener market data queries
   news        News summary queries
   ohlcv       Snapshot and historical OHLCV data
+  patterns    Chart-pattern queries
+  portfolio   Authenticated user's crypto portfolio
   quota       Inspect current permit quotas
   refs        Reference data and enums
+  setups      Stored and generated AI trade setups for supported coins
   signals     Trading signal feed and metadata
   ta          Curated technical analysis summaries
   tui         Interactive terminal UI

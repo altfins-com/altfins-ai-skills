@@ -50,3 +50,7 @@ Preferred output sections:
 - Do not present probable explanations as confirmed facts.
 - Do not imply an MCP capability unless the tool was actually discovered or documented.
 - Do not turn market analysis into personalized financial advice.
+
+## Compare across sessions
+
+Resolve canonical IDs first. Retrieve the last available OHLCV observation and indicator window separately for each instrument. Align overlapping sessions or report the differing bar dates. Document which instruments and fields a mixed snapshot supplied. Use historical candles for prices at signal detection. Label feed delay and quote retrieval time explicitly.

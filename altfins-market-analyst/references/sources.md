@@ -4,13 +4,13 @@ Use this skill conservatively.
 
 ## Shared starting point
 
-Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) for the shared cross-repository source inventory.
+Start with [validated-sources.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-sources.md) for the shared cross-repository source inventory.
 
 ## Preferred source order
 
 1. User-provided requirements and constraints
-2. Checked-in MCP documented surface snapshot
-3. Connected MCP client discovery in the current session
+2. Connected MCP client discovery in the current session
+3. [Versioned native MCP capture](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/mcp/tools-list.json)
 4. Official altFINS documentation
 5. Verified repository or environment context relevant to the task
 

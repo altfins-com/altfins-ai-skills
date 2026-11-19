@@ -1,6 +1,6 @@
 # AltFINS Market Analyst
 
-`altfins-market-analyst` is the skill to use when you want a structured crypto market analysis built around validated altFINS-facing workflows.
+`altfins-market-analyst` is the skill to use when you want a structured crypto, stock and forex analysis built around validated altFINS-facing workflows.
 
 It is designed for analysis tasks such as:
 - understanding the technical outlook for one coin
@@ -86,6 +86,6 @@ Reusable output templates:
 
 ## When to Use Another Skill Instead
 
-Use [../altfins-market-researcher/README.md](../altfins-market-researcher/README.md) when you need actual `af` CLI commands, export formats, or repeatable research workflows.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-market-researcher/README.md) when you need actual `af` CLI commands, export formats, or repeatable research workflows.
 
-Use [../altfins-query-builder/README.md](../altfins-query-builder/README.md) when the user starts with a vague plain-English request and the first job is to turn it into a clean structured brief or validated request plan.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-query-builder/README.md) when the user starts with a vague plain-English request and the first job is to turn it into a clean structured brief or validated request plan.

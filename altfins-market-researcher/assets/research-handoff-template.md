@@ -3,6 +3,10 @@
 ## Objective
 
 - User goal:
+- Asset class, universe and canonical IDs:
+- CLI version, data source and retrieval time (UTC):
+- Interval, UTC window and sort order:
+- Missing instruments, fields or bars:
 - Why this CLI family fits:
 
 ## Validated Command Family

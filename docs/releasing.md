@@ -37,13 +37,14 @@ python3 scripts/test_release_assets.py
 2. GitHub Actions runs [.github/workflows/release.yml](../.github/workflows/release.yml).
 3. The release workflow creates or updates the GitHub Release and uploads:
    - `altfins-ai-skills-src.tar.gz`
+   - one `.skill.zip` per skill for direct upload
    - `altfins-skills-windows.zip`
    - `altfins-skills.rb`
 4. The same workflow updates `altfins-com/homebrew-tap` by pushing `Formula/altfins-skills.rb`.
 
 ## Required Secret
 
-The tap update step requires this repository secret:
+Automatic tap publication uses the following repository secret. When it is absent, copy the released `altfins-skills.rb` to `Formula/altfins-skills.rb` in the tap, verify the source archive digest and push the formula.
 
 ```text
 HOMEBREW_TAP_GITHUB_TOKEN

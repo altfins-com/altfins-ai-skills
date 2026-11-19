@@ -12,9 +12,10 @@
 
 ## Step 3: Required Slots
 
-- Assets:
+- Requested asset class and universe:
+- Catalogue-confirmed IDs and ambiguous candidates:
 - Timeframe or interval:
-- Date range:
+- UTC start and end:
 - Filters or signal conditions:
 - Desired output style:
 
@@ -33,3 +34,5 @@
 ```text
 # put the final brief, prompt, or command plan here
 ```
+
+Use screener presets for provider strategies, `ta list` for editorial coverage and `setups list` for stored AI material. A request for historical research provides no authorization for generation.

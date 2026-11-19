@@ -9,5 +9,6 @@ When a user needs repeatable `af` CLI research help:
 - read `{{PROJECT_SKILL_ROOT}}/README.md` to confirm the fit
 - read `{{PROJECT_SKILL_ROOT}}/SKILL.md` before proposing commands
 - use the bundled references and assets inside `{{PROJECT_SKILL_ROOT}}/`
-- stay grounded in the validated CLI snapshots bundled with the skill
+- stay grounded in the validated CLI snapshots linked from the skill
 - prefer reproducible commands, safe request shaping, and export-friendly output
+- Check the installed CLI, preserve canonical IDs and record coverage and observation times in exports.

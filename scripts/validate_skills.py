@@ -21,6 +21,7 @@ COMMON_REQUIRED_FILES = [
     ROOT / "docs" / "validated-surfaces" / "cli" / "af-help.txt",
     ROOT / "docs" / "validated-surfaces" / "cli" / "commands.json",
     ROOT / "docs" / "validated-surfaces" / "mcp" / "documented-surface.json",
+    ROOT / "docs" / "validated-surfaces" / "mcp" / "tools-list.json",
     ROOT / "scripts" / "lint_markdown_contracts.py",
     ROOT / "scripts" / "skills.py",
     ROOT / "scripts" / "skills_core.py",
@@ -186,8 +187,8 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
     validate_golden_examples(skill_dir, errors)
 
     sources_file = skill_dir / "references" / "sources.md"
-    if sources_file.exists() and "../../docs/validated-sources.md" not in sources_file.read_text(encoding="utf-8"):
-        errors.append(f"{sources_file}: must link back to ../../docs/validated-sources.md")
+    if sources_file.exists() and not re.search(r"https://github\.com/altfins-com/altfins-ai-skills/blob/v[0-9.]+/docs/validated-sources\.md", sources_file.read_text(encoding="utf-8")):
+        errors.append(f"{sources_file}: must link to the published version of the source inventory")
 
 
 def main(argv: list[str]) -> int:

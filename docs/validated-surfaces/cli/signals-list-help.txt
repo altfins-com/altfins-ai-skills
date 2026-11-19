@@ -11,7 +11,7 @@ Flags:
       --page int           Zero-based page index
       --signals string     Comma-separated signal keys
       --size int           Page size
-      --sort strings       Sort expressions (repeatable)
+      --sort stringArray   Sort expressions (repeatable)
       --stdin-json         Read filter JSON from stdin
       --symbols string     Comma-separated symbol list
       --to string          To date/datetime

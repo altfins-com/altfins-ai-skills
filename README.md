@@ -2,7 +2,7 @@
 
 Reusable AI skills for altFINS workflows.
 
-Install the `altfins-skills` command, copy the skills into your local agent or project, and use them for crypto market analysis, CLI research, and plain-English-to-query translation.
+Install the `altfins-skills` command, copy the skills into your local agent or project, and use them for crypto, stock and forex analysis, CLI research, and plain-English-to-query translation.
 
 ## Install
 
@@ -99,7 +99,7 @@ This repository ships three reusable skills:
 
 ### AltFINS Market Analyst
 
-Use this when you want structured crypto market analysis built around validated altFINS-facing workflows.
+Use this when you want structured crypto, stock and forex analysis built around validated altFINS-facing workflows.
 
 Best for:
 - single-coin technical outlooks
@@ -250,3 +250,7 @@ When adding a new skill:
 - [docs/validated-surfaces/README.md](docs/validated-surfaces/README.md)
 - [docs/skill-validation.md](docs/skill-validation.md)
 - [docs/skill-roadmap.md](docs/skill-roadmap.md)
+
+## Individual skill downloads
+
+Download a skill ZIP for Claude Cowork or another client that accepts packaged skills. The same release includes the Windows installer bundle and Homebrew source archive. [Release assets](https://github.com/altfins-com/altfins-ai-skills/releases/latest)

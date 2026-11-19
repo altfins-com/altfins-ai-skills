@@ -13,6 +13,7 @@ from skills_core import repo_root
 
 EXCLUDES = {
     ".git",
+    "graphify-out",
     "dist",
     "tmp",
     "__pycache__",

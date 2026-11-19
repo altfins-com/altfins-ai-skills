@@ -1,6 +1,6 @@
 ---
 name: altfins-query-builder
-description: Use this skill for translating plain-English trading or research intent into structured prompts, request briefs, or validated altFINS-ready handoffs without overclaiming execution details.
+description: Translate crypto, stock and forex research questions into instrument-specific altFINS requests and CLI or MCP handoffs.
 ---
 
 # AltFINS Query Builder
@@ -35,7 +35,7 @@ If the target interface is not confirmed in the current validated surface, stay 
 
 Start by classifying the request into one plain-English category:
 
-- find coins
+- find instruments
 - check signals
 - look up indicator history
 - look up price candles
@@ -78,10 +78,16 @@ After choosing a beginner-facing category:
 - CLI-ready request plans grounded in validated command snapshots
 - documented-MCP-ready prompts grounded in the documented MCP surface
 
+## Resolve the requested instrument
+
+Record the requested asset class, canonical IDs, universe, interval, UTC window and downstream capability. Use `af refs symbols --search Apple` or the discovered `symbols_getAvailableSymbols` tool. An unspecified Apple investment may mean Apple Inc. (`CS_AAPL`) or a token such as `AAPLX`. Present the catalogue matches when the exposure matters. Resolve EUR/USD to `FX_EURUSD` and carry the exact IDs into the handoff.
+
+Distinguish a provider-defined preset, curated technical analysis, a stored AI setup and a request to generate a new setup. Generation spends one monthly prompt and requires explicit authorization.
+
 ## References
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
-- Read [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
+- Read [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
 - Read [references/target-catalog.md](references/target-catalog.md) for validated target mappings.
 - Read [references/intent-taxonomy.md](references/intent-taxonomy.md) for beginner-facing categories and routing rules.
 - Read [references/translation-playbook.md](references/translation-playbook.md) for a reusable translation flow.

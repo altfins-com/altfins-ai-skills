@@ -1,13 +1,13 @@
 ---
 name: altfins-market-analyst
-description: Use this skill for structured altFINS market analysis workflows, especially when the task involves MCP-driven research planning, evidence gathering, and conservative synthesis.
+description: Analyze crypto, stock and forex evidence from altFINS, including technical outlooks, cross-market comparisons and coverage gaps.
 ---
 
 # AltFINS Market Analyst
 
 ## Purpose
 
-Use this skill to structure crypto market analysis around validated altFINS-facing workflows. The emphasis is on research framing, evidence gathering, and disciplined synthesis rather than fast speculation.
+Use this skill to structure crypto, stock and forex analysis around validated altFINS-facing workflows. The emphasis is on research framing, evidence gathering, and disciplined synthesis rather than fast speculation.
 
 ## Use This Skill When
 
@@ -72,10 +72,16 @@ The output mode should match the user's actual need, not just the amount of avai
 - conservative next-step recommendations for further investigation
 - clearly labeled analysis outputs that distinguish facts from interpretation
 
+## Cross-market evidence
+
+Resolve each instrument in the catalogue. Keep Apple common stock (`CS_AAPL`) separate from tokenized Apple (`AAPLX`). Match each requested symbol against returned rows and report the last available bar in UTC. Account for stock exchange sessions and the FX trading week. Check price, trend and RSI on comparable intervals. Exclude crypto on-chain measures from equity analysis. FX volume can be zero or unavailable, so omit volume, OBV, VWMA, supply and market-cap rankings for FX.
+
+For a signal, report its detection time separately from the retrieval-time price, daily change and market cap. Some plans delay signals by 24 hours. For historical analysis use contemporaneous candles. An empty curated TA page means editorial coverage is missing. Continue with candles and indicators for the same ID. Distinguish editorial TA, stored AI setups and newly generated material.
+
 ## References
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
-- Read [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
+- Read [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
 - Read [references/mcp-anchors.md](references/mcp-anchors.md) for validated MCP facts.
 - Read [references/analysis-workflow.md](references/analysis-workflow.md) for a reusable analysis flow.
 - Read [references/synthesis-rules.md](references/synthesis-rules.md) for evidence and reasoning discipline.

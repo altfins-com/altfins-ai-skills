@@ -1,39 +1,19 @@
-# Validated Surfaces
+# Validated surfaces
 
-This directory stores checked-in snapshots that the skills can treat as stable local reference material.
+The [CLI manifest](cli/manifest.json) records the binary version, source commit and capture date. [Command discovery](cli/commands.json) includes required flags, safety metadata and endpoint mappings.
 
-## CLI Snapshot
+The [native MCP capture](mcp/tools-list.json) records the tools and input schemas returned by the authenticated endpoint on the stated date. The [documentation extract](mcp/documented-surface.json) records transport, authentication and connector rollout. Runtime discovery determines what a particular client can call.
 
-The CLI snapshot is generated from the real `af` binary and includes:
+Refresh the CLI from a release build. Supply the full source commit used to build it.
 
-- [cli/commands.json](cli/commands.json)
-- [cli/manifest.json](cli/manifest.json)
-- [cli/af-help.txt](cli/af-help.txt)
-- selected subcommand help snapshots for markets, signals, analytics, OHLCV, news, TA, and TUI
-
-Refresh it with:
-
-```bash
-python3 scripts/refresh_validated_surfaces.py --cli-bin /path/to/af --skip-mcp
+```sh
+python3 scripts/refresh_validated_surfaces.py --cli-bin /path/to/af --cli-commit "$CLI_COMMIT"
 ```
 
-## MCP Documented Surface
+Refresh MCP from a complete JSON-RPC response saved after initialization. The capture file should contain only the tools/list envelope.
 
-The MCP snapshot is a curated extract of the official documented surface and currently lives in:
-
-- [mcp/documented-surface.json](mcp/documented-surface.json)
-
-It intentionally captures only documented endpoint, transport, authentication, client setup targets, and capability families. Actual runtime tool names still need discovery from a connected MCP client.
-
-Refresh it with:
-
-```bash
-python3 scripts/refresh_validated_surfaces.py --skip-cli
+```sh
+python3 scripts/refresh_validated_surfaces.py --skip-cli --mcp-capture /path/to/tools-list-response.json
 ```
 
-## Ground Rules
-
-- Refresh snapshots only from the real local CLI or official altFINS sources.
-- Do not hand-edit generated CLI snapshot files.
-- When a checked-in snapshot and a live interface disagree, prefer the live interface and refresh the snapshot.
-- Use [../validated-sources.md](../validated-sources.md) as the higher-level inventory of authoritative sources.
+Each invocation updates only the selected interfaces. Maintain the documentation extract from the official MCP documentation.

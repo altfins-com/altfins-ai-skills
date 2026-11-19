@@ -13,7 +13,7 @@ from pathlib import Path
 
 from skills_core import repo_root
 
-EXCLUDES = {".git", "dist", "tmp", "__pycache__", ".pytest_cache"}
+EXCLUDES = {".git", "graphify-out", "dist", "tmp", "__pycache__", ".pytest_cache"}
 
 
 def should_skip(path: Path, root: Path) -> bool:

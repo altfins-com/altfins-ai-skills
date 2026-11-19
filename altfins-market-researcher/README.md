@@ -88,6 +88,6 @@ Reusable handoff templates:
 
 ## When to Use Another Skill Instead
 
-Use [../altfins-market-analyst/README.md](../altfins-market-analyst/README.md) when the user wants a structured technical analysis rather than command selection.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-market-analyst/README.md) when the user wants a structured technical analysis rather than command selection.
 
-Use [../altfins-query-builder/README.md](../altfins-query-builder/README.md) when the first job is to turn a vague trading idea into a cleaner structured request before deciding whether CLI is even the right interface.
+Use [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/altfins-query-builder/README.md) when the first job is to turn a vague trading idea into a cleaner structured request before deciding whether CLI is even the right interface.

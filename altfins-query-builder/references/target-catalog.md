@@ -1,12 +1,12 @@
 # Target Catalog
 
-Validated on April 12, 2026.
+Reviewed on 19 November 2026.
 
 This file maps common user intents to validated altFINS-facing target families.
 
 Reference snapshots:
-- [../../docs/validated-surfaces/cli/commands.json](../../docs/validated-surfaces/cli/commands.json)
-- [../../docs/validated-surfaces/mcp/documented-surface.json](../../docs/validated-surfaces/mcp/documented-surface.json)
+- [commands.json](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/cli/commands.json)
+- [documented-surface.json](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/mcp/documented-surface.json)
 
 ## Beginner-Facing Category Layer
 
@@ -14,7 +14,7 @@ Use one of these plain-English categories first:
 
 | Beginner-facing category | What the user usually means |
 | --- | --- |
-| find coins | screen a market or shortlist candidates |
+| find instruments | screen a market or shortlist candidates |
 | check signals | look for bullish or bearish trigger-style results |
 | look up indicator history | pull historical values for RSI, MACD, or similar metrics |
 | look up price candles | get OHLCV history or snapshots |
@@ -27,7 +27,7 @@ Use one of these plain-English categories first:
 
 | Beginner-facing category | Best validated target family | Preferred output mode |
 | --- | --- | --- |
-| find coins | market screening | CLI-ready or interface-neutral |
+| find instruments | market screening | CLI-ready or interface-neutral |
 | check signals | signal feed query | CLI-ready |
 | look up indicator history | analytics history | CLI-ready |
 | look up price candles | OHLCV history or snapshot | CLI-ready |
@@ -40,7 +40,7 @@ Use one of these plain-English categories first:
 
 | User intent | Validated CLI target | Endpoint family |
 | --- | --- | --- |
-| Screen coins by filters or display fields | `af markets search` | `/api/v2/public/screener-data/search-requests` |
+| Screen instruments by filters or display fields | `af markets search` | `/api/v2/public/screener-data/search-requests` |
 | Discover available screener field ids | `af markets fields` | `/api/v2/public/screener-data/value-types` |
 | Pull historical indicator or metric data | `af analytics history` | `/api/v2/public/analytics/search-requests` |
 | Discover analytics type ids | `af analytics types` | `/api/v2/public/analytics/types` |
@@ -92,3 +92,16 @@ Stay interface-neutral if:
 - the user goal is clear but the target interface is not
 - required fields such as symbol, interval, or date range are missing
 - the request would otherwise force you to invent flags, JSON keys, or runtime tool names
+
+## Setup and discovery routes
+
+| Requested evidence | CLI v1.2.0 or connected MCP capability |
+| --- | --- |
+| Instrument identity | `af refs symbols --search Apple` or discovered `symbols_getAvailableSymbols` |
+| Provider screener strategy | `af markets preset --preset TYPE`. Discover names through `screener_getPresetFilterTypes` when present. |
+| Curated editorial technical analysis | `af ta list --symbol BTC` |
+| Previously generated setup and report | `af setups list`, then `af setups report --id ID` (one API credit) |
+| New AI setup for a supported coin | `af setups generate --symbol SOL --dry-run`. Obtain authorization to consume a monthly AI prompt before execution. |
+| Crypto chart patterns | `af patterns list --symbol BTC`. Coverage depends on the plan and interval. |
+
+The native MCP catalogue on 19 November had no chart-pattern or AI generation tool. REST news accepts date bounds. The discovered MCP crypto news tool supports symbol keywords and source filters.

@@ -4,13 +4,13 @@ Use this skill conservatively.
 
 ## Shared starting point
 
-Start with [../../docs/validated-sources.md](../../docs/validated-sources.md) for the shared cross-repository source inventory.
+Start with [validated-sources.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-sources.md) for the shared cross-repository source inventory.
 
 ## Preferred source order
 
 1. User-provided task context
-2. Checked-in CLI snapshots under `../../docs/validated-surfaces/cli/`
-3. Live local `af` help output and `af commands -o json`
+2. Live local `af` help output and `af commands -o json`
+3. [Versioned CLI snapshot](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/cli/commands.json)
 4. Official altFINS documentation
 5. Verified repository context relevant to the CLI workflow
 

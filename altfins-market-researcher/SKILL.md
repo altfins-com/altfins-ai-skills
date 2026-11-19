@@ -1,6 +1,6 @@
 ---
 name: altfins-market-researcher
-description: Use this skill for repeatable altFINS CLI research workflows, especially when the task involves command discovery, export-friendly output, and careful use of the validated CLI surface.
+description: Use the altFINS CLI to screen crypto, stocks or forex, retrieve historical data, and export reproducible research.
 ---
 
 # AltFINS Market Researcher
@@ -64,10 +64,16 @@ Do not force everything into flags if the query shape is clearly better expresse
 - request previews and command-discovery guidance
 - safe request-shaping plans for complex queries
 
+## Instrument discovery and export
+
+Check `af --version` and `af commands -o json` before choosing flags. CLI 1.2.0 supports `refs symbols --search` and `markets search --asset-class`. On older binaries, inspect `af refs symbols -o json` and use confirmed IDs with existing history commands. Keep the UTC window, interval, sort order, source, retrieval time and missing IDs with the export.
+
+A stock or forex scan sends the full catalogue selection before server sorting and pagination. The regular screener charges by symbol count even for a one-row result. Restrict the universe to explicit IDs when the request concerns only those instruments. Use stored setups for a lookup. Generation is a separately confirmed, billed action.
+
 ## References
 
 - Read [references/sources.md](references/sources.md) for source boundaries.
-- Read [../docs/validated-surfaces/README.md](../docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
+- Read [README.md](https://github.com/altfins-com/altfins-ai-skills/blob/v1.1.0/docs/validated-surfaces/README.md) for the checked-in CLI and MCP surface snapshots.
 - Read [references/cli-anchors.md](references/cli-anchors.md) for validated CLI surface details.
 - Read [references/request-patterns.md](references/request-patterns.md) for validated request-shaping rules.
 - Read [references/filter-body-guidance.md](references/filter-body-guidance.md) for conservative JSON-body planning guidance.

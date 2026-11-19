@@ -4,14 +4,14 @@ Usage:
   af news list [flags]
 
 Flags:
-      --filter string   JSON filter or @path/to/filter.json
-      --from string     From date/datetime
-  -h, --help            help for list
-      --page int        Zero-based page index
-      --size int        Page size
-      --sort strings    Sort expressions (repeatable)
-      --stdin-json      Read filter JSON from stdin
-      --to string       To date/datetime
+      --filter string      JSON filter or @path/to/filter.json
+      --from string        From date/datetime
+  -h, --help               help for list
+      --page int           Zero-based page index
+      --size int           Page size
+      --sort stringArray   Sort expressions (repeatable)
+      --stdin-json         Read filter JSON from stdin
+      --to string          To date/datetime
 
 Global Flags:
       --dry-run         Show the API request without executing it

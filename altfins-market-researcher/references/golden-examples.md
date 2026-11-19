@@ -91,3 +91,11 @@ Note:
 
 - it respects the interactive intent
 - it does not confuse TUI-local search with remote filtering
+
+## Daily EUR/USD RSI as CSV
+
+```sh
+af analytics history --symbol FX_EURUSD --type RSI14 --interval DAILY --from 2026-11-09 --to 2026-11-18 --sort time,desc --fields symbol,time,value -o csv
+```
+
+This uses the forex pair. On CLI versions before 1.2.0 keep the canonical ID and verify or sort exported timestamps locally because comma-bearing sort expressions could split. A request for “highest-volume forex pairs” cannot be ranked from this feed. Ask whether a price- or RSI-based ranking would meet the research question.

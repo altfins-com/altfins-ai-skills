@@ -1,7 +1,7 @@
 interface:
   display_name: "AltFINS Market Analyst"
   short_description: "Structured altFINS market analysis workflows"
-  default_prompt: "Use $altfins-market-analyst to structure a conservative altFINS market analysis workflow for this crypto research question."
+  default_prompt: "Use $altfins-market-analyst to assess Apple common stock from its latest completed daily bars and identify missing evidence."
 
 policy:
   allow_implicit_invocation: false

@@ -2,6 +2,14 @@
   "command": "af",
   "use": "af",
   "short": "altFINS CLI for market data, signals, analytics, and TUI workflows",
+  "safety": {
+    "operationType": "read",
+    "mutatesLocalState": false,
+    "mutatesRemoteState": false,
+    "dryRunSupported": false,
+    "confirmationRequired": false,
+    "forceSupported": false
+  },
   "flags": [
     {
       "name": "dry-run",
@@ -33,6 +41,14 @@
       "command": "af analytics",
       "use": "analytics",
       "short": "Historical analytics and metric metadata",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -71,6 +87,14 @@
           "endpoint": {
             "method": "POST",
             "path": "/api/v2/public/analytics/search-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -130,7 +154,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -164,6 +188,14 @@
           "endpoint": {
             "method": "GET",
             "path": "/api/v2/public/analytics/types"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -202,6 +234,14 @@
       "command": "af auth",
       "use": "auth",
       "short": "Manage altFINS API key configuration",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -237,6 +277,19 @@
           "command": "af auth clear",
           "use": "clear",
           "short": "Remove locally stored API key from config",
+          "safety": {
+            "operationType": "local_write",
+            "mutatesLocalState": true,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": true,
+            "confirmationFlags": [
+              "--yes",
+              "-y"
+            ],
+            "forceSupported": false,
+            "confirmationExitCode": 5
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -265,6 +318,13 @@
               "usage": "Output format: table, json, jsonl, csv",
               "default": "table",
               "inherited": true
+            },
+            {
+              "name": "yes",
+              "shorthand": "y",
+              "type": "bool",
+              "usage": "Confirm removal without an interactive prompt",
+              "default": "false"
             }
           ]
         },
@@ -272,6 +332,16 @@
           "command": "af auth set",
           "use": "set",
           "short": "Save an altFINS API key into local config",
+          "safety": {
+            "operationType": "local_write",
+            "mutatesLocalState": true,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": true,
+            "forceRequiredToReplace": true,
+            "confirmationExitCode": 5
+          },
           "flags": [
             {
               "name": "api-key",
@@ -290,6 +360,12 @@
               "type": "string",
               "usage": "Comma-separated output field selection",
               "inherited": true
+            },
+            {
+              "name": "force",
+              "type": "bool",
+              "usage": "Replace an existing stored API key instead of failing",
+              "default": "false"
             },
             {
               "name": "no-color",
@@ -312,6 +388,14 @@
           "command": "af auth status",
           "use": "status",
           "short": "Show current auth configuration",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -346,9 +430,248 @@
       ]
     },
     {
+      "command": "af calendar",
+      "use": "calendar",
+      "short": "Crypto calendar event queries",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af calendar categories",
+          "use": "categories",
+          "short": "List valid calendar event categories (local)",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        },
+        {
+          "command": "af calendar list",
+          "use": "list",
+          "short": "List crypto calendar events",
+          "endpoint": {
+            "method": "MCP",
+            "path": "tools/call:getCryptoCalendarEvents"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "category",
+              "type": "string",
+              "usage": "Comma-separated categories (see `af calendar categories`)"
+            },
+            {
+              "name": "description-keyword",
+              "type": "string",
+              "usage": "Match a keyword in the event description"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "event-from",
+              "type": "string",
+              "usage": "Filter by event date from (when it happens)"
+            },
+            {
+              "name": "event-to",
+              "type": "string",
+              "usage": "Filter by event date to"
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "hot",
+              "type": "bool",
+              "usage": "Only events voted hot",
+              "default": "false"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "quick-search",
+              "type": "string",
+              "usage": "Full-text search across all event fields"
+            },
+            {
+              "name": "release-from",
+              "type": "string",
+              "usage": "Filter by release (announcement) date from (ISO or natural language)"
+            },
+            {
+              "name": "release-to",
+              "type": "string",
+              "usage": "Filter by release (announcement) date to"
+            },
+            {
+              "name": "significant",
+              "type": "bool",
+              "usage": "Only events voted significant",
+              "default": "false"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size (server default when 0)",
+              "default": "0"
+            },
+            {
+              "name": "sort-direction",
+              "type": "string",
+              "usage": "Sort direction: ASC or DESC"
+            },
+            {
+              "name": "sort-field",
+              "type": "string",
+              "usage": "Sort field: dateEvent or createdDate"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbols",
+              "type": "string",
+              "usage": "Comma-separated asset symbols (e.g. BTC,ETH)"
+            },
+            {
+              "name": "title-keyword",
+              "type": "string",
+              "usage": "Match a keyword in the event title"
+            },
+            {
+              "name": "trending",
+              "type": "bool",
+              "usage": "Only events voted trending",
+              "default": "false"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "command": "af commands",
       "use": "commands",
       "short": "List commands with metadata for agents and automation",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -391,6 +714,14 @@
       "command": "af completion",
       "use": "completion",
       "short": "Generate the autocompletion script for the specified shell",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -426,6 +757,14 @@
           "command": "af completion bash",
           "use": "bash",
           "short": "Generate the autocompletion script for bash",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -467,6 +806,14 @@
           "command": "af completion fish",
           "use": "fish",
           "short": "Generate the autocompletion script for fish",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -508,6 +855,14 @@
           "command": "af completion powershell",
           "use": "powershell",
           "short": "Generate the autocompletion script for powershell",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -549,6 +904,14 @@
           "command": "af completion zsh",
           "use": "zsh",
           "short": "Generate the autocompletion script for zsh",
+          "safety": {
+            "operationType": "read",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -592,6 +955,14 @@
       "command": "af help",
       "use": "help [command]",
       "short": "Help about any command",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -627,6 +998,14 @@
       "command": "af markets",
       "use": "markets",
       "short": "Screener market data queries",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -666,6 +1045,14 @@
             "method": "GET",
             "path": "/api/v2/public/screener-data/value-types"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -698,6 +1085,87 @@
           ]
         },
         {
+          "command": "af markets preset",
+          "use": "preset",
+          "short": "Run a provider-defined screener preset",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/screener-data/preset-filter"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "display-type",
+              "type": "string",
+              "usage": "Comma-separated screener fields"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Candle interval"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "preset",
+              "type": "string",
+              "usage": "Preset filter type",
+              "required": true
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringArray",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            }
+          ]
+        },
+        {
           "command": "af markets search",
           "use": "search",
           "short": "Run a screener market search",
@@ -705,7 +1173,20 @@
             "method": "POST",
             "path": "/api/v2/public/screener-data/search-requests"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
+            {
+              "name": "asset-class",
+              "type": "string",
+              "usage": "Rank the entire stock or forex catalogue (credits depend on symbol count)"
+            },
             {
               "name": "ath-after",
               "type": "string",
@@ -739,9 +1220,14 @@
               "inherited": true
             },
             {
+              "name": "exchange",
+              "type": "string",
+              "usage": "Single exchange"
+            },
+            {
               "name": "exchanges",
               "type": "string",
-              "usage": "Comma-separated exchange filters"
+              "usage": "Single exchange (legacy spelling)"
             },
             {
               "name": "fields",
@@ -807,6 +1293,11 @@
               "default": "0"
             },
             {
+              "name": "percent-down-from-ath",
+              "type": "string",
+              "usage": "Percent-down-from-ATH filter enum"
+            },
+            {
               "name": "rsi-divergence",
               "type": "string",
               "usage": "RSI divergence filter"
@@ -819,7 +1310,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -836,8 +1327,9 @@
             },
             {
               "name": "support-resistance-lookback",
-              "type": "string",
-              "usage": "Support/resistance lookback intervals: 1-5"
+              "type": "int",
+              "usage": "Support/resistance lookback intervals: 1-5",
+              "default": "5"
             },
             {
               "name": "symbols",
@@ -845,9 +1337,14 @@
               "usage": "Comma-separated symbols"
             },
             {
+              "name": "trading-type",
+              "type": "string",
+              "usage": "Single trading type"
+            },
+            {
               "name": "trading-types",
               "type": "string",
-              "usage": "Comma-separated trading type filters"
+              "usage": "Single trading type (legacy spelling)"
             },
             {
               "name": "week-52",
@@ -862,6 +1359,14 @@
       "command": "af news",
       "use": "news",
       "short": "News summary queries",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -900,6 +1405,14 @@
           "endpoint": {
             "method": "POST",
             "path": "/api/v2/public/news-summary/find-summary"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -952,6 +1465,14 @@
             "method": "POST",
             "path": "/api/v2/public/news-summary/search-requests"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -1005,7 +1526,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -1028,6 +1549,14 @@
       "command": "af ohlcv",
       "use": "ohlcv",
       "short": "Snapshot and historical OHLCV data",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1066,6 +1595,14 @@
           "endpoint": {
             "method": "POST",
             "path": "/api/v2/public/ohlcv/history-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1125,7 +1662,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -1154,6 +1691,14 @@
           "endpoint": {
             "method": "POST",
             "path": "/api/v2/public/ohlcv/snapshot-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1210,9 +1755,252 @@
       ]
     },
     {
+      "command": "af patterns",
+      "use": "patterns",
+      "short": "Chart-pattern queries",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af patterns list",
+          "use": "list",
+          "short": "Find crypto chart patterns (plan-dependent coverage)",
+          "endpoint": {
+            "method": "POST",
+            "path": "/api/v2/public/patterns-data/search-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "usage": "JSON filter or @path/to/filter.json"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Candle interval"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringArray",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "stdin-json",
+              "type": "bool",
+              "usage": "Read filter JSON from stdin",
+              "default": "false"
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Crypto identifier, e.g. BTC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af portfolio",
+      "use": "portfolio",
+      "short": "Authenticated user's crypto portfolio",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af portfolio show",
+          "use": "show",
+          "short": "Show the authenticated user's portfolio holdings",
+          "endpoint": {
+            "method": "MCP",
+            "path": "tools/call:getUserPortfolio"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "full",
+              "type": "bool",
+              "usage": "Reveal wallet addresses and unrecognized fields (secrets stay masked)",
+              "default": "false"
+            },
+            {
+              "name": "mask-balances",
+              "type": "bool",
+              "usage": "Mask balance figures in the output",
+              "default": "false"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            }
+          ]
+        }
+      ]
+    },
+    {
       "command": "af quota",
       "use": "quota",
       "short": "Inspect current permit quotas",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1251,6 +2039,14 @@
           "endpoint": {
             "method": "GET",
             "path": "/api/v2/public/all-available-permits"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1291,6 +2087,14 @@
             "method": "GET",
             "path": "/api/v2/public/available-permits"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -1330,6 +2134,14 @@
             "method": "GET",
             "path": "/api/v2/public/monthly-available-permits"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -1367,6 +2179,14 @@
       "command": "af refs",
       "use": "refs",
       "short": "Reference data and enums",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1405,6 +2225,14 @@
           "endpoint": {
             "method": "GET",
             "path": "/api/v2/public/intervals"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1445,7 +2273,20 @@
             "method": "GET",
             "path": "/api/v2/public/symbols"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
+            {
+              "name": "asset-class",
+              "type": "string",
+              "usage": "Limit to stock or forex identifiers"
+            },
             {
               "name": "dry-run",
               "type": "bool",
@@ -1473,6 +2314,285 @@
               "usage": "Output format: table, json, jsonl, csv",
               "default": "table",
               "inherited": true
+            },
+            {
+              "name": "search",
+              "type": "string",
+              "usage": "Match an identifier or instrument name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "command": "af setups",
+      "use": "setups",
+      "short": "Stored and generated AI trade setups for supported coins",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "bool",
+          "usage": "Show the API request without executing it",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "usage": "Comma-separated output field selection",
+          "inherited": true
+        },
+        {
+          "name": "no-color",
+          "type": "bool",
+          "usage": "Disable ANSI color output",
+          "default": "false",
+          "inherited": true
+        },
+        {
+          "name": "output",
+          "shorthand": "o",
+          "type": "string",
+          "usage": "Output format: table, json, jsonl, csv",
+          "default": "table",
+          "inherited": true
+        }
+      ],
+      "children": [
+        {
+          "command": "af setups generate",
+          "use": "generate",
+          "short": "Generate a setup (one monthly AI prompt, including reused results)",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/ai-trade-setup/generate"
+          },
+          "safety": {
+            "operationType": "remote_write",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": true,
+            "dryRunSupported": true,
+            "confirmationRequired": true,
+            "confirmationFlags": [
+              "--yes"
+            ],
+            "forceSupported": false,
+            "confirmationExitCode": 5
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Candle interval",
+              "default": "DAILY"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "symbol",
+              "type": "string",
+              "usage": "Supported coin symbol",
+              "required": true
+            },
+            {
+              "name": "yes",
+              "type": "bool",
+              "usage": "Confirm use of one monthly AI prompt",
+              "default": "false"
+            }
+          ]
+        },
+        {
+          "command": "af setups list",
+          "use": "list",
+          "short": "Read stored setups (defaults to the newest matching UTC day)",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/ai-trade-setup/search-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "confidence",
+              "type": "string",
+              "usage": "LOW, MEDIUM or HIGH"
+            },
+            {
+              "name": "created-by",
+              "type": "string",
+              "usage": "ALTFINS or ME",
+              "default": "ALTFINS"
+            },
+            {
+              "name": "direction",
+              "type": "string",
+              "usage": "LONG, SHORT or NONE"
+            },
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "usage": "Earliest setup creation date/time"
+            },
+            {
+              "name": "generated-via",
+              "type": "string",
+              "usage": "GUI or REST for your own setups"
+            },
+            {
+              "name": "interval",
+              "type": "string",
+              "usage": "Candle interval"
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
+            },
+            {
+              "name": "page",
+              "type": "int",
+              "usage": "Zero-based page index",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "usage": "Page size",
+              "default": "0"
+            },
+            {
+              "name": "sort",
+              "type": "stringArray",
+              "usage": "Sort expressions (repeatable)",
+              "default": "[]"
+            },
+            {
+              "name": "symbols",
+              "type": "string",
+              "usage": "Comma-separated symbols"
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "usage": "Latest setup creation date/time"
+            }
+          ]
+        },
+        {
+          "command": "af setups report",
+          "use": "report",
+          "short": "Read a Markdown report or pending status (one API credit)",
+          "endpoint": {
+            "method": "GET",
+            "path": "/api/v2/public/ai-trade-setup/{id}/report"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
+          "flags": [
+            {
+              "name": "dry-run",
+              "type": "bool",
+              "usage": "Show the API request without executing it",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "fields",
+              "type": "string",
+              "usage": "Comma-separated output field selection",
+              "inherited": true
+            },
+            {
+              "name": "id",
+              "type": "int64",
+              "usage": "Setup ID from list or generate",
+              "default": "0",
+              "required": true
+            },
+            {
+              "name": "no-color",
+              "type": "bool",
+              "usage": "Disable ANSI color output",
+              "default": "false",
+              "inherited": true
+            },
+            {
+              "name": "output",
+              "shorthand": "o",
+              "type": "string",
+              "usage": "Output format: table, json, jsonl, csv",
+              "default": "table",
+              "inherited": true
             }
           ]
         }
@@ -1482,6 +2602,14 @@
       "command": "af signals",
       "use": "signals",
       "short": "Trading signal feed and metadata",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1521,6 +2649,14 @@
             "method": "GET",
             "path": "/api/v2/public/signals-feed/signal-keys"
           },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -1559,6 +2695,14 @@
           "endpoint": {
             "method": "POST",
             "path": "/api/v2/public/signals-feed/search-requests"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1623,7 +2767,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -1651,6 +2795,14 @@
       "command": "af ta",
       "use": "ta",
       "short": "Curated technical analysis summaries",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1689,6 +2841,14 @@
           "endpoint": {
             "method": "GET",
             "path": "/api/v2/public/technical-analysis/data"
+          },
+          "safety": {
+            "operationType": "remote_query",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": true,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1733,7 +2893,7 @@
             },
             {
               "name": "sort",
-              "type": "stringSlice",
+              "type": "stringArray",
               "usage": "Sort expressions (repeatable)",
               "default": "[]"
             },
@@ -1750,6 +2910,14 @@
       "command": "af tui",
       "use": "tui",
       "short": "Interactive terminal UI",
+      "safety": {
+        "operationType": "read",
+        "mutatesLocalState": false,
+        "mutatesRemoteState": false,
+        "dryRunSupported": false,
+        "confirmationRequired": false,
+        "forceSupported": false
+      },
       "flags": [
         {
           "name": "dry-run",
@@ -1788,6 +2956,14 @@
           "endpoint": {
             "method": "TUI",
             "path": "/api/v2/public/screener-data/search-requests"
+          },
+          "safety": {
+            "operationType": "interactive",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1844,6 +3020,14 @@
             "method": "TUI",
             "path": "/api/v2/public/news-summary/search-requests"
           },
+          "safety": {
+            "operationType": "interactive",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
+          },
           "flags": [
             {
               "name": "dry-run",
@@ -1883,11 +3067,6 @@
               "type": "bool",
               "usage": "Read filter JSON from stdin",
               "default": "false"
-            },
-            {
-              "name": "symbol",
-              "type": "string",
-              "usage": "Optional symbol seed filter"
             }
           ]
         },
@@ -1898,6 +3077,14 @@
           "endpoint": {
             "method": "TUI",
             "path": "/api/v2/public/signals-feed/search-requests"
+          },
+          "safety": {
+            "operationType": "interactive",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {
@@ -1953,6 +3140,14 @@
           "endpoint": {
             "method": "TUI",
             "path": "/api/v2/public/technical-analysis/data"
+          },
+          "safety": {
+            "operationType": "interactive",
+            "mutatesLocalState": false,
+            "mutatesRemoteState": false,
+            "dryRunSupported": false,
+            "confirmationRequired": false,
+            "forceSupported": false
           },
           "flags": [
             {

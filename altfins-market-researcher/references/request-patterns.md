@@ -65,3 +65,9 @@ Choose the lightest pattern that safely represents the query:
 
 - stay flag-first when the request is already clear
 - escalate to `--filter` or `--stdin-json` when flag-only guidance would become speculative
+
+## Stored setups and sorting
+
+Use `af setups list --created-by ALTFINS` for published daily setups. Without dates the server selects the newest matching UTC day. `af setups report --id ID` reads the Markdown report for one API credit. A pending generation can be checked by ID. Only an explicit request to spend a monthly AI prompt authorizes `setups generate --yes`, including reused results.
+
+Repeat complete sort expressions, e.g. `--sort time,desc`. Verify order in the page metadata, keep missing symbols explicit and retain nullable support/resistance prices.

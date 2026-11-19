@@ -4,11 +4,11 @@ Usage:
   af ta list [flags]
 
 Flags:
-  -h, --help            help for list
-      --page int        Zero-based page index
-      --size int        Page size
-      --sort strings    Sort expressions (repeatable)
-      --symbol string   Symbol filter
+  -h, --help               help for list
+      --page int           Zero-based page index
+      --size int           Page size
+      --sort stringArray   Sort expressions (repeatable)
+      --symbol string      Symbol filter
 
 Global Flags:
       --dry-run         Show the API request without executing it
