@@ -1,8 +1,14 @@
-# altfins-ai-skills
+# altFINS AI Skills
 
-Reusable AI skills for altFINS workflows.
+Use these skills to research crypto, stocks and forex with altFINS. Choose the skill that matches your question or download its ZIP for Claude Cowork.
 
-Install the `altfins-skills` command, copy the skills into your local agent or project, and use them for crypto, stock and forex analysis, CLI research, and plain-English-to-query translation.
+| Skill | Example request | Download |
+| --- | --- | --- |
+| [Query Builder](altfins-query-builder/README.md) | “Compare Apple common stock and EUR/USD using daily RSI.” | [Query Builder ZIP](https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-query-builder.skill.zip) |
+| [Market Researcher](altfins-market-researcher/README.md) | “Export daily EUR/USD RSI for the last month as CSV.” | [Market Researcher ZIP](https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-market-researcher.skill.zip) |
+| [Market Analyst](altfins-market-analyst/README.md) | “Assess Apple using the last completed stock session and identify missing evidence.” | [Market Analyst ZIP](https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-market-analyst.skill.zip) |
+
+Version 1.1.0 documents altFINS CLI v1.2.0 and 16 observed MCP tools. [Release notes](https://github.com/altfins-com/altfins-ai-skills/releases/tag/v1.1.0)
 
 ## Install
 
@@ -49,27 +55,7 @@ This writes:
 - `~/.claude/agents/<skill>.md` as the Claude Code subagent entrypoint
 - `~/.claude/skills/<skill>/` as the bundled skill payload referenced by that subagent
 
-For **Claude Cowork**, the flow has three explicit steps:
-
-1. Install `altfins-skills` with Homebrew.
-2. Run the package command to create the skill ZIP.
-3. Open `Claude > Customize > Skills` and upload that ZIP manually.
-
-```bash
-altfins-skills package --platform claude-cowork altfins-market-analyst
-```
-
-Homebrew installs the `altfins-skills` command only. It does **not** upload anything into Claude Cowork for you.
-
-When you run the installed command, the ZIP is created here:
-
-```text
-~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
-```
-
-In a repo checkout, the same command writes to `dist/skills/`.
-
-Then pick that ZIP in `Claude > Customize > Skills`.
+For **Claude Cowork**, download the ZIP for your chosen skill from the table above and upload it in **Claude > Customize > Skills**. To build a ZIP locally, use the [packaging instructions](#package-skills).
 
 ### Project-Level Installs
 
@@ -102,7 +88,7 @@ This repository ships three reusable skills:
 Use this when you want structured crypto, stock and forex analysis built around validated altFINS-facing workflows.
 
 Best for:
-- single-coin technical outlooks
+- technical outlooks for a coin, stock or currency pair
 - comparing two market setups
 - summarizing the most interesting opportunities from a scan
 - separating facts from interpretation
@@ -127,7 +113,7 @@ See:
 
 ### AltFINS Query Builder
 
-Use this when the user starts with a vague plain-English crypto request and the first job is to turn it into something structured.
+Use this when the user starts with a plain-English market research request and the first job is to turn it into something structured.
 
 Best for:
 - clarifying what the user actually wants
@@ -163,7 +149,7 @@ Use $altfins-market-analyst to assess the current technical outlook for ETH and 
 |----------|------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
 | Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
-| Claude Cowork | `package-upload` | create a `.skill.zip` with `altfins-skills package --platform claude-cowork ...`, then manually upload it in `Customize > Skills` |
+| Claude Cowork | `package-upload` | download a released `.skill.zip` and upload it in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
@@ -250,7 +236,3 @@ When adding a new skill:
 - [docs/validated-surfaces/README.md](docs/validated-surfaces/README.md)
 - [docs/skill-validation.md](docs/skill-validation.md)
 - [docs/skill-roadmap.md](docs/skill-roadmap.md)
-
-## Individual skill downloads
-
-Download a skill ZIP for Claude Cowork or another client that accepts packaged skills. The same release includes the Windows installer bundle and Homebrew source archive. [Release assets](https://github.com/altfins-com/altfins-ai-skills/releases/latest)

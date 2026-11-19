@@ -71,31 +71,15 @@ The `.md` file is the Claude Code subagent entrypoint. The bundled skill folder 
 
 ### Claude Cowork
 
-Use `claude-cowork` when you want to upload a skill ZIP in the Claude UI.
+Download the `.skill.zip` for your chosen skill from the [GitHub release assets](https://github.com/altfins-com/altfins-ai-skills/releases/latest). In Claude, open **Customize > Skills** and upload that ZIP.
 
-The flow is:
-1. Install `altfins-skills`.
-2. Run `package` to create the ZIP.
-3. Open `Claude > Customize > Skills` and upload that ZIP manually.
+To build a local copy, run the package command.
 
 ```bash
 altfins-skills package --platform claude-cowork altfins-market-analyst
 ```
 
-Homebrew installs the `altfins-skills` command only. It does **not** copy or upload the skill into Claude Cowork automatically.
-
-When you run the installed command, the ZIP is created here:
-
-```text
-~/.altfins-skills/dist/skills/altfins-market-analyst.skill.zip
-```
-
-In a repo checkout, the same command writes to `dist/skills/`.
-
-Upload path in Claude:
-- `Customize > Skills`
-
-`claude-cowork` is intentionally package-oriented. It does not support `altfins-skills install ...` because Claude Cowork imports skills through the UI.
+The installed command writes to `~/.altfins-skills/dist/skills/`. A repository checkout writes to `dist/skills/`.
 
 ## Project-Mode Platforms
 
@@ -137,7 +121,7 @@ python3 scripts/skills.py package --all
 |----------|-------------------|-----------------|
 | Codex | `skills` | `$CODEX_HOME/skills/<skill>` or `~/.codex/skills/<skill>` |
 | Claude Code | `skills` | `~/.claude/agents/<skill>.md` + `~/.claude/skills/<skill>/` |
-| Claude Cowork | `package-upload` | create a `.skill.zip` with `altfins-skills package --platform claude-cowork ...`, then manually upload it in `Customize > Skills` |
+| Claude Cowork | `package-upload` | download a released `.skill.zip` and upload it in `Customize > Skills` |
 | Gemini | `skills` | `~/.gemini/skills/<skill>` |
 | Copilot | `skills` | `~/.copilot/skills/<skill>` |
 | Cursor | `project` | `<project>/.cursor/rules/<skill>.mdc` + `<project>/.altfins-skills/cursor/<skill>/` |
