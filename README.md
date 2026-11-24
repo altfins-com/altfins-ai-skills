@@ -8,7 +8,7 @@ Use these skills to research crypto, stocks and forex with altFINS. Choose the s
 | [Market Researcher](altfins-market-researcher/README.md) | “Export daily EUR/USD RSI for the last month as CSV.” | [Market Researcher ZIP](https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-market-researcher.skill.zip) |
 | [Market Analyst](altfins-market-analyst/README.md) | “Assess Apple using the last completed stock session and identify missing evidence.” | [Market Analyst ZIP](https://github.com/altfins-com/altfins-ai-skills/releases/latest/download/altfins-market-analyst.skill.zip) |
 
-Version 1.1.0 documents altFINS CLI v1.2.0 and 16 observed MCP tools. [Release notes](https://github.com/altfins-com/altfins-ai-skills/releases/tag/v1.1.0)
+Version 1.1.1 adds guidance for handling untrusted news, signal text and instrument names across the three research skills. The reference snapshots cover CLI v1.2.0 and 16 observed MCP tools. [Release notes](https://github.com/altfins-com/altfins-ai-skills/releases/tag/v1.1.1)
 
 ## Install
 
